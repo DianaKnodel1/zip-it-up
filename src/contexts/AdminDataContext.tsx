@@ -60,6 +60,7 @@ interface AdminDataContextType {
   assignments: AssignmentRow[];
   
   allBookings: BookingRow[];
+  interviewAppointments: InterviewAppointmentRow[];
   allTransactions: TransactionRow[];
   chatConversations: ChatConversationRow[];
   adminUserIds: Set<string>;
@@ -102,6 +103,7 @@ export function AdminDataProvider({ children }: { children: ReactNode }) {
   const [assignments, setAssignments] = useState<AssignmentRow[]>([]);
   
   const [allBookings, setAllBookings] = useState<BookingRow[]>([]);
+  const [interviewAppointments, setInterviewAppointments] = useState<InterviewAppointmentRow[]>([]);
   const [allTransactions, setAllTransactions] = useState<TransactionRow[]>([]);
   const [chatConversations, setChatConversations] = useState<ChatConversationRow[]>([]);
   const [adminUserIds, setAdminUserIds] = useState<Set<string>>(new Set());
@@ -176,6 +178,19 @@ export function AdminDataProvider({ children }: { children: ReactNode }) {
         track("Buchungen",
           () => fetchAll<BookingRow>(() => supabase.from("bookings").select(BOOKING_OVERVIEW_COLUMNS).order("created_at", { ascending: false })),
           setAllBookings),
+        track("Interview-Termine",
+          async () => {
+            try {
+              return await fetchAll<InterviewAppointmentRow>(() =>
+                supabase.from("interview_appointments")
+                  .select("id, application_id, starts_at, ends_at, status")
+                  .order("starts_at", { ascending: false }));
+            } catch {
+              // Tabelle existiert auf älteren Systemen evtl. noch nicht.
+              return [] as InterviewAppointmentRow[];
+            }
+          },
+          setInterviewAppointments),
         track("Admin-Rollen",
           () => fetchAll<{ user_id: string; role: string }>(() => supabase.from("user_roles").select("user_id, role").eq("role", "admin")),
           (rows) => setAdminUserIds(new Set(rows.map((r) => r.user_id)))),
@@ -243,7 +258,7 @@ export function AdminDataProvider({ children }: { children: ReactNode }) {
 
   return (
     <AdminDataContext.Provider value={{
-      applications, profiles, kycList, templates, assignments, allBookings, allTransactions, chatConversations,
+      applications, profiles, kycList, templates, assignments, allBookings, interviewAppointments, allTransactions, chatConversations,
       adminUserIds, emailConfirmedUserIds, userEmails, loading, loadingApplications, loadingProfiles, loadData, setProfiles, setKycList, setAllTransactions, getProfileForUser,
     }}>
       {children}
