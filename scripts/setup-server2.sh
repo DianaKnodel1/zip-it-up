@@ -16,7 +16,7 @@
 set -euo pipefail
 
 # ── CONFIG ─────────────────────────────────────────────────────────────────
-REPO_URL="${REPO_URL:-https://github.com/DianaKnodel1/integrate-project.git}"
+REPO_URL="${REPO_URL:-https://github.com/DianaKnodel1/zip-it-up.git}"
 REPO_BRANCH="${REPO_BRANCH:-main}"
 PROJECT_DIR="${PROJECT_DIR:-/opt/apps/portal}"
 # Alle Domains, die auf dieses Portal zeigen (space-separated)
