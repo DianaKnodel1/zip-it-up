@@ -17,7 +17,6 @@ import { Lock, Save, Palette, Bot, ArrowRight, Globe, Users as UsersIcon, Mail, 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BookingLimitsCard } from "@/components/admin/BookingLimitsCard";
 import { StandardTasksCard } from "@/components/admin/StandardTasksCard";
-import { StaffAccountsCard } from "@/components/admin/StaffAccountsCard";
 import { Link } from "@tanstack/react-router";
 
 function AdminSettingsPage() {
@@ -74,7 +73,6 @@ function AdminSettingsPage() {
             {section.value === "auftraege" && <StandardTasksCard />}
             {section.value === "konto" && (
               <>
-                <StaffAccountsCard />
                 <Card>
                   <CardHeader className="pb-3">
                     <CardTitle className="text-sm flex items-center gap-2">
