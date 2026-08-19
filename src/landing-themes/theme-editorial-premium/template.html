@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>{{seo_title}}</title>
+<meta name="description" content="{{seo_description}}" />
+<meta property="og:title" content="{{seo_title}}" />
+<meta property="og:description" content="{{seo_description}}" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://{{landing_domain}}/" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..900,0..100&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" />
+<link rel="stylesheet" href="style.css" />
+<style>:root{--accent:{{accent_color}};}</style>
+</head>
+<body>
+
+<!-- ═══════════ HEADER ═══════════ -->
+<header class="ep-nav">
+  <div class="ep-nav-inner">
+    <a class="ep-brand" href="#">
+      <span class="ep-brand-mark">◐</span>
+      <span class="ep-brand-name">{{brand_name}}</span>
+      <span class="ep-brand-tag">— {{brand_tagline}}</span>
+    </a>
+    <nav class="ep-nav-links" aria-label="Hauptnavigation">
+      <a href="#kapitel-01">{{nav_1}}</a>
+      <a href="#kapitel-02">{{nav_2}}</a>
+      <a href="#kapitel-04">{{nav_3}}</a>
+      <a href="#tester">{{nav_4}}</a>
+    </nav>
+    <a href="#bewerbung-form" class="ep-nav-cta">{{nav_cta}} <span aria-hidden="true">→</span></a>
+  </div>
+</header>
+
+<!-- ═══════════ HERO ═══════════ -->
+<section class="ep-hero" id="hero">
+  <div class="ep-hero-eyebrow">
+    <span class="ep-eb-dot"></span>
+    <span>{{hero_eyebrow}}</span>
+  </div>
+  <div class="ep-hero-grid">
+    <div class="ep-hero-left">
+      <h1 class="ep-hero-title reveal">{{hero_title}}</h1>
+      <p class="ep-hero-sub reveal">{{hero_subtitle}}</p>
+      <div class="ep-hero-ctas reveal">
+        <a href="#bewerbung-form" class="ep-btn ep-btn-primary">{{hero_cta_primary}}</a>
+        <a href="#kapitel-01" class="ep-btn ep-btn-ghost">{{hero_cta_secondary}} <span aria-hidden="true">↓</span></a>
+      </div>
+    </div>
+    <div class="ep-hero-right" data-parallax="0.15">
+      <!-- Composed illustration: devices + magnifier + checks + floating shapes -->
+      <svg class="ep-hero-svg" viewBox="0 0 600 640" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <linearGradient id="epGrad1" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="var(--accent)" stop-opacity="0.08"/>
+            <stop offset="1" stop-color="var(--accent)" stop-opacity="0"/>
+          </linearGradient>
+          <linearGradient id="epScreen" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#f7f5f0"/>
+            <stop offset="1" stop-color="#eeece6"/>
+          </linearGradient>
+        </defs>
+        <!-- soft radial bg -->
+        <circle cx="380" cy="220" r="240" fill="url(#epGrad1)"/>
+        <!-- floating dots -->
+        <circle class="ep-float" data-float="1" cx="80" cy="120" r="6" fill="var(--accent)"/>
+        <circle class="ep-float" data-float="-1" cx="540" cy="500" r="4" fill="#1a1a1a"/>
+        <circle class="ep-float" data-float="1.4" cx="70" cy="520" r="10" fill="none" stroke="#1a1a1a" stroke-width="1"/>
+        <!-- Desktop browser -->
+        <g transform="translate(60 110)" class="ep-float" data-float="0.4">
+          <rect x="0" y="0" width="380" height="260" rx="14" fill="#1a1a1a"/>
+          <rect x="10" y="10" width="360" height="240" rx="10" fill="url(#epScreen)"/>
+          <circle cx="24" cy="24" r="4" fill="#e85d3a"/>
+          <circle cx="38" cy="24" r="4" fill="#f0b429"/>
+          <circle cx="52" cy="24" r="4" fill="#7dd3a4"/>
+          <rect x="30" y="60" width="200" height="12" rx="3" fill="#1a1a1a" opacity="0.85"/>
+          <rect x="30" y="82" width="140" height="8" rx="3" fill="#1a1a1a" opacity="0.45"/>
+          <rect x="30" y="120" width="90" height="70" rx="6" fill="var(--accent)" opacity="0.14"/>
+          <rect x="130" y="120" width="90" height="70" rx="6" fill="#1a1a1a" opacity="0.08"/>
+          <rect x="230" y="120" width="120" height="70" rx="6" fill="#1a1a1a" opacity="0.08"/>
+          <rect x="30" y="200" width="320" height="8" rx="3" fill="#1a1a1a" opacity="0.15"/>
+          <rect x="30" y="216" width="220" height="8" rx="3" fill="#1a1a1a" opacity="0.1"/>
+        </g>
+        <!-- Phone -->
+        <g transform="translate(360 300)" class="ep-float" data-float="0.7">
+          <rect x="0" y="0" width="140" height="260" rx="22" fill="#1a1a1a"/>
+          <rect x="8" y="8" width="124" height="244" rx="16" fill="url(#epScreen)"/>
+          <rect x="55" y="14" width="30" height="4" rx="2" fill="#1a1a1a"/>
+          <rect x="20" y="40" width="80" height="10" rx="3" fill="#1a1a1a" opacity="0.8"/>
+          <rect x="20" y="58" width="60" height="6" rx="3" fill="#1a1a1a" opacity="0.4"/>
+          <rect x="20" y="80" width="100" height="60" rx="8" fill="var(--accent)" opacity="0.14"/>
+          <rect x="20" y="150" width="100" height="8" rx="3" fill="#1a1a1a" opacity="0.15"/>
+          <rect x="20" y="164" width="80" height="8" rx="3" fill="#1a1a1a" opacity="0.1"/>
+          <rect x="20" y="196" width="100" height="34" rx="6" fill="#1a1a1a"/>
+        </g>
+        <!-- Magnifier -->
+        <g transform="translate(380 90)" class="ep-float" data-float="-0.5">
+          <circle cx="60" cy="60" r="52" fill="#fff" stroke="#1a1a1a" stroke-width="2"/>
+          <circle cx="60" cy="60" r="52" fill="var(--accent)" opacity="0.07"/>
+          <line x1="98" y1="98" x2="140" y2="140" stroke="#1a1a1a" stroke-width="6" stroke-linecap="round"/>
+          <path d="M40 60 L55 75 L82 46" stroke="var(--accent)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </g>
+        <!-- Seal / checklist -->
+        <g transform="translate(20 400)" class="ep-float" data-float="0.9">
+          <circle cx="52" cy="52" r="50" fill="#1a1a1a"/>
+          <circle cx="52" cy="52" r="42" fill="none" stroke="#f7f5f0" stroke-width="1" stroke-dasharray="2 3"/>
+          <text x="52" y="46" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="9" fill="#f7f5f0" letter-spacing="2">QA</text>
+          <text x="52" y="62" text-anchor="middle" font-family="Fraunces, serif" font-size="18" font-weight="600" fill="#f7f5f0">A+</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+  <div class="ep-hero-meta">
+    <span>{{hero_meta_left}}</span>
+    <span class="ep-meta-line" aria-hidden="true"></span>
+    <span>{{hero_meta_right}}</span>
+  </div>
+</section>
+
+<!-- ═══════════ KAPITEL 01 — Warum ═══════════ -->
+<section class="ep-chapter" id="kapitel-01">
+  <div class="ep-ch-grid">
+    <aside class="ep-ch-margin">
+      <div class="ep-ch-num">{{ch1_number}}</div>
+      <div class="ep-ch-note">↳ {{ch1_marginal}}</div>
+    </aside>
+    <div class="ep-ch-main">
+      <div class="ep-ch-eb reveal">— {{ch1_eyebrow}}</div>
+      <h2 class="ep-ch-title reveal">{{ch1_title}}</h2>
+      <p class="ep-lead reveal">{{ch1_lead}}</p>
+      <p class="ep-body reveal">{{ch1_body}}</p>
+    </div>
+    <div class="ep-ch-visual reveal" data-parallax="0.08">
+      <svg viewBox="0 0 320 400" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect x="20" y="30" width="280" height="340" rx="8" fill="#1a1a1a"/>
+        <rect x="30" y="40" width="260" height="200" rx="4" fill="url(#epScreen)"/>
+        <rect x="45" y="60" width="150" height="8" rx="2" fill="#1a1a1a" opacity="0.8"/>
+        <rect x="45" y="75" width="110" height="5" rx="2" fill="#1a1a1a" opacity="0.4"/>
+        <rect x="45" y="100" width="230" height="1" fill="#1a1a1a" opacity="0.15"/>
+        <rect x="45" y="120" width="230" height="80" rx="4" fill="var(--accent)" opacity="0.1"/>
+        <text x="45" y="285" font-family="JetBrains Mono, monospace" font-size="10" fill="#f7f5f0" opacity="0.7">STATUS · MONITORED</text>
+        <circle cx="45" cy="315" r="6" fill="var(--accent)"/>
+        <rect x="60" y="311" width="160" height="8" rx="2" fill="#f7f5f0" opacity="0.9"/>
+        <circle cx="45" cy="340" r="6" fill="#f7f5f0" opacity="0.3"/>
+        <rect x="60" y="336" width="120" height="8" rx="2" fill="#f7f5f0" opacity="0.5"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ KAPITEL 02 — Prozess ═══════════ -->
+<section class="ep-chapter ep-alt" id="kapitel-02">
+  <div class="ep-ch-grid">
+    <aside class="ep-ch-margin">
+      <div class="ep-ch-num">{{ch2_number}}</div>
+      <div class="ep-ch-note">↳ Prozess in vier Akten</div>
+    </aside>
+    <div class="ep-ch-main">
+      <div class="ep-ch-eb reveal">— {{ch2_eyebrow}}</div>
+      <h2 class="ep-ch-title reveal">{{ch2_title}}</h2>
+    </div>
+  </div>
+  <ol class="ep-steps">
+    <li class="ep-step reveal">
+      <span class="ep-step-num">01</span>
+      <div class="ep-step-body">
+        <h3>{{step_1_title}}</h3>
+        <p>{{step_1_text}}</p>
+      </div>
+      <span class="ep-step-icon" aria-hidden="true">
+        <svg viewBox="0 0 40 40" fill="none"><rect x="6" y="8" width="28" height="24" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M12 16h16M12 22h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </span>
+    </li>
+    <li class="ep-step reveal">
+      <span class="ep-step-num">02</span>
+      <div class="ep-step-body">
+        <h3>{{step_2_title}}</h3>
+        <p>{{step_2_text}}</p>
+      </div>
+      <span class="ep-step-icon" aria-hidden="true">
+        <svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="15" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M8 34c1.5-6 6-9 12-9s10.5 3 12 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </span>
+    </li>
+    <li class="ep-step reveal">
+      <span class="ep-step-num">03</span>
+      <div class="ep-step-body">
+        <h3>{{step_3_title}}</h3>
+        <p>{{step_3_text}}</p>
+      </div>
+      <span class="ep-step-icon" aria-hidden="true">
+        <svg viewBox="0 0 40 40" fill="none"><circle cx="18" cy="18" r="9" stroke="currentColor" stroke-width="1.5"/><path d="M26 26l7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M14 18l3 3 6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+    </li>
+    <li class="ep-step reveal">
+      <span class="ep-step-num">04</span>
+      <div class="ep-step-body">
+        <h3>{{step_4_title}}</h3>
+        <p>{{step_4_text}}</p>
+      </div>
+      <span class="ep-step-icon" aria-hidden="true">
+        <svg viewBox="0 0 40 40" fill="none"><path d="M10 8h16l6 6v18a2 2 0 01-2 2H10a2 2 0 01-2-2V10a2 2 0 012-2z" stroke="currentColor" stroke-width="1.5"/><path d="M14 20h12M14 26h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </span>
+    </li>
+  </ol>
+</section>
+
+<!-- ═══════════ KAPITEL 03 — Vorher/Nachher ═══════════ -->
+<section class="ep-chapter ep-chapter-dark" id="kapitel-03">
+  <div class="ep-ch-grid">
+    <aside class="ep-ch-margin">
+      <div class="ep-ch-num">{{ch3_number}}</div>
+      <div class="ep-ch-note">↳ Ein direkter Vergleich</div>
+    </aside>
+    <div class="ep-ch-main">
+      <div class="ep-ch-eb reveal">— {{ch3_eyebrow}}</div>
+      <h2 class="ep-ch-title reveal">{{ch3_title}}</h2>
+    </div>
+  </div>
+  <div class="ep-compare reveal">
+    <div class="ep-compare-col ep-before">
+      <div class="ep-compare-label">{{ch3_before_label}}</div>
+      <ul>
+        <li>{{ch3_before_1}}</li>
+        <li>{{ch3_before_2}}</li>
+        <li>{{ch3_before_3}}</li>
+        <li>{{ch3_before_4}}</li>
+      </ul>
+    </div>
+    <div class="ep-compare-arrow" aria-hidden="true">→</div>
+    <div class="ep-compare-col ep-after">
+      <div class="ep-compare-label">{{ch3_after_label}}</div>
+      <ul>
+        <li>{{ch3_after_1}}</li>
+        <li>{{ch3_after_2}}</li>
+        <li>{{ch3_after_3}}</li>
+        <li>{{ch3_after_4}}</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ KAPITEL 04 — Leistungen ═══════════ -->
+<section class="ep-chapter" id="kapitel-04">
+  <div class="ep-ch-grid">
+    <aside class="ep-ch-margin">
+      <div class="ep-ch-num">{{ch4_number}}</div>
+      <div class="ep-ch-note">↳ Vier Disziplinen</div>
+    </aside>
+    <div class="ep-ch-main">
+      <div class="ep-ch-eb reveal">— {{ch4_eyebrow}}</div>
+      <h2 class="ep-ch-title reveal">{{ch4_title}}</h2>
+    </div>
+  </div>
+  <div class="ep-services">
+    <article class="ep-service reveal">
+      <div class="ep-svc-num">{{svc_1_num}}</div>
+      <div class="ep-svc-body">
+        <h3>{{svc_1_title}}</h3>
+        <p>{{svc_1_text}}</p>
+        <a href="#bewerbung-form" class="ep-svc-cta">{{svc_1_cta}}</a>
+      </div>
+      <div class="ep-svc-visual" aria-hidden="true">
+        <svg viewBox="0 0 200 140" fill="none"><rect x="10" y="10" width="180" height="120" rx="6" stroke="currentColor" stroke-width="1.2"/><rect x="10" y="10" width="180" height="18" rx="6" fill="currentColor" opacity="0.08"/><circle cx="22" cy="19" r="2.5" fill="currentColor" opacity="0.5"/><circle cx="32" cy="19" r="2.5" fill="currentColor" opacity="0.5"/><rect x="24" y="46" width="60" height="70" rx="3" fill="var(--accent)" opacity="0.12"/><rect x="94" y="46" width="82" height="30" rx="3" fill="currentColor" opacity="0.08"/><rect x="94" y="82" width="82" height="34" rx="3" fill="currentColor" opacity="0.08"/></svg>
+      </div>
+    </article>
+    <article class="ep-service reveal ep-svc-flip">
+      <div class="ep-svc-num">{{svc_2_num}}</div>
+      <div class="ep-svc-body">
+        <h3>{{svc_2_title}}</h3>
+        <p>{{svc_2_text}}</p>
+        <a href="#bewerbung-form" class="ep-svc-cta">{{svc_2_cta}}</a>
+      </div>
+      <div class="ep-svc-visual" aria-hidden="true">
+        <svg viewBox="0 0 200 140" fill="none"><rect x="70" y="8" width="60" height="124" rx="10" stroke="currentColor" stroke-width="1.2"/><rect x="76" y="14" width="48" height="112" rx="6" fill="currentColor" opacity="0.06"/><rect x="90" y="30" width="20" height="4" rx="2" fill="currentColor" opacity="0.4"/><rect x="82" y="46" width="36" height="30" rx="3" fill="var(--accent)" opacity="0.2"/><rect x="82" y="82" width="36" height="6" rx="2" fill="currentColor" opacity="0.3"/><rect x="82" y="92" width="24" height="6" rx="2" fill="currentColor" opacity="0.3"/></svg>
+      </div>
+    </article>
+    <article class="ep-service reveal">
+      <div class="ep-svc-num">{{svc_3_num}}</div>
+      <div class="ep-svc-body">
+        <h3>{{svc_3_title}}</h3>
+        <p>{{svc_3_text}}</p>
+        <a href="#bewerbung-form" class="ep-svc-cta">{{svc_3_cta}}</a>
+      </div>
+      <div class="ep-svc-visual" aria-hidden="true">
+        <svg viewBox="0 0 200 140" fill="none"><rect x="10" y="20" width="80" height="100" rx="4" stroke="currentColor" stroke-width="1.2"/><rect x="16" y="26" width="68" height="8" rx="2" fill="var(--accent)" opacity="0.3"/><rect x="16" y="42" width="55" height="4" rx="2" fill="currentColor" opacity="0.3"/><rect x="16" y="52" width="60" height="4" rx="2" fill="currentColor" opacity="0.3"/><rect x="16" y="62" width="40" height="4" rx="2" fill="currentColor" opacity="0.3"/><rect x="110" y="20" width="80" height="100" rx="4" stroke="currentColor" stroke-width="1.2"/><path d="M120 90 L140 60 L160 78 L180 40" stroke="var(--accent)" stroke-width="1.5" fill="none"/><circle cx="180" cy="40" r="3" fill="var(--accent)"/></svg>
+      </div>
+    </article>
+    <article class="ep-service reveal ep-svc-flip">
+      <div class="ep-svc-num">{{svc_4_num}}</div>
+      <div class="ep-svc-body">
+        <h3>{{svc_4_title}}</h3>
+        <p>{{svc_4_text}}</p>
+        <a href="#bewerbung-form" class="ep-svc-cta">{{svc_4_cta}}</a>
+      </div>
+      <div class="ep-svc-visual" aria-hidden="true">
+        <svg viewBox="0 0 200 140" fill="none"><rect x="20" y="14" width="160" height="112" rx="4" stroke="currentColor" stroke-width="1.2"/><rect x="30" y="26" width="80" height="8" rx="2" fill="currentColor" opacity="0.6"/><rect x="30" y="40" width="50" height="4" rx="2" fill="currentColor" opacity="0.3"/><rect x="30" y="56" width="140" height="1" fill="currentColor" opacity="0.15"/><path d="M40 90 L60 70 L80 82 L100 60 L120 76 L140 50 L160 68" stroke="var(--accent)" stroke-width="1.5" fill="none"/><rect x="30" y="106" width="30" height="10" rx="2" fill="var(--accent)" opacity="0.15"/></svg>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ═══════════ ZAHLEN ═══════════ -->
+<section class="ep-stats" id="stats">
+  <div class="ep-stats-head">
+    <div class="ep-ch-eb reveal">— {{stats_eyebrow}}</div>
+    <h2 class="ep-stats-title reveal">{{stats_title}}</h2>
+  </div>
+  <div class="ep-stats-grid">
+    <div class="ep-stat reveal">
+      <div class="ep-stat-num"><span class="ep-count" data-to="{{stat_1_num}}">0</span><span class="ep-stat-suffix">{{stat_1_suffix}}</span></div>
+      <div class="ep-stat-label">{{stat_1_label}}</div>
+    </div>
+    <div class="ep-stat reveal">
+      <div class="ep-stat-num"><span class="ep-count" data-to="{{stat_2_num}}">0</span><span class="ep-stat-suffix">{{stat_2_suffix}}</span></div>
+      <div class="ep-stat-label">{{stat_2_label}}</div>
+    </div>
+    <div class="ep-stat reveal">
+      <div class="ep-stat-num"><span class="ep-count" data-to="{{stat_3_num}}">0</span><span class="ep-stat-suffix">{{stat_3_suffix}}</span></div>
+      <div class="ep-stat-label">{{stat_3_label}}</div>
+    </div>
+    <div class="ep-stat reveal">
+      <div class="ep-stat-num"><span class="ep-count" data-to="{{stat_4_num}}">0</span><span class="ep-stat-suffix">{{stat_4_suffix}}</span></div>
+      <div class="ep-stat-label">{{stat_4_label}}</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ TESTER WERDEN ═══════════ -->
+<section class="ep-tester" id="tester">
+  <div class="ep-tester-grid">
+    <div class="ep-tester-visual reveal" data-parallax="0.1">
+      <svg viewBox="0 0 420 400" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="210" cy="200" r="180" fill="var(--accent)" opacity="0.06"/>
+        <rect x="80" y="120" width="220" height="150" rx="8" fill="#1a1a1a"/>
+        <rect x="88" y="128" width="204" height="130" rx="4" fill="#f7f5f0"/>
+        <rect x="100" y="145" width="80" height="6" rx="2" fill="#1a1a1a" opacity="0.7"/>
+        <rect x="100" y="158" width="60" height="4" rx="2" fill="#1a1a1a" opacity="0.35"/>
+        <rect x="100" y="180" width="180" height="60" rx="4" fill="var(--accent)" opacity="0.15"/>
+        <rect x="150" y="270" width="80" height="8" rx="2" fill="#1a1a1a"/>
+        <!-- coffee cup -->
+        <g transform="translate(320 260)">
+          <ellipse cx="24" cy="8" rx="24" ry="6" fill="#1a1a1a"/>
+          <path d="M2 8 L6 44 Q8 52 24 52 Q40 52 42 44 L46 8" fill="#1a1a1a"/>
+          <path d="M46 16 Q60 18 60 30 Q60 42 46 40" stroke="#1a1a1a" stroke-width="3" fill="none"/>
+        </g>
+        <!-- headphones -->
+        <g transform="translate(30 60)" opacity="0.85">
+          <path d="M8 30 Q8 8 30 8 Q52 8 52 30" stroke="#1a1a1a" stroke-width="2" fill="none"/>
+          <rect x="4" y="28" width="10" height="18" rx="3" fill="#1a1a1a"/>
+          <rect x="46" y="28" width="10" height="18" rx="3" fill="#1a1a1a"/>
+        </g>
+        <circle cx="360" cy="120" r="6" fill="var(--accent)"/>
+        <circle cx="50" cy="340" r="10" fill="none" stroke="#1a1a1a" stroke-width="1.2"/>
+      </svg>
+    </div>
+    <div class="ep-tester-body">
+      <div class="ep-ch-eb reveal">— {{testers_eyebrow}}</div>
+      <h2 class="ep-tester-title reveal">{{testers_title}}</h2>
+      <p class="ep-body reveal">{{testers_text}}</p>
+      <div class="ep-tester-meta reveal">
+        <span>◦ {{testers_stat_1}}</span>
+        <span>◦ {{testers_stat_2}}</span>
+      </div>
+      <a href="#bewerbung-form" class="ep-btn ep-btn-primary reveal">{{testers_cta}}</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ UNTERNEHMEN ═══════════ -->
+<section class="ep-biz">
+  <div class="ep-biz-grid">
+    <div class="ep-biz-body">
+      <div class="ep-ch-eb reveal">— {{biz_eyebrow}}</div>
+      <h2 class="ep-biz-title reveal">{{biz_title}}</h2>
+      <p class="ep-body reveal">{{biz_text}}</p>
+      <ul class="ep-biz-list reveal">
+        <li>{{biz_bullet_1}}</li>
+        <li>{{biz_bullet_2}}</li>
+        <li>{{biz_bullet_3}}</li>
+      </ul>
+    </div>
+    <div class="ep-biz-visual reveal" data-parallax="0.06">
+      <svg viewBox="0 0 460 460" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <!-- background composition -->
+        <circle cx="230" cy="230" r="200" fill="#f7f5f0"/>
+        <!-- website card -->
+        <g transform="translate(40 40)">
+          <rect width="200" height="140" rx="6" fill="#fff" stroke="#1a1a1a" stroke-width="1.2"/>
+          <rect x="10" y="10" width="180" height="16" rx="4" fill="#1a1a1a" opacity="0.1"/>
+          <rect x="10" y="36" width="120" height="8" rx="2" fill="#1a1a1a" opacity="0.7"/>
+          <rect x="10" y="54" width="180" height="4" rx="2" fill="#1a1a1a" opacity="0.25"/>
+          <rect x="10" y="70" width="180" height="4" rx="2" fill="#1a1a1a" opacity="0.25"/>
+          <rect x="10" y="86" width="90" height="40" rx="4" fill="var(--accent)" opacity="0.14"/>
+          <rect x="110" y="86" width="80" height="40" rx="4" fill="#1a1a1a" opacity="0.08"/>
+        </g>
+        <!-- app -->
+        <g transform="translate(280 30)">
+          <rect width="90" height="170" rx="14" fill="#1a1a1a"/>
+          <rect x="6" y="6" width="78" height="158" rx="10" fill="#f7f5f0"/>
+          <rect x="16" y="26" width="40" height="6" rx="2" fill="#1a1a1a" opacity="0.75"/>
+          <rect x="16" y="46" width="58" height="34" rx="4" fill="var(--accent)" opacity="0.2"/>
+          <rect x="16" y="90" width="58" height="4" rx="2" fill="#1a1a1a" opacity="0.3"/>
+          <rect x="16" y="100" width="40" height="4" rx="2" fill="#1a1a1a" opacity="0.3"/>
+          <rect x="16" y="130" width="58" height="20" rx="4" fill="#1a1a1a"/>
+        </g>
+        <!-- cloud -->
+        <g transform="translate(70 220)">
+          <path d="M20 30 Q10 30 10 20 Q10 10 22 10 Q26 0 40 0 Q56 0 60 12 Q76 12 76 26 Q76 40 62 40 L20 40 Z" fill="#fff" stroke="#1a1a1a" stroke-width="1.2"/>
+          <text x="43" y="30" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="9" fill="#1a1a1a">CLOUD</text>
+        </g>
+        <!-- bug -->
+        <g transform="translate(200 230)">
+          <ellipse cx="30" cy="30" rx="22" ry="18" fill="#1a1a1a"/>
+          <line x1="8" y1="30" x2="0" y2="24" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+          <line x1="8" y1="30" x2="0" y2="36" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+          <line x1="52" y1="30" x2="60" y2="24" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+          <line x1="52" y1="30" x2="60" y2="36" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="24" cy="26" r="3" fill="#f7f5f0"/>
+          <circle cx="36" cy="26" r="3" fill="#f7f5f0"/>
+        </g>
+        <!-- report -->
+        <g transform="translate(300 240)">
+          <rect width="130" height="170" rx="6" fill="#fff" stroke="#1a1a1a" stroke-width="1.2"/>
+          <rect x="12" y="14" width="60" height="6" rx="2" fill="#1a1a1a" opacity="0.8"/>
+          <rect x="12" y="26" width="40" height="4" rx="2" fill="#1a1a1a" opacity="0.35"/>
+          <rect x="12" y="44" width="106" height="1" fill="#1a1a1a" opacity="0.2"/>
+          <path d="M20 100 L40 80 L60 90 L80 70 L100 82 L118 60" stroke="var(--accent)" stroke-width="1.5" fill="none"/>
+          <rect x="12" y="130" width="106" height="8" rx="2" fill="#1a1a1a" opacity="0.15"/>
+          <rect x="12" y="144" width="80" height="8" rx="2" fill="#1a1a1a" opacity="0.15"/>
+        </g>
+        <circle cx="80" cy="80" r="6" fill="var(--accent)"/>
+        <circle cx="400" cy="200" r="4" fill="var(--accent)"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- injection anchor for trust/testimonial blocks -->
+<div data-inject-anchor></div>
+
+<!-- ═══════════ FINAL CTA ═══════════ -->
+<section class="ep-final" id="final">
+  <div class="ep-final-bg" aria-hidden="true">
+    <div class="ep-final-orb ep-final-orb-1"></div>
+    <div class="ep-final-orb ep-final-orb-2"></div>
+  </div>
+  <div class="ep-final-inner">
+    <div class="ep-ch-eb ep-eb-light reveal">— {{final_eyebrow}}</div>
+    <h2 class="ep-final-title reveal">{{final_title}}</h2>
+    <div class="ep-final-ctas reveal">
+      <a href="#bewerbung-form" class="ep-btn ep-btn-primary ep-btn-lg">{{final_cta_1}}</a>
+      <a href="#bewerbung-form" class="ep-btn ep-btn-outline-light ep-btn-lg">{{final_cta_2}}</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer class="ep-foot">
+  <div class="ep-foot-top">
+    <div class="ep-foot-brand">
+      <div class="ep-brand-mark">◐</div>
+      <div class="ep-foot-name">{{brand_name}}</div>
+      <p class="ep-foot-tag">{{footer_tagline}}</p>
+    </div>
+    <div class="ep-foot-cols">
+      <div class="ep-foot-col">
+        <div class="ep-foot-h">{{footer_col_1_title}}</div>
+        <div class="ep-foot-links" data-list="{{footer_col_1_links}}"></div>
+      </div>
+      <div class="ep-foot-col">
+        <div class="ep-foot-h">{{footer_col_2_title}}</div>
+        <div class="ep-foot-links" data-list="{{footer_col_2_links}}"></div>
+      </div>
+      <div class="ep-foot-col">
+        <div class="ep-foot-h">{{footer_col_3_title}}</div>
+        <div class="ep-foot-links" data-list="{{footer_col_3_links}}"></div>
+      </div>
+    </div>
+  </div>
+  <div class="ep-foot-bottom">
+    <div>© <span id="ep-year"></span> {{brand_name}} — Alle Rechte vorbehalten.</div>
+    <div class="ep-foot-legal">
+      <a href="/impressum">Impressum</a>
+      <a href="/datenschutz">Datenschutz</a>
+      <a href="/agb">AGB</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

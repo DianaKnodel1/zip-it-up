@@ -1,0 +1,49 @@
+:root {
+  --amber-bg: #FFFFFF;
+  --amber-text: #1F2937;
+  --amber-accent: #D97706;
+  --amber-dark: #111827;
+  --amber-light: #F9FAFB;
+  --amber-font: 'Outfit', sans-serif;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: var(--amber-bg); color: var(--amber-text); font-family: var(--amber-font); line-height: 1.6; }
+.amber-container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+/* Navigation */
+.amber-nav { padding: 32px 0; }
+.amber-nav-inner { display: flex; align-items: center; justify-content: space-between; }
+.amber-brand { font-size: 1.5rem; font-weight: 700; color: var(--amber-dark); text-decoration: none; }
+.amber-menu { display: flex; gap: 32px; }
+.amber-menu a { text-decoration: none; color: var(--amber-text); font-size: 0.9rem; }
+.amber-nav-cta { background: var(--amber-accent); color: #fff; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-weight: 600; }
+
+/* Hero */
+.amber-hero { padding: 80px 0; }
+.amber-hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
+.amber-hero h1 { font-size: 3.5rem; margin-bottom: 24px; color: var(--amber-dark); line-height: 1.2; }
+.amber-hero p { font-size: 1.2rem; color: #4B5563; margin-bottom: 32px; }
+.amber-hero-actions { display: flex; gap: 16px; }
+.amber-btn-primary { background: var(--amber-dark); color: #fff; padding: 16px 32px; text-decoration: none; border-radius: 4px; }
+.amber-btn-secondary { background: transparent; border: 1px solid var(--amber-dark); color: var(--amber-dark); padding: 16px 32px; text-decoration: none; border-radius: 4px; }
+
+/* Trust */
+.amber-trust { padding: 40px 0; background: var(--amber-light); }
+.amber-trust-grid { display: flex; justify-content: space-between; gap: 32px; }
+.amber-trust-item { display: flex; align-items: center; gap: 12px; }
+.amber-trust-icon { color: var(--amber-accent); font-weight: bold; }
+
+/* Prozess */
+.amber-process { padding: 80px 0; }
+.amber-section-title { font-size: 2.5rem; margin-bottom: 48px; text-align: center; }
+.amber-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+.amber-step { padding: 32px; background: var(--amber-light); border-radius: 8px; }
+.amber-step-nr { display: block; font-size: 2rem; color: var(--amber-accent); margin-bottom: 16px; font-weight: 700; }
+
+/* About */
+.amber-about { padding: 80px 0; background: var(--amber-dark); color: #fff; }
+
+/* Footer */
+.amber-footer { padding: 80px 0 40px; background: #F3F4F6; }
+.amber-footer-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 40px; }
+.amber-footer-bottom { margin-top: 40px; text-align: center; font-size: 0.8rem; }

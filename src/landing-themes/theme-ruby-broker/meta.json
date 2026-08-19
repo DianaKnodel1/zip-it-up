@@ -1,0 +1,25 @@
+{
+  "id": "theme-ruby-broker",
+  "name": "Ruby — Dynamic Broker",
+  "description": "Energetisch und schnell. Fokussiert auf hohe Geschwindigkeit und Bewerber-Conversion.",
+  "slots": {
+    "hero_title": "Deine Karriere im Überholmodus",
+    "hero_sub": "Wir finden Jobs, die zu deinem Tempo passen. Schnell, diskret und erfolgreich.",
+    "hero_cta": "Jetzt Termin sichern",
+    "hero_cta_sec": "Wie es funktioniert",
+    "hero_image": "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&q=80&w=1200",
+    "trust_title": "Warum Ruby?",
+    "t1_t": "Turbo-Bewerbung",
+    "t2_t": "Diskretion garantiert",
+    "t3_t": "Marktexklusive Rollen",
+    "process_title": "Einfach zum Job",
+    "s1_t": "Kontakt",
+    "s1_d": "Wähle deinen Wunsch-Termin.",
+    "s2_t": "Matching",
+    "s2_d": "Wir präsentieren dein Profil dem Arbeitgeber.",
+    "s3_t": "Start",
+    "s3_d": "Erfolgreicher Einstieg in Rekordzeit.",
+    "about_title": "Über Ruby",
+    "about_text": "Ruby Broker versteht, dass Zeit der wertvollste Rohstoff ist. Wir minimieren Wartezeiten und maximieren Ergebnisse."
+  }
+}

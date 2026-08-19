@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>{{seo_title}}</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body class="theme-sapphire">
+<div class="sap-sidebar">
+  <a href="#" class="sap-logo">{{brand_name}}</a>
+  <nav>
+    <a href="#prozess">Analyse</a>
+    <a href="#about">Prinzipien</a>
+    <a href="#kontakt">Kontakt</a>
+  </nav>
+  <div class="sap-sidebar-footer">{{firmenname}}</div>
+</div>
+<main class="sap-main">
+  <section class="sap-hero">
+    <div class="sap-content">
+      <h1>{{hero_title}}</h1>
+      <p>{{hero_sub}}</p>
+      <div class="sap-actions">
+        <a href="#bewerbung-form" class="sap-btn">{{hero_cta}}</a>
+      </div>
+    </div>
+  </section>
+  <section id="prozess" class="sap-steps">
+    <h2>{{process_title}}</h2>
+    <div class="sap-step-list">
+      <div class="sap-step"><h4>{{s1_t}}</h4><p>{{s1_d}}</p></div>
+      <div class="sap-step"><h4>{{s2_t}}</h4><p>{{s2_d}}</p></div>
+      <div class="sap-step"><h4>{{s3_t}}</h4><p>{{s3_d}}</p></div>
+    </div>
+  </section>
+  <footer id="kontakt" class="sap-footer">
+    <div class="sap-footer-content">
+      <div class="sap-info">
+        <h3>{{firmenname}}</h3>
+        <p>{{contact_address}}</p>
+      </div>
+      <div class="sap-legal">{{legal_block}}</div>
+    </div>
+  </footer>
+</main>
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+:root{--slate-main:#334155;--slate-gold:#94a3b8;--slate-text:#1e293b}
+body{margin:0;font-family:'Plus Jakarta Sans',sans-serif;color:var(--slate-text);background:#fff}
+.slate-container{max-width:1000px;margin:0 auto;padding:0 32px}
+.slate-header{padding:40px 0;position:absolute;width:100%;z-index:10}
+.slate-header .slate-container{display:flex;justify-content:space-between;align-items:center}
+.slate-logo{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--slate-main);text-decoration:none}
+.slate-btn-outline{border:1px solid var(--slate-main);padding:10px 24px;text-decoration:none;color:var(--slate-main);font-size:14px;letter-spacing:1px;text-transform:uppercase}
+.slate-hero{height:90vh;display:flex;align-items:center;background:#f1f5f9;position:relative;overflow:hidden}
+.slate-hero-box{max-width:700px;z-index:2}
+.slate-hero-box span{text-transform:uppercase;letter-spacing:3px;font-size:12px;color:var(--slate-gold);margin-bottom:24px;display:block}
+.slate-hero-box h1{font-family:'Playfair Display',serif;font-size:64px;margin:0 0 32px;line-height:1.1}
+.slate-hero-box p{font-size:20px;color:var(--slate-main);margin-bottom:48px;font-weight:300}
+.slate-btn-solid{background:var(--slate-main);color:#fff;padding:18px 36px;text-decoration:none;font-size:16px;box-shadow:0 10px 30px rgba(0,0,0,.1)}
+.slate-process{padding:120px 0}
+.slate-process-grid{display:grid;grid-template-columns:1fr 1.5fr;gap:80px}
+.slate-process-intro h2{font-family:'Playfair Display',serif;font-size:40px;margin-bottom:24px}
+.slate-item{margin-bottom:48px;padding-bottom:32px;border-bottom:1px solid #e2e8f0}
+.slate-item h5{font-size:18px;margin:0 0 12px;text-transform:uppercase;letter-spacing:1px}
+.slate-footer{padding:100px 0;background:var(--slate-main);color:#fff}
+.slate-footer-inner{display:flex;justify-content:space-between}
+.slate-footer-brand h3{font-family:'Playfair Display',serif;margin-bottom:24px}
+.slate-contact{font-weight:300;opacity:.7;line-height:1.8}
+.slate-footer-nav a{display:block;color:#fff;text-decoration:none;margin-bottom:12px;opacity:.8}
+@media(max-width:768px){
+  .slate-hero-box h1{font-size:40px}
+  .slate-process-grid{grid-template-columns:1fr;gap:40px}
+  .slate-footer-inner{flex-direction:column;gap:48px}
+}

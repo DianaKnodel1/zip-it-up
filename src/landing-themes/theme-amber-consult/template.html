@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>{{seo_title}}</title>
+<meta name="description" content="{{seo_description}}" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body class="theme-amber">
+<header class="amber-nav">
+  <div class="amber-container">
+    <div class="amber-nav-inner">
+      <a href="#" class="amber-brand">{{brand_name}}</a>
+      <nav class="amber-menu">
+        <a href="#prozess">Prozess</a>
+        <a href="#ueber-uns">Über uns</a>
+        <a href="#kontakt">Kontakt</a>
+      </nav>
+      <a href="#bewerbung-form" class="amber-nav-cta">{{hero_cta}}</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="amber-hero">
+    <div class="amber-container">
+      <div class="amber-hero-grid">
+        <div class="amber-hero-content">
+          <h1>{{hero_title}}</h1>
+          <p>{{hero_sub}}</p>
+          <div class="amber-hero-actions">
+            <a href="#bewerbung-form" class="amber-btn-primary">{{hero_cta}}</a>
+            <a href="#prozess" class="amber-btn-secondary">{{hero_cta_sec}}</a>
+          </div>
+        </div>
+        <div class="amber-hero-media">
+          <img src="{{hero_image}}" alt="Expert Consultation" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="amber-trust">
+    <div class="amber-container">
+      <div class="amber-trust-grid">
+        <div class="amber-trust-item">
+          <span class="amber-trust-icon">✓</span>
+          <h3>{{t1_t}}</h3>
+        </div>
+        <div class="amber-trust-item">
+          <span class="amber-trust-icon">✓</span>
+          <h3>{{t2_t}}</h3>
+        </div>
+        <div class="amber-trust-item">
+          <span class="amber-trust-icon">✓</span>
+          <h3>{{t3_t}}</h3>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="prozess" class="amber-process">
+    <div class="amber-container">
+      <h2 class="amber-section-title">{{process_title}}</h2>
+      <div class="amber-steps">
+        <div class="amber-step">
+          <span class="amber-step-nr">01</span>
+          <h3>{{s1_t}}</h3>
+          <p>{{s1_d}}</p>
+        </div>
+        <div class="amber-step">
+          <span class="amber-step-nr">02</span>
+          <h3>{{s2_t}}</h3>
+          <p>{{s2_d}}</p>
+        </div>
+        <div class="amber-step">
+          <span class="amber-step-nr">03</span>
+          <h3>{{s3_t}}</h3>
+          <p>{{s3_d}}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="ueber-uns" class="amber-about">
+    <div class="amber-container">
+      <div class="amber-about-grid">
+        <div class="amber-about-content">
+          <h2 class="amber-section-title">{{about_title}}</h2>
+          <p>{{about_text}}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer id="kontakt" class="amber-footer">
+  <div class="amber-container">
+    <div class="amber-footer-grid">
+      <div class="amber-footer-info">
+        <h3>{{firmenname}}</h3>
+        <p>{{contact_address}}</p>
+        <p>{{contact_phone}}</p>
+        <p>{{contact_email}}</p>
+      </div>
+      <div class="amber-footer-links">
+        <h4>Rechtliches</h4>
+        <a href="{{impressum_url}}">Impressum</a>
+        <a href="{{datenschutz_url}}">Datenschutz</a>
+      </div>
+    </div>
+    <div class="amber-footer-bottom">
+      &copy; 2026 {{firmenname}}. Alle Rechte vorbehalten.
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

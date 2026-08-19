@@ -1,0 +1,55 @@
+{
+  "id": "theme-noir-executive",
+  "name": "Noir — Executive Search",
+  "description": "Hochwertiger, dunkler Editorial-Look für Premium-Personalberatungen. Seriös, minimalistisch und selbstbewusst.",
+  "slots": [
+    { "key": "brand_name", "label": "Marke", "type": "text", "default": "VERMITTLUNG" },
+    { "key": "hero_title", "label": "Hero Titel", "type": "text", "default": "Menschen. Möglichkeiten. Perspektiven." },
+    { "key": "hero_sub", "label": "Hero Untertitel", "type": "longtext", "default": "Wir verbinden qualifizierte Menschen mit passenden Unternehmen und schaffen professionelle Verbindungen für den nächsten Karriereschritt." },
+    { "key": "hero_cta", "label": "Hero Button", "type": "text", "default": "Jetzt bewerben" },
+    { "key": "hero_cta_sec", "label": "Hero Sekundär", "type": "text", "default": "Unsere Vermittlung" },
+    { "key": "hero_image", "label": "Hero Bild", "type": "image", "default": "assets/hero.jpg" },
+    
+    { "key": "trust_title", "label": "Vertrauen Titel", "type": "text", "default": "Persönlich. Gezielter. Professioneller." },
+    { "key": "t1_t", "label": "Trust 1", "type": "text", "default": "Exklusives Netzwerk" },
+    { "key": "t2_t", "label": "Trust 2", "type": "text", "default": "Gezieltes Matching" },
+    { "key": "t3_t", "label": "Trust 3", "type": "text", "default": "Persönliche Beratung" },
+    { "key": "t4_t", "label": "Trust 4", "type": "text", "default": "Diskreter Prozess" },
+
+    { "key": "process_title", "label": "Prozess Titel", "type": "text", "default": "Der Weg zur richtigen Position" },
+    { "key": "s1_t", "label": "Schritt 1", "type": "text", "default": "Bewerbung" },
+    { "key": "s1_d", "label": "Schritt 1 Beschreibung", "type": "text", "default": "Ihr Profil erreicht uns direkt und diskret." },
+    { "key": "s2_t", "label": "Schritt 2", "type": "text", "default": "Profil" },
+    { "key": "s2_d", "label": "Schritt 2 Beschreibung", "type": "text", "default": "Wir analysieren Ihre Stärken und Wünsche." },
+    { "key": "s3_t", "label": "Schritt 3", "type": "text", "default": "Matching" },
+    { "key": "s3_d", "label": "Schritt 3 Beschreibung", "type": "text", "default": "Gezielte Auswahl passender Partnerunternehmen." },
+    { "key": "s4_t", "label": "Schritt 4", "type": "text", "default": "Vermittlung" },
+    { "key": "s4_d", "label": "Schritt 4 Beschreibung", "type": "text", "default": "Wir moderieren den Kontakt auf Augenhöhe." },
+    { "key": "s5_t", "label": "Schritt 5", "type": "text", "default": "Nächster Schritt" },
+    { "key": "s5_d", "label": "Schritt 5 Beschreibung", "type": "text", "default": "Ihr Karrieresprung beginnt hier." },
+
+    { "key": "applicant_title", "label": "Bewerber Headline", "type": "text", "default": "Nicht irgendeine Position. Die richtige." },
+    { "key": "applicant_text", "label": "Bewerber Text", "type": "longtext", "default": "Wir begleiten Sie durch einen strukturierten Prozess zu Partnerunternehmen, die wirklich zu Ihrem Profil passen." },
+    
+    { "key": "company_title", "label": "Unternehmen Headline", "type": "text", "default": "Talente gezielt erreichen." },
+    { "key": "company_text", "label": "Unternehmen Text", "type": "longtext", "default": "Professionelle Darstellung des Nutzens für Partnerunternehmen. Wir finden die Köpfe, die Ihr Unternehmen voranbringen." },
+    { "key": "company_image", "label": "Unternehmen Bild", "type": "image", "default": "assets/company.jpg" },
+
+    { "key": "brand_statement", "label": "Brand Statement", "type": "text", "default": "THE RIGHT CONNECTION CHANGES THE NEXT STEP." },
+    
+    { "key": "about_title", "label": "Über uns Titel", "type": "text", "default": "Expertise trifft Diskretion." },
+    { "key": "about_text", "label": "Über uns Text", "type": "longtext", "default": "Wir verstehen uns als Architekten beruflicher Perspektiven. Mit langjähriger Erfahrung in der Personalberatung schaffen wir Mehrwert für Talente und Unternehmen gleichermaßen." },
+    { "key": "about_image", "label": "Über uns Bild", "type": "image", "default": "assets/about.jpg" },
+
+    { "key": "faq_title", "label": "FAQ Titel", "type": "text", "default": "Häufige Fragen" },
+    { "key": "final_title", "label": "Final Titel", "type": "text", "default": "Ihr nächster Schritt beginnt hier." },
+    { "key": "final_cta", "label": "Final Button", "type": "text", "default": "Jetzt bewerben" },
+    
+    { "key": "contact_email", "label": "E-Mail", "type": "text", "default": "" },
+    { "key": "contact_phone", "label": "Telefon", "type": "text", "default": "" },
+    { "key": "impressum_url", "label": "Impressum URL", "type": "text", "default": "#" },
+    { "key": "datenschutz_url", "label": "Datenschutz URL", "type": "text", "default": "#" },
+    { "key": "seo_title", "label": "SEO Titel", "type": "text", "default": "Premium Personalberatung & Vermittlung | Noir" },
+    { "key": "seo_description", "label": "SEO Beschreibung", "type": "text", "default": "Exklusive Personalvermittlung für qualifizierte Fach- und Führungskräfte. Diskret, professionell und gezielt." }
+  ]
+}

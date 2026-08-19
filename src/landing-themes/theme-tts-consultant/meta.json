@@ -1,0 +1,373 @@
+{
+  "id": "theme-tts-consultant",
+  "name": "TTS-Beratung Replica — Digitalisierungs-Beratung",
+  "description": "1:1 Replica von tts-beratung.de: heller Hintergrund, blaue Akzente, Hero mit Bild & Stat-Card, 3 Fachgebiete-Karten, Karriere-Banner, Über-uns mit Bullet-Liste und 4 Stat-Kacheln. Voll rebrandable.",
+  "slots": [
+    {
+      "key": "logo_image",
+      "label": "Logo (optional, ersetzt Wordmark)",
+      "type": "image",
+      "default": ""
+    },
+    {
+      "key": "nav_label_start",
+      "label": "Nav: Startseite",
+      "type": "text",
+      "default": "Startseite"
+    },
+    {
+      "key": "nav_label_company",
+      "label": "Nav: Unternehmen",
+      "type": "text",
+      "default": "Unternehmen"
+    },
+    {
+      "key": "nav_label_services",
+      "label": "Nav: Fachgebiete",
+      "type": "text",
+      "default": "Stellenbereiche"
+    },
+    {
+      "key": "nav_label_team",
+      "label": "Nav: Unser Team",
+      "type": "text",
+      "default": "Ihr Ansprechpartner"
+    },
+    {
+      "key": "nav_label_career",
+      "label": "Nav: Karriere",
+      "type": "text",
+      "default": "Bewerben"
+    },
+    {
+      "key": "nav_label_contact",
+      "label": "Nav: Kontakt",
+      "type": "text",
+      "default": "Kontakt"
+    },
+    {
+      "key": "nav_cta_label",
+      "label": "Nav-CTA Label",
+      "type": "text",
+      "default": "Jetzt bewerben"
+    },
+    {
+      "key": "cta_url",
+      "label": "Bewerbungs-URL (Jetzt bewerben)",
+      "type": "text",
+      "default": "/bewerbung"
+    },
+    {
+      "key": "cta_label",
+      "label": "CTA-Button-Beschriftung",
+      "type": "text",
+      "default": "Jetzt bewerben"
+    },
+    {
+      "key": "hero_title",
+      "label": "Hero-Überschrift",
+      "type": "longtext",
+      "default": "Unsere Partnerunternehmen suchen Verstärkung — wir bringen Sie zusammen."
+    },
+    {
+      "key": "hero_image",
+      "label": "Hero-Bild (URL)",
+      "type": "image",
+      "default": "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=1400&q=80"
+    },
+    {
+      "key": "hero_stat_value",
+      "label": "Hero-Stat Wert",
+      "type": "text",
+      "default": "48 h"
+    },
+    {
+      "key": "hero_stat_label",
+      "label": "Hero-Stat Label",
+      "type": "text",
+      "default": "Erste Rückmeldung"
+    },
+    {
+      "key": "hero_stat_body",
+      "label": "Hero-Stat Beschreibung",
+      "type": "longtext",
+      "default": "Wir prüfen Ihr Profil kostenfrei und melden uns in der Regel innerhalb von 48 Stunden."
+    },
+    {
+      "key": "services_kicker",
+      "label": "Fachgebiete Kicker",
+      "type": "text",
+      "default": "Unsere Stellenbereiche"
+    },
+    {
+      "key": "services_title",
+      "label": "Fachgebiete-Headline",
+      "type": "longtext",
+      "default": "In diesen Bereichen vermitteln wir laufend Positionen bei unseren Partnerunternehmen."
+    },
+    {
+      "key": "service_1_title",
+      "label": "Service 1 Titel",
+      "type": "text",
+      "default": "Kaufmännische Berufe"
+    },
+    {
+      "key": "service_1_body",
+      "label": "Service 1 Beschreibung",
+      "type": "longtext",
+      "default": "Sachbearbeitung, Kundenbetreuung, Buchhaltung und Assistenz — feste Stellen bei geprüften Partnerunternehmen. Wir klären vorab Aufgaben, Arbeitszeiten und Vergütung, damit Sie wissen, worauf Sie sich einlassen."
+    },
+    {
+      "key": "service_1_link",
+      "label": "Service 1 Link",
+      "type": "text",
+      "default": "#fachgebiete"
+    },
+    {
+      "key": "service_2_title",
+      "label": "Service 2 Titel",
+      "type": "text",
+      "default": "IT & digitale Aufgaben"
+    },
+    {
+      "key": "service_2_body",
+      "label": "Service 2 Beschreibung",
+      "type": "longtext",
+      "default": "Support, Software-Tests, Datenpflege und digitale Projektarbeit — auch für Quereinsteiger mit Sorgfalt und Technikaffinität. Einarbeitung erfolgt beim Partnerunternehmen, wir begleiten Sie dabei."
+    },
+    {
+      "key": "service_2_link",
+      "label": "Service 2 Link",
+      "type": "text",
+      "default": "#fachgebiete"
+    },
+    {
+      "key": "service_3_title",
+      "label": "Service 3 Titel",
+      "type": "text",
+      "default": "Service & Produktion"
+    },
+    {
+      "key": "service_3_body",
+      "label": "Service 3 Beschreibung",
+      "type": "longtext",
+      "default": "Logistik, Fertigung, Qualitätskontrolle und Servicetätigkeiten. Sozialversicherungspflichtige Anstellung, klare Schichtmodelle und ein fester Ansprechpartner bei uns — von der Bewerbung bis zum ersten Arbeitstag."
+    },
+    {
+      "key": "service_3_link",
+      "label": "Service 3 Link",
+      "type": "text",
+      "default": "#fachgebiete"
+    },
+    {
+      "key": "career_kicker",
+      "label": "Karriere-Banner Kicker",
+      "type": "text",
+      "default": "Für Bewerberinnen und Bewerber"
+    },
+    {
+      "key": "career_title",
+      "label": "Karriere-Banner Titel",
+      "type": "text",
+      "default": "Unsere Partnerunternehmen suchen Verstärkung — bewerben Sie sich in zwei Minuten."
+    },
+    {
+      "key": "career_cta_label",
+      "label": "Karriere-Banner CTA",
+      "type": "text",
+      "default": "Jetzt bewerben"
+    },
+    {
+      "key": "about_kicker",
+      "label": "Über uns Kicker",
+      "type": "text",
+      "default": "Über uns"
+    },
+    {
+      "key": "about_title",
+      "label": "Über uns Headline",
+      "type": "longtext",
+      "default": "Personalvermittlung mit persönlicher Begleitung."
+    },
+    {
+      "key": "about_body",
+      "label": "Über uns Text",
+      "type": "longtext",
+      "default": "Wir sind eine Personalvermittlung und stellen selbst nicht ein — wir bringen Sie mit Unternehmen zusammen, die wirklich suchen. Dafür prüfen wir jedes Partnerunternehmen vorab, besprechen Ihre Wünsche im persönlichen Gespräch und schlagen nur Positionen vor, die tatsächlich passen. Für Sie ist die Vermittlung kostenfrei."
+    },
+    {
+      "key": "about_subtitle",
+      "label": "Über uns Subheadline",
+      "type": "longtext",
+      "default": "Vom ersten Gespräch bis zur Vertragsunterschrift bleibt derselbe Ansprechpartner an Ihrer Seite."
+    },
+    {
+      "key": "about_image_1",
+      "label": "Über uns Bild 1",
+      "type": "image",
+      "default": "https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=900&q=80"
+    },
+    {
+      "key": "about_image_2",
+      "label": "Über uns Bild 2",
+      "type": "image",
+      "default": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=900&q=80"
+    },
+    {
+      "key": "about_bullet_1",
+      "label": "Vorteil 1",
+      "type": "text",
+      "default": "Kostenfrei für Bewerber"
+    },
+    {
+      "key": "about_bullet_2",
+      "label": "Vorteil 2",
+      "type": "text",
+      "default": "Geprüfte Partnerunternehmen"
+    },
+    {
+      "key": "about_bullet_3",
+      "label": "Vorteil 3",
+      "type": "text",
+      "default": "Fester Ansprechpartner"
+    },
+    {
+      "key": "about_bullet_4",
+      "label": "Vorteil 4",
+      "type": "text",
+      "default": "Deutschlandweite Stellen"
+    },
+    {
+      "key": "about_bullet_5",
+      "label": "Vorteil 5",
+      "type": "text",
+      "default": "Auch für Quereinsteiger"
+    },
+    {
+      "key": "about_bullet_6",
+      "label": "Vorteil 6",
+      "type": "text",
+      "default": "Schnelle Rückmeldung"
+    },
+    {
+      "key": "about_cta_label",
+      "label": "Über uns CTA",
+      "type": "text",
+      "default": "Mehr erfahren"
+    },
+    {
+      "key": "about_cta_link",
+      "label": "Über uns CTA Link",
+      "type": "text",
+      "default": "#unternehmen"
+    },
+    {
+      "key": "stat_1_value",
+      "label": "Stat 1 Wert",
+      "type": "text",
+      "default": "250+"
+    },
+    {
+      "key": "stat_1_label",
+      "label": "Stat 1 Label",
+      "type": "text",
+      "default": "Vermittelte Fachkräfte"
+    },
+    {
+      "key": "stat_1_body",
+      "label": "Stat 1 Beschreibung",
+      "type": "longtext",
+      "default": "Wir begleiten Bewerberinnen und Bewerber bis in die feste Anstellung."
+    },
+    {
+      "key": "stat_2_value",
+      "label": "Stat 2 Wert",
+      "type": "text",
+      "default": "80+"
+    },
+    {
+      "key": "stat_2_label",
+      "label": "Stat 2 Label",
+      "type": "text",
+      "default": "Partnerunternehmen"
+    },
+    {
+      "key": "stat_2_body",
+      "label": "Stat 2 Beschreibung",
+      "type": "longtext",
+      "default": "Vom Mittelstand bis zum Konzern — alle Auftraggeber werden vorab geprüft."
+    },
+    {
+      "key": "stat_3_value",
+      "label": "Stat 3 Wert",
+      "type": "text",
+      "default": "48 h"
+    },
+    {
+      "key": "stat_3_label",
+      "label": "Stat 3 Label",
+      "type": "text",
+      "default": "Reaktionszeit"
+    },
+    {
+      "key": "stat_3_body",
+      "label": "Stat 3 Beschreibung",
+      "type": "longtext",
+      "default": "So schnell erhalten Sie in der Regel unsere erste Rückmeldung."
+    },
+    {
+      "key": "stat_4_value",
+      "label": "Stat 4 Wert",
+      "type": "text",
+      "default": "0 €"
+    },
+    {
+      "key": "stat_4_label",
+      "label": "Stat 4 Label",
+      "type": "text",
+      "default": "Kosten für Bewerber"
+    },
+    {
+      "key": "stat_4_body",
+      "label": "Stat 4 Beschreibung",
+      "type": "longtext",
+      "default": "Die Vermittlung ist für Sie zu jedem Zeitpunkt kostenfrei."
+    },
+    {
+      "key": "footer_tagline",
+      "label": "Footer Tagline",
+      "type": "longtext",
+      "default": "Ihre Personalvermittlung — wir bringen Sie mit passenden Partnerunternehmen zusammen."
+    },
+    {
+      "key": "footer_address",
+      "label": "Footer Adresse",
+      "type": "longtext",
+      "default": ""
+    },
+    {
+      "key": "footer_email",
+      "label": "Footer E-Mail",
+      "type": "text",
+      "default": ""
+    },
+    {
+      "key": "footer_phone",
+      "label": "Footer Telefon",
+      "type": "text",
+      "default": ""
+    },
+    {
+      "key": "impressum_url",
+      "label": "Impressum-Link",
+      "type": "text",
+      "default": "impressum.html"
+    },
+    {
+      "key": "datenschutz_url",
+      "label": "Datenschutz-Link",
+      "type": "text",
+      "default": "datenschutz.html"
+    }
+  ]
+}

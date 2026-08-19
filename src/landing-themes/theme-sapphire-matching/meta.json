@@ -1,0 +1,25 @@
+{
+  "id": "theme-sapphire-matching",
+  "name": "Sapphire — Precision Matching",
+  "description": "Präzise, analytisch und effizient. Perfekt für Fach- und Führungskräfte.",
+  "slots": {
+    "hero_title": "Präzision in der Personalvermittlung",
+    "hero_sub": "Unser datengestütztes Matching sorgt für die perfekte Übereinstimmung von Talent und Anforderung.",
+    "hero_cta": "Talent-Check starten",
+    "hero_cta_sec": "Methodik ansehen",
+    "hero_image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1200",
+    "trust_title": "Der Sapphire-Vorteil",
+    "t1_t": "Exklusive Mandate",
+    "t2_t": "Deep-Dive Analyse",
+    "t3_t": "Langfristige Erfolgsquote",
+    "process_title": "Unser Auswahlprozess",
+    "s1_t": "Analyse",
+    "s1_d": "Prüfung deiner Kompetenzen und Wünsche.",
+    "s2_t": "Matching",
+    "s2_d": "Abgleich mit unseren exklusiven Partnern.",
+    "s3_t": "Integration",
+    "s3_d": "Begleitung bis zum erfolgreichen Start.",
+    "about_title": "Unsere Philosophie",
+    "about_text": "Sapphire Matching kombiniert jahrzehntelange Erfahrung mit modernster Technologie für Ergebnisse, die überzeugen."
+  }
+}

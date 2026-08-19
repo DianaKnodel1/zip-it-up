@@ -1,0 +1,32 @@
+{
+  "id": "theme-amber-consult",
+  "name": "Amber — Moderne Beratung",
+  "description": "Warmes, vertrauensvolles Design in Bernstein und Dunkelgrau. Fokus auf Beratungskompetenz und persönliche Nähe.",
+  "slots": [
+    { "key": "brand_name", "label": "Marke", "type": "text", "default": "BERATUNG" },
+    { "key": "hero_title", "label": "Ihre Expertise verdient die passende Bühne.", "type": "text", "default": "Ihre Expertise verdient die passende Bühne." },
+    { "key": "hero_sub", "label": "Hero Untertitel", "type": "longtext", "default": "Wir beraten Fachkräfte persönlich auf ihrem Weg zu führenden Unternehmen in der Region." },
+    { "key": "hero_cta", "label": "Hero Button", "type": "text", "default": "Kostenlose Beratung" },
+    { "key": "hero_cta_sec", "label": "Hero Sekundär", "type": "text", "default": "Unser Ansatz" },
+    { "key": "hero_image", "label": "Hero Bild", "type": "image", "default": "assets/hero.jpg" },
+    { "key": "trust_title", "label": "Vertrauen", "type": "text", "default": "Warum uns Experten vertrauen" },
+    { "key": "t1_t", "label": "Trust 1", "type": "text", "default": "Diskrete Vermittlung" },
+    { "key": "t2_t", "label": "Trust 2", "type": "text", "default": "Individuelle Coachings" },
+    { "key": "t3_t", "label": "Trust 3", "type": "text", "default": "Top-Netzwerk" },
+    { "key": "process_title", "label": "Unser Beratungs-Prozess", "type": "text", "default": "Unser Beratungs-Prozess" },
+    { "key": "s1_t", "label": "Schritt 1", "type": "text", "default": "Erstgespräch" },
+    { "key": "s1_d", "label": "Schritt 1 Beschreibung", "type": "text", "default": "Wir lernen Ihre Ziele und Wünsche kennen." },
+    { "key": "s2_t", "label": "Schritt 2", "type": "text", "default": "Strategie" },
+    { "key": "s2_d", "label": "Schritt 2 Beschreibung", "type": "text", "default": "Entwicklung Ihres individuellen Karriereplans." },
+    { "key": "s3_t", "label": "Schritt 3", "type": "text", "default": "Vorstellung" },
+    { "key": "s3_d", "label": "Schritt 3 Beschreibung", "type": "text", "default": "Gezielte Kontakte zu passenden Entscheidern." },
+    { "key": "about_title", "label": "Über uns", "type": "text", "default": "Über uns" },
+    { "key": "about_text", "label": "Über uns Text", "type": "longtext", "default": "Wir sind mehr als nur Vermittler. Wir sind Partner für Ihre berufliche Zukunft." },
+    { "key": "contact_email", "label": "E-Mail", "type": "text", "default": "" },
+    { "key": "contact_phone", "label": "Telefon", "type": "text", "default": "" },
+    { "key": "impressum_url", "label": "Impressum URL", "type": "text", "default": "#" },
+    { "key": "datenschutz_url", "label": "Datenschutz URL", "type": "text", "default": "#" },
+    { "key": "seo_title", "label": "SEO Titel", "type": "text", "default": "Amber Personalberatung | Karriere & Vermittlung" },
+    { "key": "seo_description", "label": "SEO Beschreibung", "type": "text", "default": "Persönliche Karriereberatung und diskrete Vermittlung für Fachkräfte." }
+  ]
+}

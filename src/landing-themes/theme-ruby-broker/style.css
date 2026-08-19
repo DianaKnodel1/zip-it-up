@@ -1,0 +1,27 @@
+:root{--ruby-red:#dc2626;--ruby-dark:#111827;--ruby-gray:#4b5563}
+body{margin:0;font-family:'Space Grotesk',sans-serif;background:#fff;color:var(--ruby-dark)}
+.ruby-container{max-width:1200px;margin:0 auto;padding:0 24px}
+.ruby-header{padding:20px 0;background:#fff;position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,.05)}
+.ruby-header .ruby-container{display:flex;justify-content:space-between;align-items:center}
+.ruby-logo{font-size:24px;font-weight:700;color:var(--ruby-red)}
+.ruby-cta-btn{background:var(--ruby-red);color:#fff;padding:12px 24px;text-decoration:none;font-weight:700;border-radius:2px;text-transform:uppercase;letter-spacing:1px}
+.ruby-hero{padding:80px 0;text-align:center}
+.ruby-hero h1{font-size:72px;line-height:1;margin-bottom:24px;text-transform:uppercase}
+.ruby-hero p{font-size:24px;color:var(--ruby-gray);max-width:800px;margin:0 auto 48px}
+.ruby-hero-img img{width:100%;max-width:1000px;border-radius:8px;box-shadow:0 30px 60px rgba(0,0,0,.1)}
+.ruby-trust{padding:40px 0;border-top:1px solid #eee;border-bottom:1px solid #eee}
+.ruby-trust-row{display:flex;justify-content:space-between;font-weight:700}
+.ruby-trust-row span{color:var(--ruby-red);margin-right:10px}
+.ruby-steps{padding:100px 0;background:var(--ruby-dark);color:#fff}
+.ruby-steps h2{font-size:48px;margin-bottom:60px;text-transform:uppercase}
+.ruby-step-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:40px}
+.ruby-step{padding:40px;border:1px solid rgba(255,255,255,.1)}
+.ruby-step h3{color:var(--ruby-red);font-size:24px;margin-bottom:16px}
+.ruby-footer{padding:80px 0;background:#f9fafb}
+.ruby-footer-top{display:flex;justify-content:space-between}
+.ruby-footer-legal a{display:block;color:var(--ruby-gray);text-decoration:none;margin-bottom:8px}
+@media(max-width:768px){
+  .ruby-hero h1{font-size:40px}
+  .ruby-trust-row{flex-direction:column;gap:16px}
+  .ruby-step-grid{grid-template-columns:1fr}
+}
