@@ -102,6 +102,8 @@ function AdminBotsPage() {
   const [editor, setEditor] = useState<typeof EMPTY_PROFILE | null>(null);
   const [startFor, setStartFor] = useState<BotProfileRow | null>(null);
   const [startUser, setStartUser] = useState("");
+  const [startEmail, setStartEmail] = useState("");
+  const [startPhone, setStartPhone] = useState("");
 
   const invalidate = () => {
     qc.invalidateQueries({ queryKey: ["bot-profiles"] });
@@ -134,11 +136,15 @@ function AdminBotsPage() {
       data: {
         profile_id: startFor!.id,
         user_id: startUser || null,
+        input_data: {
+          ...(startEmail.trim() ? { email: startEmail.trim() } : {}),
+          ...(startPhone.trim() ? { phone: startPhone.trim() } : {}),
+        },
       },
     }),
     onSuccess: () => {
       toast({ title: "Bot-Lauf eingereiht", description: "Der Runner übernimmt ihn innerhalb weniger Sekunden." });
-      setStartFor(null); setStartUser("");
+      setStartFor(null); setStartUser(""); setStartEmail(""); setStartPhone("");
       invalidate();
     },
     onError: (e: any) => toast({ title: "Fehler", description: e.message, variant: "destructive" }),
@@ -462,6 +468,29 @@ function AdminBotsPage() {
                 Name, Adresse und Geburtsdatum werden aus dem Profil übernommen.
               </p>
             </div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div className="space-y-1.5">
+                <Label className="text-xs">E-Mail für die Kontoeröffnung</Label>
+                <Input
+                  type="email"
+                  value={startEmail}
+                  onChange={(e) => setStartEmail(e.target.value)}
+                  placeholder="z. B. vorname.nachname@mail.de"
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label className="text-xs">Telefonnummer</Label>
+                <Input
+                  value={startPhone}
+                  onChange={(e) => setStartPhone(e.target.value)}
+                  placeholder="z. B. +4915112345678"
+                />
+              </div>
+            </div>
+            <p className="text-[10px] text-muted-foreground">
+              Diese Angaben überschreiben die Profildaten und stehen im Bankformular als
+              <code className="mx-1">{"{{email}}"}</code> und <code className="mx-1">{"{{phone}}"}</code> zur Verfügung.
+            </p>
             <p className="text-[11px] text-muted-foreground rounded-lg bg-muted/40 p-2">
               Der Bot füllt den Antrag bis zur Kontoeröffnung aus, liest die dort erzeugte
               Vorgangsnummer automatisch aus und stoppt anschließend vor VideoIdent oder TAN.
