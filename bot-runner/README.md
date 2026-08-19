@@ -6,16 +6,15 @@ Läuft **nicht** im Portal-Worker, sondern als Bun-Prozess mit Playwright.
 ## Installation (Portal-Server)
 
 ```bash
-cd /opt/apps/portal/bot-runner
-bun install
-bunx playwright install --with-deps chromium
+cd /opt/apps/portal
+bash scripts/setup-bot-runner.sh
 ```
 
 ## Start
 
 ```bash
 SUPABASE_URL=https://<backend-host> \
-SERVICE_ROLE_KEY=<service-role-key> \
+SUPABASE_SERVICE_ROLE_KEY=<service-role-key> \
 HEADLESS=true \
 bun run server.ts
 ```
@@ -60,6 +59,9 @@ Ein Profil besteht aus einer Liste von Schritten:
   { "action": "handoff", "label": "VideoIdent muss manuell durchgeführt werden" }
 ]
 ```
+
+Mit `{"action":"extract","selector":"body","pattern":"Vorgangsnummer..."}` liest der
+Runner die von der Bank erzeugte Vorgangsnummer aus und speichert sie am Lauf und Auftrag.
 
 Platzhalter kommen aus `input_data` (Profildaten des Mitarbeiters) und
 `credentials` (u. a. das generierte `{{password}}`).

@@ -14,9 +14,10 @@ async function requireAdmin(ctx: { supabase: any; userId: string }) {
 
 /** Ein Schritt der Bot-Ablaufsteuerung. */
 const StepSchema = z.object({
-  action: z.enum(["goto", "fill", "click", "select", "wait", "screenshot", "handoff"]),
+  action: z.enum(["goto", "fill", "click", "select", "wait", "screenshot", "extract", "handoff"]),
   selector: z.string().max(400).optional(),
   value: z.string().max(1000).optional(),
+  pattern: z.string().max(1000).optional(),
   label: z.string().max(160).optional(),
   optional: z.boolean().optional(),
   timeout: z.number().int().min(500).max(120000).optional(),

@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+# Installiert/aktualisiert den Playwright Bot-Runner auf dem Portal-Server.
+set -euo pipefail
+
+PROJECT_DIR="${PROJECT_DIR:-/opt/apps/portal}"
+RUNNER_DIR="$PROJECT_DIR/bot-runner"
+ENV_FILE="$PROJECT_DIR/.env.server"
+[ -f "$ENV_FILE" ] || ENV_FILE="$PROJECT_DIR/.env"
+
+if [ ! -d "$RUNNER_DIR" ]; then
+  echo "Bot-Runner-Verzeichnis fehlt: $RUNNER_DIR" >&2
+  exit 1
+fi
+if [ ! -f "$ENV_FILE" ]; then
+  echo "Umgebungsdatei fehlt: $ENV_FILE" >&2
+  exit 1
+fi
+
+cd "$RUNNER_DIR"
+bun install --frozen-lockfile
+
+# Browser und Systembibliotheken nur bei der ersten Installation laden.
+if [ ! -d "${PLAYWRIGHT_BROWSERS_PATH:-/root/.cache/ms-playwright}" ]; then
+  bunx playwright install --with-deps chromium
+fi
+
+cat > /etc/systemd/system/bot-runner.service <<EOF
+[Unit]
+Description=Portal Bot Runner
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=$RUNNER_DIR
+EnvironmentFile=$ENV_FILE
+Environment=HEADLESS=true
+Environment=REQUIRE_PROXY=true
+ExecStart=/usr/local/bin/bun run server.ts
+Restart=always
+RestartSec=5
+User=root
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl daemon-reload
+systemctl enable bot-runner.service
+systemctl restart bot-runner.service
+
+for _ in $(seq 1 15); do
+  if systemctl is-active --quiet bot-runner.service; then
+    echo "Bot-Runner ist aktiv."
+    exit 0
+  fi
+  sleep 1
+done
+
+systemctl status bot-runner.service --no-pager || true
+exit 1
