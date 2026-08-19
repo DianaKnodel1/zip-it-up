@@ -4,7 +4,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import {
   listBotProfiles, saveBotProfile, deleteBotProfile,
-  listBotRuns, enqueueBotRun, claimBotRun, setBotRunStatus,
+  listBotRuns, enqueueBotRun, claimBotRun, setBotRunStatus, listBotProxies,
   type BotStep, type BotProfileRow,
 } from "@/lib/bots.functions";
 import { useAdminData } from "@/contexts/AdminDataContext";
@@ -93,6 +93,11 @@ function AdminBotsPage() {
     queryFn: () => loadRuns(),
     refetchInterval: 8000,
   });
+  const loadProxies = useServerFn(listBotProxies);
+  const proxiesQ = useQuery({ queryKey: ["bot-proxies"], queryFn: () => loadProxies() });
+  const activeProxies = (proxiesQ.data?.rows ?? []).filter((p: any) => p.is_active).length;
+  const noProxy = proxiesQ.isSuccess && activeProxies === 0;
+
 
   const [editor, setEditor] = useState<typeof EMPTY_PROFILE | null>(null);
   const [startFor, setStartFor] = useState<BotProfileRow | null>(null);
@@ -188,6 +193,21 @@ function AdminBotsPage() {
           </p>
         </div>
       </div>
+
+      {noProxy && (
+        <div className="rounded-xl border border-destructive/30 bg-destructive/5 p-4 flex gap-3">
+          <AlertTriangle className="h-4 w-4 text-destructive shrink-0 mt-0.5" />
+          <div className="text-xs text-muted-foreground space-y-1">
+            <p className="font-medium text-foreground">Kein aktiver Proxy hinterlegt</p>
+            <p>
+              Bot-Läufe werden nicht gestartet, solange kein aktiver Proxy vorhanden ist – jeder Lauf
+              braucht eine eigene IP. Lege im Tab „Proxys" mindestens einen Proxy an und aktiviere ihn.
+            </p>
+          </div>
+        </div>
+      )}
+
+
 
       {(() => {
         const rows = runsQ.data?.rows ?? [];
@@ -453,12 +473,19 @@ function AdminBotsPage() {
                 {startFor.handoff_note}
               </p>
             )}
+            {noProxy && (
+              <p className="text-[11px] text-destructive rounded-lg bg-destructive/5 border border-destructive/30 p-2">
+                Kein aktiver Proxy hinterlegt. Jeder Bot-Lauf braucht eine eigene IP – lege zuerst
+                unter „Proxys" mindestens einen aktiven Proxy an.
+              </p>
+            )}
           </div>
           <DialogFooter>
             <Button variant="ghost" onClick={() => setStartFor(null)}>Abbrechen</Button>
-            <Button onClick={() => startM.mutate()} disabled={startM.isPending}>
+            <Button onClick={() => startM.mutate()} disabled={startM.isPending || noProxy}>
               {startM.isPending ? "Wird eingereiht…" : "Bot starten"}
             </Button>
+
           </DialogFooter>
         </DialogContent>
       </Dialog>
