@@ -60,6 +60,8 @@ export interface BotRunRow {
   started_at: string | null;
   finished_at: string | null;
   created_at: string;
+  proxy_id?: string | null;
+  vorgangsnummer: string | null;
 }
 
 export const listBotProfiles = createServerFn({ method: "GET" })

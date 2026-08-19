@@ -45,6 +45,9 @@ export function AssignmentBotPanel({ assignmentId, caseNumber, status, webId, on
 
   useEffect(() => { void load(); }, [load]);
   useEffect(() => { setNr(caseNumber); }, [caseNumber]);
+  useEffect(() => {
+    if (run?.vorgangsnummer) setNr(String(run.vorgangsnummer));
+  }, [run?.vorgangsnummer]);
 
   // Solange der Lauf aktiv ist, Status regelmäßig nachladen.
   useEffect(() => {

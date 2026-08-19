@@ -37,6 +37,7 @@ interface Step {
 interface Run {
   id: string;
   profile_id: string;
+  assignment_id?: string | null;
   proxy_id?: string | null;
   proxy_session?: string | null;
   input_data: Record<string, string>;

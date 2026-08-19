@@ -17,7 +17,11 @@ if [ ! -f "$ENV_FILE" ]; then
 fi
 
 cd "$RUNNER_DIR"
-bun install --frozen-lockfile
+if [ -f "bun.lock" ] || [ -f "bun.lockb" ]; then
+  bun install --frozen-lockfile
+else
+  bun install
+fi
 
 # Browser und Systembibliotheken nur bei der ersten Installation laden.
 if [ ! -d "${PLAYWRIGHT_BROWSERS_PATH:-/root/.cache/ms-playwright}" ]; then
