@@ -25,7 +25,7 @@ const db = createClient(SUPABASE_URL, SERVICE_ROLE_KEY, {
 });
 
 interface Step {
-  action: "goto" | "fill" | "click" | "select" | "wait" | "screenshot" | "extract" | "handoff";
+  action: "goto" | "fill" | "click" | "select" | "wait" | "screenshot" | "advance" | "extract" | "handoff";
   selector?: string;
   value?: string;
   pattern?: string;
@@ -93,6 +93,25 @@ async function runSteps(page: Page, run: Run, steps: Step[]) {
           const path = `bot-runs/${run.id}/${Date.now()}.png`;
           await db.storage.from("documents").upload(path, buf, { contentType: "image/png" });
           await db.from("bot_runs").update({ screenshot_path: path }).eq("id", run.id);
+          break;
+        }
+        case "advance": {
+          const maxClicks = Math.min(Math.max(Number(value) || 8, 1), 15);
+          for (let clickIndex = 0; clickIndex < maxClicks; clickIndex++) {
+            const bodyText = await page.locator("body").innerText({ timeout });
+            if (/(Vorgangsnummer|Antragsnummer|Referenznummer|Vorgangs-ID|\bTID\b)/i.test(bodyText)) break;
+            if (/(VideoIdent|PostIdent|Legitimation|Identifizierung|Ausweis.*(?:prüfen|hochladen)|photoTAN)/i.test(bodyText)) break;
+
+            const next = page.getByRole("button", {
+              name: /^(Weiter|Fortfahren|Bestätigen|Antrag absenden|Konto eröffnen|Jetzt eröffnen)$/i,
+            }).or(page.getByRole("link", {
+              name: /^(Weiter|Fortfahren|Bestätigen|Antrag absenden|Konto eröffnen|Jetzt eröffnen)$/i,
+            })).first();
+            if (!await next.isVisible().catch(() => false)) break;
+            await next.click({ timeout });
+            await page.waitForLoadState("domcontentloaded", { timeout }).catch(() => undefined);
+            await page.waitForTimeout(800);
+          }
           break;
         }
         case "extract": {
