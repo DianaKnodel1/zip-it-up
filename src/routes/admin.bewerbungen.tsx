@@ -173,7 +173,7 @@ export const Route = createFileRoute("/admin/bewerbungen")({
 });
 
 function AdminBewerbungenPage() {
-  const { applications, profiles, allBookings, loadingApplications: loading, loadData } = useAdminData();
+  const { applications, profiles, allBookings, interviewAppointments, loadingApplications: loading, loadData } = useAdminData();
   const search = useSearch({ from: "/admin/bewerbungen" });
   const navigate = useNavigate();
   const tab = (search as any).tab ?? "alle";
@@ -218,21 +218,32 @@ function AdminBewerbungenPage() {
   // DB-Automatik an der Buchung gesetzt, nicht an der Bewerbung.
   const bookingByApp = useMemo(() => {
     const m = new Map<string, { date: Date | null; status: string | null }>();
+    const put = (appId: string, d: Date | null, status: string | null) => {
+      const prev = m.get(appId);
+      // Neuester Termin gewinnt; ein bereits erkannter No-Show/Absage-Status
+      // darf dabei nicht von einem älteren "scheduled" überschrieben werden.
+      const isFinal = (st: string | null) => st === "no_show" || st === "cancelled" || st === "storniert";
+      if (!prev) { m.set(appId, { date: d, status }); return; }
+      if (isFinal(prev.status) && !isFinal(status)) return;
+      if (!prev.date || (d && d.getTime() > prev.date.getTime()) || isFinal(status)) {
+        m.set(appId, { date: d ?? prev.date, status: status ?? prev.status });
+      }
+    };
     for (const b of allBookings as any[]) {
       const appId = b.application_id || b.app_id;
       if (!appId) continue;
       const d = b.booking_date && b.booking_time
         ? new Date(`${b.booking_date}T${b.booking_time}`)
         : b.scheduled_at ? new Date(b.scheduled_at) : null;
-      const prev = m.get(appId);
-      const status = b.status ? String(b.status) : null;
-      // Neueste Buchung gewinnt.
-      if (!prev || !prev.date || (d && d.getTime() > prev.date.getTime())) {
-        m.set(appId, { date: d, status });
-      }
+      put(appId, d, b.status ? String(b.status) : null);
+    }
+    // interview_appointments: hier setzt die DB-Automatik 'no_show'/'completed'.
+    for (const ia of (interviewAppointments ?? []) as any[]) {
+      if (!ia.application_id) continue;
+      put(ia.application_id, ia.starts_at ? new Date(ia.starts_at) : null, ia.status ? String(ia.status) : null);
     }
     return m;
-  }, [allBookings]);
+  }, [allBookings, interviewAppointments]);
 
 
   const [landingById, setLandingById] = useState<Map<string, { slug: string; firmenname: string | null }>>(new Map());
