@@ -54,6 +54,16 @@ export async function createBotRun(db: any, createdBy: string, input: CreateRunI
   if (pErr) throw new Error(pErr.message);
   if (!profile.is_active) throw new Error("Bot-Profil ist deaktiviert");
 
+  // Jeder Lauf braucht eine eigene IP: ohne aktiven Proxy wird gar nicht erst
+  // gestartet, sonst liefe der Bot über die Server-IP.
+  const allocated = await allocateProxy(db);
+  if (!allocated.proxy_id) {
+    throw new Error(
+      "Kein aktiver Proxy hinterlegt – der Bot-Lauf wurde nicht gestartet. Bitte unter Bots → Proxys mindestens einen Proxy anlegen und aktivieren.",
+    );
+  }
+
+
   let base: Record<string, string> = {};
   if (input.user_id) {
     const { data: prof } = await db
