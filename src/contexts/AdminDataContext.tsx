@@ -34,6 +34,8 @@ export interface KycRow {
 }
 export interface TaskTemplate {
   id: string; title: string; description: string; instructions: string; compensation: number; is_active: boolean; created_at: string;
+  /** 'auto' = darf automatisch verteilt werden, 'manuell' = nur durch Admin. */
+  assignment_mode?: string | null;
 }
 export interface TaskQuestion { id: string; question: string; sort_order: number; }
 export interface AssignmentRow {
@@ -77,7 +79,7 @@ const AdminDataContext = createContext<AdminDataContextType | null>(null);
 const APPLICATION_OVERVIEW_COLUMNS = "id, full_name, first_name, last_name, email, phone, status, created_at, tenant_id, address, postal_code, city, birth_date, birth_place, nationality, user_id, source_slug, source_landing_id, target_landing_id, flow_type, booking_status, scheduled_at, interview_started_at, interview_completed_at, interview_recommendation, invite_mail_status, invite_mail_error, invite_mail_at";
 const PROFILE_OVERVIEW_COLUMNS = "id, user_id, full_name, application_id, phone, status, address, street, zip_code, city, birth_date, birth_place, nationality, living_since, previous_address, created_at, contract_signed_at, signature_url, onboarding_status, admin_notes, social_security_number, tax_number, iban, health_insurance, family_status, employment_type, employment_start_date, tenant_id, team_leader_id";
 const KYC_OVERVIEW_COLUMNS = "id, user_id, status, id_front_url, id_back_url, selfie_url, rejection_reason, risk_flag, reviewed_at, created_at";
-const TEMPLATE_OVERVIEW_COLUMNS = "id, title, description, instructions, compensation, is_active, is_published, image_url, created_at";
+const TEMPLATE_OVERVIEW_COLUMNS = "id, title, description, instructions, compensation, is_active, is_published, image_url, created_at, assignment_mode";
 const ASSIGNMENT_OVERVIEW_COLUMNS = "id, task_template_id, user_id, status, admin_comment, created_at, sms_channel_id, release_at, individual_instructions, individual_phone, individual_hint, post_ident_pdf_url, post_ident_pdf_name";
 const BOOKING_OVERVIEW_COLUMNS = "id, user_id, time_slot_id, assignment_id, status, created_at, booking_date, booking_time, application_id, app_id, scheduled_at, admin_override";
 

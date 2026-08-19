@@ -54,6 +54,8 @@ function AdminTemplateBuilderPage() {
   const [instructions, setInstructions] = useState("");
   const [compensation, setCompensation] = useState("");
   const [imageUrl, setImageUrl] = useState("");
+  // 'auto' = Automatik darf verteilen, 'manuell' = nur Admin weist zu.
+  const [assignmentMode, setAssignmentMode] = useState<"auto" | "manuell">("auto");
 
   useEffect(() => {
     loadTemplate();
@@ -77,6 +79,7 @@ function AdminTemplateBuilderPage() {
       setInstructions(t.instructions);
       setCompensation(String(t.compensation));
       setImageUrl(t.image_url || "");
+      setAssignmentMode(t.assignment_mode === "manuell" ? "manuell" : "auto");
 
       const loadedSteps = ((stepsRes.data ?? []) as any[]).map((s) => ({
         ...s,
@@ -105,6 +108,7 @@ function AdminTemplateBuilderPage() {
           title: title.trim(), description, instructions,
           compensation: parseFloat(compensation) || 0,
           created_by: user!.id, image_url: imageUrl || null,
+          assignment_mode: assignmentMode,
         }).select("id").single();
         if (error) throw error;
         tplId = data.id;
@@ -114,6 +118,7 @@ function AdminTemplateBuilderPage() {
           title: title.trim(), description, instructions,
           compensation: parseFloat(compensation) || 0,
           image_url: imageUrl || null,
+          assignment_mode: assignmentMode,
         }).eq("id", templateId);
         if (error) throw error;
       }
@@ -210,6 +215,7 @@ function AdminTemplateBuilderPage() {
         title: `${title} (Kopie)`, description, instructions,
         compensation: parseFloat(compensation) || 0,
         created_by: user!.id, image_url: imageUrl || null,
+        assignment_mode: assignmentMode,
       }).select("id").single();
       if (error) throw error;
 
@@ -368,6 +374,18 @@ function AdminTemplateBuilderPage() {
                 </div>
               </div>
               {imageUrl && <img src={imageUrl} alt="Preview" className="h-32 w-full object-cover rounded-xl border border-border" />}
+              <div className="flex items-start gap-3 rounded-xl border border-border p-3">
+                <Switch
+                  checked={assignmentMode === "auto"}
+                  onCheckedChange={(v) => setAssignmentMode(v ? "auto" : "manuell")}
+                />
+                <div className="space-y-0.5">
+                  <p className="text-sm font-medium text-foreground">Automatisch verteilen</p>
+                  <p className="text-xs text-muted-foreground">
+                    Aus = nur du weist diesen Auftrag zu (z. B. Bank-/Bot-Aufträge). Die Automatik fasst ihn dann nie an.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         )}

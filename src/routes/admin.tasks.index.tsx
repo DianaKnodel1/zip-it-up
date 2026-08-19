@@ -140,6 +140,23 @@ function AdminTasksPage() {
     loadData();
   };
 
+  // Zuweisungsmodus: 'auto' = Automatik darf verteilen, 'manuell' = nur Admin.
+  const toggleAssignmentMode = async (tpl: TaskTemplate) => {
+    const next = (tpl.assignment_mode ?? "auto") === "manuell" ? "auto" : "manuell";
+    const { error } = await supabase
+      .from("task_templates")
+      .update({ assignment_mode: next })
+      .eq("id", tpl.id);
+    if (error) { toast({ title: "Fehler", description: error.message, variant: "destructive" }); return; }
+    toast({
+      title: next === "manuell" ? "Nur manuell" : "Automatisch verteilen",
+      description: next === "manuell"
+        ? "Diese Vorlage weist nur noch du selbst zu."
+        : "Diese Vorlage darf die Automatik an Termine verteilen.",
+    });
+    loadData();
+  };
+
   const deleteTemplate = async (tpl: TaskTemplate) => {
     const { count } = await supabase
       .from("task_assignments")
@@ -198,6 +215,7 @@ function AdminTasksPage() {
                 <th className="text-left px-4 py-2.5 text-xs font-medium text-muted-foreground uppercase tracking-wider">Titel</th>
                 <th className="text-left px-4 py-2.5 text-xs font-medium text-muted-foreground uppercase tracking-wider">Vergütung</th>
                 <th className="text-left px-4 py-2.5 text-xs font-medium text-muted-foreground uppercase tracking-wider">Status</th>
+                <th className="text-left px-4 py-2.5 text-xs font-medium text-muted-foreground uppercase tracking-wider">Zuweisung</th>
                 <th className="text-left px-4 py-2.5 text-xs font-medium text-muted-foreground uppercase tracking-wider">Aktionen</th>
               </tr>
             </thead>
@@ -213,6 +231,30 @@ function AdminTasksPage() {
                     <Badge variant="secondary" className={cn("text-[10px] font-medium border", tpl.is_active ? "bg-status-success/15 text-status-success border-status-success/30" : "bg-muted text-muted-foreground border-border")}>
                       {tpl.is_active ? "Aktiv" : "Inaktiv"}
                     </Badge>
+                  </td>
+                  <td className="px-4 py-3">
+                    {(() => {
+                      const manual = (tpl.assignment_mode ?? "auto") === "manuell";
+                      return (
+                        <button
+                          type="button"
+                          onClick={() => toggleAssignmentMode(tpl)}
+                          title={manual ? "Klicken: Automatik erlauben" : "Klicken: nur manuell zuweisen"}
+                        >
+                          <Badge
+                            variant="secondary"
+                            className={cn(
+                              "text-[10px] font-medium border cursor-pointer",
+                              manual
+                                ? "bg-status-pending/15 text-status-pending border-status-pending/30"
+                                : "bg-primary/10 text-primary border-primary/30",
+                            )}
+                          >
+                            {manual ? "Nur manuell" : "Automatisch"}
+                          </Badge>
+                        </button>
+                      );
+                    })()}
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex gap-1">
