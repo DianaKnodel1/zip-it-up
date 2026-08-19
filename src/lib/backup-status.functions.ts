@@ -16,7 +16,7 @@ export const getBackupStatus = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     await requireAdmin(context);
-    const { data, error } = await context.supabase
+    const { data, error } = await (context.supabase as any)
       .from("backup_status")
       .select("*")
       .order("created_at", { ascending: false })
@@ -24,3 +24,4 @@ export const getBackupStatus = createServerFn({ method: "GET" })
     if (error) throw new Error(error.message);
     return { rows: (data ?? []) as any[] };
   });
+
