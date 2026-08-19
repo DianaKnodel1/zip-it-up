@@ -136,11 +136,15 @@ function AdminBotsPage() {
       data: {
         profile_id: startFor!.id,
         user_id: startUser || null,
+        input_data: {
+          ...(startEmail.trim() ? { email: startEmail.trim() } : {}),
+          ...(startPhone.trim() ? { phone: startPhone.trim() } : {}),
+        },
       },
     }),
     onSuccess: () => {
       toast({ title: "Bot-Lauf eingereiht", description: "Der Runner übernimmt ihn innerhalb weniger Sekunden." });
-      setStartFor(null); setStartUser("");
+      setStartFor(null); setStartUser(""); setStartEmail(""); setStartPhone("");
       invalidate();
     },
     onError: (e: any) => toast({ title: "Fehler", description: e.message, variant: "destructive" }),
