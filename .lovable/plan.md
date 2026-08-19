@@ -1,55 +1,47 @@
-# Bot absichern (Proxy, Captcha, eigener Server) + KI-Chat entlasten
+# Statistik-Fix, KI-Chat als Vorschlag-Assistent, Online/Offline im Chat
 
-Vier Themen, in dieser Reihenfolge umsetzbar.
+## 1. „Nicht erschienen" zählt 0 — Ursache gefunden
 
-## 1. Bot auf eigenem Server
+Im Code geprüft:
+- Die Datenbank-Automatik (`auto_complete_and_noshow_appointments`) setzt No-Show auf **`interview_appointments.status`**.
+- Die Bewerbungsseite lädt aber ausschließlich die Tabelle **`bookings`** (`AdminDataContext`, `BOOKING_OVERVIEW_COLUMNS`) und wertet nur `bookings.status` und `applications.booking_status` aus.
+- Ergebnis: Der von der Automatik gesetzte No-Show kommt in der Oberfläche nie an → Chip bleibt bei 0. Wer nicht erschienen ist, landet stattdessen unter „Interview" (Termin verstrichen → `auswertung_fehler`), was den Interview-Zähler aufbläht.
 
-Der Runner wird heute im Portal-Deploy (`scripts/deploy.sh`) mitinstalliert. Sobald der neue Server da ist:
+Fix:
+- `AdminDataContext` lädt zusätzlich `interview_appointments` (Termin-Zeit + Status + `application_id`).
+- Die Termin-Zuordnung auf der Bewerbungsseite berücksichtigt beide Quellen; der neueste Termin gewinnt, `no_show`/`cancelled` aus **beiden** Tabellen zählen.
+- **Zusätzliche Sicherung, falls der Cron nicht läuft:** Termin liegt mehr als 45 Minuten in der Vergangenheit, kein Interview gestartet und keine Entscheidung getroffen → wird als „Nicht erschienen" gezählt (statt wie heute unter „Interview").
+- Reihenfolge bleibt: Nicht erschienen / Abgesagt gewinnen gegen Empfehlung und Zusage.
+- Kontrolle: Die Summe der Chips muss „Alle" ergeben; das prüfe ich nach der Änderung an den echten Zahlen (139 gesamt).
 
-- Neuer Schalter `BOT_RUNNER_HOST` in `scripts/deploy.sh`: ist er gesetzt, wird der Runner **nicht** lokal installiert, sondern per SSH auf dem Bot-Server aktualisiert und neu gestartet; ist er leer, bleibt alles wie bisher.
-- `scripts/setup-bot-runner.sh` bekommt einen Erst-Setup-Modus für eine frische VM (Bun, Playwright/Chromium, `.env.server`-Vorlage mit `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `REQUIRE_PROXY=true`).
-- Kurzanleitung in `bot-runner/README.md` (3 Befehle für die neue Maschine).
+## 2. KI-Chat — nur Vorschläge, immer deine Freigabe
 
-## 2. Proxy-Prüfung („geht mein Proxy?")
+Grundregel, die überall gilt: **Die KI sendet nie selbst.** Jede Antwort erscheint als Vorschlag im Eingabefeld, du liest, änderst und sendest. Nach außen ist der Absender immer der Teamleiter — keine Kennzeichnung als „KI" oder „Assistent", kein Bot-Avatar, kein Hinweistext beim Mitarbeiter.
 
-Heute kann man einen Proxy anlegen, aber nicht testen — ein kaputter Proxy fällt erst beim Lauf auf.
+Umgesetzt wird nur:
+- **Wissensbasis statt Allgemeinplätze:** Der Vorschlag bekommt den Kontext des Mitarbeiters (offene Aufträge und deren Status, nächster Termin, Onboarding-Stand, Vertragsstatus) plus eine gepflegte FAQ-Liste. Dadurch beantwortet der Vorschlag „Wo finde ich meinen Auftrag?", „Wann ist mein Termin?", „Wie läuft die Legitimation?" konkret statt allgemein.
+- **Stil bleibt wie bisher:** aus deinen bisherigen Nachrichten gelernt, inkl. Lernen aus deinen Korrekturen.
+- **FAQ-Pflege:** kleine Admin-Seite, auf der du Frage/Antwort-Paare hinterlegst, die die KI verwenden darf.
 
-- **Runner:** neuer Modus `bun run server.ts --proxy-test <proxy-id>` sowie eine Queue-Tabellenspalte, damit der Test aus dem Portal ausgelöst werden kann. Der Test öffnet über den Proxy eine IP-Prüfseite, liest die ausgehende IP + Land aus und schreibt Ergebnis, Antwortzeit und Fehlertext nach `bot_proxies`.
-- **Migration:** `bot_proxies` erhält `last_check_at`, `last_check_ok`, `last_check_ip`, `last_check_error`.
-- **UI (`/admin/bots` → Proxys):** Button „Testen" pro Proxy, Ampel-Badge (grün mit IP/Land, rot mit Fehlertext, grau = nie getestet) und Hinweis, wenn der letzte Test älter als 24 h ist.
-- **Vor jedem Lauf:** der Runner prüft den Proxy kurz vor dem Start; schlägt er fehl, geht der Lauf mit klarer Meldung („Proxy X nicht erreichbar") auf `failed`, statt über eine falsche IP zu laufen.
+Gestrichen (auf deinen Wunsch): automatische Antworten, Kennzeichnung als Assistent, Sammelantworten in der Chat-Übersicht, Eskalationsregeln, Nachtmodus.
 
-## 3. Fehlerbild heute (geprüft im Code)
+Der öffentliche Support-Chat („KI Chat" im Floating-Widget) bleibt davon unberührt; im direkten Mitarbeiter-Teamleiter-Chat antwortet ausschließlich du.
 
-- **Warteschlange bleibt stehen:** solange kein Runner-Dienst läuft, holt niemand die Läufe ab. Deshalb kommt Punkt 1 zuerst; zusätzlich zeigt die Bots-Seite künftig „Runner zuletzt gesehen vor X Min." (Heartbeat), damit du sofort siehst, ob der Dienst lebt.
-- **SOCKS5 mit Benutzer/Passwort funktioniert in Chromium nicht** — der Runner ignoriert die Zugangsdaten stillschweigend. Künftig: klare Warnung im Proxy-Formular und Fehlermeldung statt stiller Fehlfunktion. Empfehlung: HTTP-Proxy mit Sticky-Session.
-- **Die Bank-Profile sind Platzhalter.** Die Selektoren (`input[name*="vorname"]` usw.) sind geraten und treffen die echten Antragsstrecken von DKB, comdirect, Consorsbank, Santander und Deutsche Bank sehr wahrscheinlich nicht. Ohne echte Aufnahme läuft kein Antrag durch.
+## 3. Online/Offline direkt im Chat umschalten
 
-## 4. Captcha & echte Antragsstrecken
+Heute kommt der Online-Status aus `profiles.leader_online` bzw. den Tenant-Einstellungen und ist nur in den Einstellungen änderbar.
 
-Captchas lassen sich nicht „einbauen" — sie sind genau die Sperre, die Automatisierung verhindern soll. Realistischer Umgang:
-
-- **Erkennen statt lösen:** der Runner prüft nach jedem Schritt auf Captcha-Merkmale (reCAPTCHA-/hCaptcha-/Turnstile-Frames, „Ich bin kein Roboter", Bot-Blockseiten). Trifft eines zu, geht der Lauf sofort auf `waiting_admin` mit Screenshot, Live-URL und Grund „Captcha – bitte manuell lösen" — statt blind weiterzuklicken und zu scheitern.
-- **Weniger Captchas provozieren:** echter User-Agent, deutsche Sprache/Zeitzone (schon da), menschliche Tippgeschwindigkeit statt Sofort-Ausfüllen, kleine zufällige Pausen, ein Lauf pro Proxy-Session, keine parallelen Läufe auf dieselbe Bank.
-- **Echte Profile aufnehmen:** pro Bank einmal die Antragsstrecke mit sichtbarem Browser (`HEADLESS=false`) durchgehen und die echten Selektoren in das Profil übernehmen. Dafür kommt ein Trockenlauf-Modus: Lauf startet mit `dry_run`, füllt Testdaten, macht nach jedem Schritt einen Screenshot und schreibt am Ende einen Bericht, welche Selektoren gefunden wurden und welche nicht — sichtbar unter `/admin/bots`.
-- Jede Bank bleibt ein eigenes Profil; die Schritte werden pro Bank einzeln korrigiert, beginnend mit der, die du zuerst brauchst.
-
-## 5. KI-Chat: dich als Teamleiter entlasten
-
-Heute gibt es den öffentlichen Support-Chat (`/api/public/ai-chat`) und den Antwortvorschlag im Admin-Chat (Stil wird automatisch gelernt). Ausbaustufen:
-
-1. **Wissensbasis statt Allgemeinplätze:** Die KI bekommt bei jeder Antwort den Kontext des Mitarbeiters (offene Aufträge, Termin, Onboarding-Status) plus eine gepflegte FAQ-Tabelle. Damit beantwortet sie „Wo finde ich meinen Auftrag?", „Wann ist mein Termin?", „Wie läuft die Legitimation?" selbstständig und korrekt.
-2. **Auto-Antwort mit Freigabe:** Für erkannte Standardfragen antwortet die KI direkt im Mitarbeiter-Chat (als „Assistent" gekennzeichnet). Alles Unsichere landet als Vorschlag bei dir — ein Klick zum Senden.
-3. **Eskalation nach Regeln:** Beschwerden, Kündigung, Geld/Auszahlung, Ausweisdaten → nie automatisch, immer an dich, mit Kurz-Zusammenfassung des Anliegens.
-4. **Sammelantworten:** In der Chat-Übersicht zeigt die KI dir für jeden offenen Chat einen Ein-Zeilen-Vorschlag, so kannst du 20 Chats in wenigen Minuten abarbeiten.
-5. **Nachtmodus:** Außerhalb deiner Zeiten antwortet die KI immer selbst („Dein Teamleiter meldet sich morgen früh") plus hilfreiche Info — keine offenen Nachrichten über Nacht.
-
-Vorschlag: Stufe 1 + 2 + 3 zuerst, das nimmt den Großteil der Routine ab.
+- Im Admin-Chat (`/admin` Chat-Ansicht) kommt oben ein Schalter „Online / Offline" mit farbigem Punkt — ein Klick schreibt den Status sofort und gilt für alle Mitarbeiter.
+- Mitarbeiter-Ansicht (Teamleiter-Karte und Chat-Kopf) zeigt entsprechend:
+  - Online: „Ich bin online. Ich antworte in der Regel innerhalb weniger Minuten."
+  - Offline: „<Name>, schreib mir — ich antworte innerhalb der nächsten Stunden."
+- Der Status aktualisiert sich beim Mitarbeiter live (Realtime), ohne Neuladen.
 
 ## Technische Details
 
-- Neue Migration für `bot_proxies`-Prüffelder und ein `dry_run`-Flag auf `bot_runs`.
-- `bot-runner/server.ts`: Proxy-Vorabtest, Captcha-Detektor, Tippsimulation, Heartbeat, Dry-Run-Bericht.
-- `scripts/deploy.sh` / `scripts/setup-bot-runner.sh`: Remote-Installation über `BOT_RUNNER_HOST`.
-- `src/routes/admin.bots.tsx`: Proxy-Test-Button, Ampeln, Runner-Heartbeat, Dry-Run-Start.
-- KI-Chat: Kontext-Loader + Regelwerk in den bestehenden Server-Funktionen (`ai-chat-helper.functions.ts`, `api/public/ai-chat.ts`), FAQ-Tabelle mit Admin-Pflege.
+- `src/contexts/AdminDataContext.tsx`: zusätzliche Abfrage `interview_appointments` (id, application_id, starts_at, status).
+- `src/routes/admin.bewerbungen.tsx`: Termin-/Statusquelle zusammenführen, `computePhase` um die 45-Minuten-Regel ergänzen, Chip-Summenprüfung.
+- `src/lib/ai-chat-helper.functions.ts`: Kontext-Loader (Aufträge, Termin, Onboarding) + FAQ-Einträge in den Systemprompt; Rückgabe bleibt reiner Vorschlagstext.
+- Neue Tabelle `chat_faq` (Frage, Antwort, aktiv, Mandant) inkl. GRANTs und RLS, plus Admin-Pflegeseite.
+- Online/Offline: Schreibpfad auf `profiles.leader_online` des Teamleiters, Realtime-Abo in `use-team-leader.ts`, Texte in `TeamLeaderCard` und Chat-Kopf.
+- Nach dem Merge auf dem Server einmal `bash scripts/migrate.sh`.
