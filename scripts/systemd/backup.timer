@@ -1,0 +1,13 @@
+[Unit]
+Description=Portal backup every 6 hours
+Requires=backup.service
+
+[Timer]
+OnCalendar=*-*-* 00:00:00
+OnCalendar=*-*-* 06:00:00
+OnCalendar=*-*-* 12:00:00
+OnCalendar=*-*-* 18:00:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target

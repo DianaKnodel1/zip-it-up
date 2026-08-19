@@ -1,0 +1,17 @@
+[Unit]
+Description=Portal full backup
+Wants=backup.timer
+
+[Service]
+Type=oneshot
+User=root
+WorkingDirectory=/opt/apps/portal
+ExecStart=/opt/apps/portal/scripts/backup.sh full
+# EnvironmentFile deutet auf /opt/apps/portal/scripts/backup.env
+EnvironmentFile=/opt/apps/portal/scripts/backup.env
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=portal-backup
+
+[Install]
+WantedBy=multi-user.target
