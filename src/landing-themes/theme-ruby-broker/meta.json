@@ -1,25 +1,349 @@
 {
   "id": "theme-ruby-broker",
   "name": "Ruby — Dynamic Broker",
-  "description": "Energetisch und schnell. Fokussiert auf hohe Geschwindigkeit und Bewerber-Conversion.",
-  "slots": {
-    "hero_title": "Deine Karriere im Überholmodus",
-    "hero_sub": "Wir finden Jobs, die zu deinem Tempo passen. Schnell, diskret und erfolgreich.",
-    "hero_cta": "Jetzt Termin sichern",
-    "hero_cta_sec": "Wie es funktioniert",
-    "hero_image": "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&q=80&w=1200",
-    "trust_title": "Warum Ruby?",
-    "t1_t": "Turbo-Bewerbung",
-    "t2_t": "Diskretion garantiert",
-    "t3_t": "Marktexklusive Rollen",
-    "process_title": "Einfach zum Job",
-    "s1_t": "Kontakt",
-    "s1_d": "Wähle deinen Wunsch-Termin.",
-    "s2_t": "Matching",
-    "s2_d": "Wir präsentieren dein Profil dem Arbeitgeber.",
-    "s3_t": "Start",
-    "s3_d": "Erfolgreicher Einstieg in Rekordzeit.",
-    "about_title": "Über Ruby",
-    "about_text": "Ruby Broker versteht, dass Zeit der wertvollste Rohstoff ist. Wir minimieren Wartezeiten und maximieren Ergebnisse."
-  }
+  "description": "Energetisch und schnell: kräftiges Rot, klare Struktur, hohe Bewerber-Conversion.",
+  "slots": [
+    {
+      "key": "brand_name",
+      "label": "Marke",
+      "type": "text",
+      "default": "VERMITTLUNG"
+    },
+    {
+      "key": "hero_badge",
+      "label": "Hero Badge",
+      "type": "text",
+      "default": "Persönliche Vermittlung"
+    },
+    {
+      "key": "hero_title",
+      "label": "Hero Titel",
+      "type": "text",
+      "default": "Deine Karriere im Überholmodus"
+    },
+    {
+      "key": "hero_sub",
+      "label": "Hero Untertitel",
+      "type": "longtext",
+      "default": "Wir vermitteln Menschen an Unternehmen, die zu ihrem Tempo passen — persönlich, schnell und verbindlich."
+    },
+    {
+      "key": "hero_cta",
+      "label": "Hero Button",
+      "type": "text",
+      "default": "Jetzt bewerben"
+    },
+    {
+      "key": "hero_cta_sec",
+      "label": "Hero Button 2",
+      "type": "text",
+      "default": "So läuft es ab"
+    },
+    {
+      "key": "hero_image",
+      "label": "Hero Bild",
+      "type": "image",
+      "default": "assets/hero.jpg"
+    },
+    {
+      "key": "fact1_v",
+      "label": "Kennzahl 1 Wert",
+      "type": "text",
+      "default": "48 h"
+    },
+    {
+      "key": "fact1_l",
+      "label": "Kennzahl 1 Label",
+      "type": "text",
+      "default": "Erste Rückmeldung"
+    },
+    {
+      "key": "fact2_v",
+      "label": "Kennzahl 2 Wert",
+      "type": "text",
+      "default": "100 %"
+    },
+    {
+      "key": "fact2_l",
+      "label": "Kennzahl 2 Label",
+      "type": "text",
+      "default": "Kostenfrei für Bewerber"
+    },
+    {
+      "key": "fact3_v",
+      "label": "Kennzahl 3 Wert",
+      "type": "text",
+      "default": "1:1"
+    },
+    {
+      "key": "fact3_l",
+      "label": "Kennzahl 3 Label",
+      "type": "text",
+      "default": "Persönliche Betreuung"
+    },
+    {
+      "key": "trust_title",
+      "label": "Vertrauen Titel",
+      "type": "text",
+      "default": "Darauf können Sie sich verlassen"
+    },
+    {
+      "key": "t1_t",
+      "label": "Vertrauen 1",
+      "type": "text",
+      "default": "Geprüfte Partnerunternehmen"
+    },
+    {
+      "key": "t2_t",
+      "label": "Vertrauen 2",
+      "type": "text",
+      "default": "Transparenter Ablauf"
+    },
+    {
+      "key": "t3_t",
+      "label": "Vertrauen 3",
+      "type": "text",
+      "default": "Datenschutz nach DSGVO"
+    },
+    {
+      "key": "t4_t",
+      "label": "Vertrauen 4",
+      "type": "text",
+      "default": "Feste Ansprechpartner"
+    },
+    {
+      "key": "process_title",
+      "label": "Prozess Titel",
+      "type": "text",
+      "default": "In vier Schritten zur neuen Position"
+    },
+    {
+      "key": "process_sub",
+      "label": "Prozess Text",
+      "type": "longtext",
+      "default": "Kein Papierkram, keine Warteschleifen — Sie wissen jederzeit, wo Sie stehen."
+    },
+    {
+      "key": "s1_t",
+      "label": "Schritt 1",
+      "type": "text",
+      "default": "Bewerbung senden"
+    },
+    {
+      "key": "s1_d",
+      "label": "Schritt 1 Text",
+      "type": "text",
+      "default": "Kurzes Formular ausfüllen — zwei Minuten genügen."
+    },
+    {
+      "key": "s2_t",
+      "label": "Schritt 2",
+      "type": "text",
+      "default": "Kennenlernen"
+    },
+    {
+      "key": "s2_d",
+      "label": "Schritt 2 Text",
+      "type": "text",
+      "default": "Wir melden uns und besprechen Ihre Ziele."
+    },
+    {
+      "key": "s3_t",
+      "label": "Schritt 3",
+      "type": "text",
+      "default": "Passende Auswahl"
+    },
+    {
+      "key": "s3_d",
+      "label": "Schritt 3 Text",
+      "type": "text",
+      "default": "Sie erhalten Positionen, die wirklich zu Ihnen passen."
+    },
+    {
+      "key": "s4_t",
+      "label": "Schritt 4",
+      "type": "text",
+      "default": "Start"
+    },
+    {
+      "key": "s4_d",
+      "label": "Schritt 4 Text",
+      "type": "text",
+      "default": "Wir begleiten Sie bis zum ersten Arbeitstag."
+    },
+    {
+      "key": "applicant_title",
+      "label": "Bewerber Titel",
+      "type": "text",
+      "default": "Für Bewerberinnen und Bewerber"
+    },
+    {
+      "key": "applicant_text",
+      "label": "Bewerber Text",
+      "type": "longtext",
+      "default": "Wir nehmen uns Zeit für Ihr Profil und schlagen nur Positionen vor, die zu Ihren Wünschen passen."
+    },
+    {
+      "key": "about_image",
+      "label": "Bild Bewerber",
+      "type": "image",
+      "default": "assets/about.jpg"
+    },
+    {
+      "key": "company_title",
+      "label": "Unternehmen Titel",
+      "type": "text",
+      "default": "Für Unternehmen"
+    },
+    {
+      "key": "company_text",
+      "label": "Unternehmen Text",
+      "type": "longtext",
+      "default": "Wir liefern vorqualifizierte Kandidatinnen und Kandidaten — passgenau und ohne Streuverluste."
+    },
+    {
+      "key": "company_image",
+      "label": "Bild Unternehmen",
+      "type": "image",
+      "default": "assets/company.jpg"
+    },
+    {
+      "key": "quotes_title",
+      "label": "Stimmen Titel",
+      "type": "text",
+      "default": "Das sagen Bewerber und Partner"
+    },
+    {
+      "key": "q1_t",
+      "label": "Zitat 1",
+      "type": "longtext",
+      "default": "Innerhalb einer Woche hatte ich zwei passende Gespräche. Sehr angenehme Betreuung."
+    },
+    {
+      "key": "q1_a",
+      "label": "Zitat 1 Autor",
+      "type": "text",
+      "default": "Sandra K., Kundenberaterin"
+    },
+    {
+      "key": "q2_t",
+      "label": "Zitat 2",
+      "type": "longtext",
+      "default": "Endlich jemand, der zuhört statt nur Lebensläufe weiterzuleiten."
+    },
+    {
+      "key": "q2_a",
+      "label": "Zitat 2 Autor",
+      "type": "text",
+      "default": "Michael B., Projektleiter"
+    },
+    {
+      "key": "q3_t",
+      "label": "Zitat 3",
+      "type": "longtext",
+      "default": "Die Profile waren vorbereitet und passten sofort. Wir besetzen deutlich schneller."
+    },
+    {
+      "key": "q3_a",
+      "label": "Zitat 3 Autor",
+      "type": "text",
+      "default": "Personalleitung, Partnerunternehmen"
+    },
+    {
+      "key": "faq_title",
+      "label": "FAQ Titel",
+      "type": "text",
+      "default": "Häufige Fragen"
+    },
+    {
+      "key": "faq1_q",
+      "label": "Frage 1",
+      "type": "text",
+      "default": "Ist die Vermittlung für mich kostenlos?"
+    },
+    {
+      "key": "faq1_a",
+      "label": "Antwort 1",
+      "type": "longtext",
+      "default": "Ja. Für Bewerberinnen und Bewerber entstehen zu keinem Zeitpunkt Kosten."
+    },
+    {
+      "key": "faq2_q",
+      "label": "Frage 2",
+      "type": "text",
+      "default": "Wie schnell erhalte ich eine Rückmeldung?"
+    },
+    {
+      "key": "faq2_a",
+      "label": "Antwort 2",
+      "type": "longtext",
+      "default": "In der Regel innerhalb von 48 Stunden nach Eingang Ihrer Bewerbung."
+    },
+    {
+      "key": "faq3_q",
+      "label": "Frage 3",
+      "type": "text",
+      "default": "Was passiert mit meinen Daten?"
+    },
+    {
+      "key": "faq3_a",
+      "label": "Antwort 3",
+      "type": "longtext",
+      "default": "Ihre Daten werden ausschließlich für die Vermittlung genutzt und erst nach Ihrer Freigabe weitergegeben."
+    },
+    {
+      "key": "faq4_q",
+      "label": "Frage 4",
+      "type": "text",
+      "default": "Brauche ich Berufserfahrung?"
+    },
+    {
+      "key": "faq4_a",
+      "label": "Antwort 4",
+      "type": "longtext",
+      "default": "Nicht zwingend. Wir vermitteln sowohl Einsteiger als auch erfahrene Fachkräfte."
+    },
+    {
+      "key": "final_title",
+      "label": "Final Titel",
+      "type": "text",
+      "default": "Ihr nächster Schritt beginnt heute"
+    },
+    {
+      "key": "final_sub",
+      "label": "Final Text",
+      "type": "text",
+      "default": "Bewerbung in zwei Minuten — wir melden uns persönlich zurück."
+    },
+    {
+      "key": "final_cta",
+      "label": "Final Button",
+      "type": "text",
+      "default": "Jetzt bewerben"
+    },
+    {
+      "key": "impressum_url",
+      "label": "Impressum URL",
+      "type": "text",
+      "default": "#"
+    },
+    {
+      "key": "datenschutz_url",
+      "label": "Datenschutz URL",
+      "type": "text",
+      "default": "#"
+    },
+    {
+      "key": "seo_title",
+      "label": "SEO Titel",
+      "type": "text",
+      "default": "Personalvermittlung mit Tempo | Jetzt bewerben"
+    },
+    {
+      "key": "seo_description",
+      "label": "SEO Beschreibung",
+      "type": "text",
+      "default": "Persönliche Personalvermittlung: kostenfrei für Bewerber, schnelle Rückmeldung und passende Positionen."
+    }
+  ]
 }
