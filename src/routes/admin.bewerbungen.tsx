@@ -199,18 +199,26 @@ function AdminBewerbungenPage() {
     return { byUid, byEmail, byApplicationId };
   }, [profiles]);
 
+  // Liefert Termin-Zeitpunkt UND Buchungsstatus – der No-Show wird von der
+  // DB-Automatik an der Buchung gesetzt, nicht an der Bewerbung.
   const bookingByApp = useMemo(() => {
-    const m = new Map<string, Date>();
+    const m = new Map<string, { date: Date | null; status: string | null }>();
     for (const b of allBookings as any[]) {
       const appId = b.application_id || b.app_id;
       if (!appId) continue;
       const d = b.booking_date && b.booking_time
         ? new Date(`${b.booking_date}T${b.booking_time}`)
         : b.scheduled_at ? new Date(b.scheduled_at) : null;
-      if (d) m.set(appId, d);
+      const prev = m.get(appId);
+      const status = b.status ? String(b.status) : null;
+      // Neueste Buchung gewinnt.
+      if (!prev || !prev.date || (d && d.getTime() > prev.date.getTime())) {
+        m.set(appId, { date: d, status });
+      }
     }
     return m;
   }, [allBookings]);
+
 
   const [landingById, setLandingById] = useState<Map<string, { slug: string; firmenname: string | null }>>(new Map());
   useEffect(() => {
