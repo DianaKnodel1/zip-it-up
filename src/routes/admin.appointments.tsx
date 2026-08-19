@@ -1,124 +1,219 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
-import { useAdminData } from "@/contexts/AdminDataContext";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { CalendarDays, Briefcase, ExternalLink, ClipboardCheck, Wand2, Loader2 } from "lucide-react";
-import { TableSkeleton, PageHeaderSkeleton } from "@/components/SkeletonLoaders";
-import { useNavigate } from "@/lib/router-compat";
-import { AssignTaskDialog } from "@/components/admin/AssignTaskDialog";
-import { cn } from "@/lib/utils";
-import { planAutoAssignments, runAutoAssignments } from "@/lib/auto-assign";
-import { useToast } from "@/hooks/use-toast";
 
 export const Route = createFileRoute("/admin/appointments")({
   component: AdminAppointmentsPage,
 });
 
-interface Slot {
-  id: string;
-  userId: string | null;
-  assignmentId: string | null;
-  status: string;
-  dateStr: string;
-  timeStr: string;
-  ts: number;
-  name: string;
-  phone: string | null;
-  profileId: string | null;
-}
+import { useState, useMemo } from "react";
+import { useAdminData } from "@/contexts/AdminDataContext";
+import { getAssignableEmployees } from "@/lib/employee-utils";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { EmptyState } from "@/components/EmptyState";
+import {
+  CalendarDays, Trash2, LinkIcon, Plus, CalendarIcon, Clock, Zap, Settings2, ShieldCheck,
+  Wand2, Loader2, ExternalLink,
+} from "lucide-react";
+import { format, startOfToday, isSameDay } from "date-fns";
+import { de } from "date-fns/locale";
+import { AssignmentIndividualData } from "@/components/AssignmentIndividualData";
+import { planAutoAssignments, runAutoAssignments } from "@/lib/auto-assign";
+import { useNavigate } from "@/lib/router-compat";
 
-function dayLabel(dateStr: string) {
-  const today = new Date();
-  const todayStr = today.toLocaleDateString("en-CA");
-  const tomorrow = new Date(today.getTime() + 86400000).toLocaleDateString("en-CA");
-  if (dateStr === todayStr) return "Heute";
-  if (dateStr === tomorrow) return "Morgen";
-  const d = new Date(`${dateStr}T00:00:00`);
-  return d.toLocaleDateString("de-DE", { weekday: "long", day: "2-digit", month: "long", year: "numeric" });
-}
+const BOOKING_STATUSES = [
+  { value: "gebucht", label: "Gebucht", class: "bg-primary/15 text-primary border border-primary/20 font-medium" },
+  { value: "bestätigt", label: "Bestätigt", class: "bg-accent text-accent-foreground border border-accent font-semibold" },
+  { value: "abgeschlossen", label: "Abgeschlossen", class: "bg-muted text-foreground border border-border font-medium" },
+  { value: "storniert", label: "Storniert", class: "bg-destructive/15 text-destructive border border-destructive/20 font-medium" },
+];
+
+// Admin darf rund um die Uhr buchen (00:00 – 23:30)
+const TIME_OPTIONS = Array.from({ length: 48 }, (_, i) => {
+  const h = Math.floor(i / 2).toString().padStart(2, "0");
+  const m = i % 2 === 0 ? "00" : "30";
+  return { value: `${h}:${m}`, label: `${h}:${m} Uhr` };
+});
 
 function AdminAppointmentsPage() {
-  const { allBookings, profiles, assignments, templates, loading, loadData } = useAdminData();
-  const navigate = useNavigate();
+  const { allBookings, profiles, templates, assignments, adminUserIds, loading, loadData } = useAdminData();
+  const assignableEmployees = useMemo(() => getAssignableEmployees(profiles, adminUserIds), [profiles, adminUserIds]);
   const { toast } = useToast();
-
-  const [search, setSearch] = useState("");
-  const [onlyOpen, setOnlyOpen] = useState(false);
-  const [hidePast, setHidePast] = useState(true);
-  const [assignFor, setAssignFor] = useState<Slot | null>(null);
+  const navigate = useNavigate();
+  const [filterStatus, setFilterStatus] = useState("alle");
+  const [assignBookingId, setAssignBookingId] = useState<string | null>(null);
+  const [selectedAssignmentId, setSelectedAssignmentId] = useState("");
   const [autoRunning, setAutoRunning] = useState(false);
 
-  // Filter-Zustand bleibt erhalten (verpasste Termine sollen sichtbar bleiben).
-  useEffect(() => {
-    const saved = typeof window !== "undefined" ? window.localStorage.getItem("admin-appointments-hide-past") : null;
-    if (saved !== null) setHidePast(saved === "1");
-  }, []);
-  useEffect(() => {
-    if (typeof window !== "undefined") window.localStorage.setItem("admin-appointments-hide-past", hidePast ? "1" : "0");
-  }, [hidePast]);
+  const [showCreate, setShowCreate] = useState(false);
+  const [createUserId, setCreateUserId] = useState("");
+  const [createDate, setCreateDate] = useState<Date>();
+  const [createTime, setCreateTime] = useState("");
+  const [createTemplateId, setCreateTemplateId] = useState<string>("none");
+  const [creating, setCreating] = useState(false);
 
-  const slots = useMemo<Slot[]>(() => {
-    return (allBookings as any[])
-      .filter((b) => b.user_id && !b.application_id)
-      .map((b) => {
-        const dateStr: string = b.booking_date || (b.scheduled_at ? new Date(b.scheduled_at).toLocaleDateString("en-CA") : "");
-        const timeStr: string = (b.booking_time || (b.scheduled_at ? new Date(b.scheduled_at).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" }) : "")).slice(0, 5);
-        const profile = profiles.find((p: any) => p.user_id === b.user_id);
-        return {
-          id: b.id,
-          userId: b.user_id ?? null,
-          assignmentId: b.assignment_id ?? null,
-          status: b.status ?? "confirmed",
-          dateStr,
-          timeStr,
-          ts: dateStr ? new Date(`${dateStr}T${timeStr || "00:00"}`).getTime() : 0,
-          name: profile?.full_name || b.full_name || "Mitarbeiter",
-          phone: profile?.phone || b.phone || null,
-          profileId: profile?.id ?? null,
-        };
+  // Individuelle Auftragsdaten – Dialog
+  const [individualAssignmentId, setIndividualAssignmentId] = useState<string | null>(null);
+  const [individualUserId, setIndividualUserId] = useState<string | null>(null);
+
+  const updateBookingStatus = async (bookingId: string, status: string) => {
+    const { error } = await supabase.from("bookings").update({ status: status as any }).eq("id", bookingId);
+    if (error) { toast({ title: "Fehler", description: error.message, variant: "destructive" }); return; }
+    toast({ title: `Status → ${BOOKING_STATUSES.find(s => s.value === status)?.label}` });
+    loadData();
+  };
+
+  const deleteBooking = async (bookingId: string) => {
+    const { error } = await supabase.from("bookings").delete().eq("id", bookingId);
+    if (error) { toast({ title: "Fehler", description: error.message, variant: "destructive" }); return; }
+    toast({ title: "Buchung gelöscht" });
+    loadData();
+  };
+
+  const assignTask = async () => {
+    if (!assignBookingId || !selectedAssignmentId) return;
+    const booking = (allBookings as any[]).find((b) => b.id === assignBookingId);
+    if (!booking) return;
+
+    const releaseAt = booking.booking_date && booking.booking_time
+      ? new Date(`${booking.booking_date}T${booking.booking_time}`).toISOString()
+      : null;
+
+    const { data: newAssignment, error: createErr } = await supabase
+      .from("task_assignments")
+      .insert({
+        user_id: booking.user_id,
+        task_template_id: selectedAssignmentId,
+        status: "zugewiesen" as any,
+        release_at: releaseAt,
       })
-      .filter((s) => s.dateStr);
-  }, [allBookings, profiles]);
+      .select("id")
+      .single();
+    if (createErr || !newAssignment) {
+      toast({ title: "Fehler", description: createErr?.message ?? "Auftrag konnte nicht erstellt werden.", variant: "destructive" });
+      return;
+    }
 
-  const assignmentIds = useMemo(() => new Set(assignments.map((a) => a.id)), [assignments]);
-  const assignmentGroups = useMemo(() => {
-    const m = new Map<string, string>();
-    for (const a of assignments as any[]) m.set(a.id, a.assignment_group === "automatisch" ? "automatisch" : "manuell");
-    return m;
-  }, [assignments]);
-  const now = Date.now();
+    const { error } = await supabase.from("bookings").update({ assignment_id: newAssignment.id }).eq("id", assignBookingId);
+    if (error) { toast({ title: "Fehler", description: error.message, variant: "destructive" }); return; }
+    toast({ title: "Auftrag zugewiesen", description: "Bitte jetzt individuelle Daten für diesen Mitarbeiter pflegen." });
+    setAssignBookingId(null); setSelectedAssignmentId("");
+    setIndividualAssignmentId(newAssignment.id);
+    setIndividualUserId(booking.user_id);
+    loadData();
+  };
 
-  const filtered = slots.filter((s) => {
-    if (search && !s.name.toLowerCase().includes(search.toLowerCase())) return false;
-    if (onlyOpen && s.assignmentId) return false;
-    if (hidePast && s.ts < now) return false;
-    return true;
-  });
+  const createBooking = async () => {
+    if (!createUserId || !createDate || !createTime) {
+      toast({ title: "Alle Felder ausfüllen", variant: "destructive" }); return;
+    }
+    setCreating(true);
+    const dateStr = format(createDate, "yyyy-MM-dd");
 
-  const upcoming = filtered.filter((s) => s.ts >= now).sort((a, b) => a.ts - b.ts);
-  const past = filtered.filter((s) => s.ts < now).sort((a, b) => b.ts - a.ts);
-  const ordered = [...upcoming, ...past];
+    let newAssignmentId: string | null = null;
+    if (createTemplateId && createTemplateId !== "none") {
+      const releaseAt = new Date(`${dateStr}T${createTime}`).toISOString();
+      const { data: asg, error: asgErr } = await supabase
+        .from("task_assignments")
+        .insert({
+          user_id: createUserId,
+          task_template_id: createTemplateId,
+          status: "zugewiesen" as any,
+          release_at: releaseAt,
+        })
+        .select("id")
+        .single();
+      if (asgErr) {
+        toast({ title: "Fehler", description: asgErr.message, variant: "destructive" });
+        setCreating(false);
+        return;
+      }
+      newAssignmentId = asg?.id ?? null;
+    }
 
-  const groups: { key: string; label: string; items: Slot[] }[] = [];
-  for (const s of ordered) {
-    const last = groups[groups.length - 1];
-    if (last && last.key === s.dateStr) last.items.push(s);
-    else groups.push({ key: s.dateStr, label: dayLabel(s.dateStr), items: [s] });
-  }
+    const { error } = await supabase.from("bookings").insert({
+      user_id: createUserId,
+      booking_date: dateStr,
+      booking_time: createTime,
+      status: "gebucht" as any,
+      admin_override: true,
+      assignment_id: newAssignmentId,
+    } as any);
+    if (error) { toast({ title: "Fehler", description: error.message, variant: "destructive" }); setCreating(false); return; }
+    toast({ title: "Termin erstellt", description: "Der Termin ist manuell freigeschaltet." });
 
-  const openCount = slots.filter((s) => !s.assignmentId && s.ts >= now).length;
+    const assignedUserId = createUserId;
+    setShowCreate(false); setCreateUserId(""); setCreateDate(undefined); setCreateTime(""); setCreateTemplateId("none");
+    setCreating(false);
+    loadData();
 
-  const autoPlan = useMemo(
-    () => planAutoAssignments(
-      upcoming.filter((s) => s.status !== "cancelled"),
-      assignments as any[],
-      templates as any[],
-    ),
-    [upcoming, assignments, templates],
-  );
+    if (newAssignmentId) {
+      setIndividualAssignmentId(newAssignmentId);
+      setIndividualUserId(assignedUserId);
+    }
+  };
+
+  const toggleAdminOverride = async (bookingId: string, current: boolean) => {
+    const booking = (allBookings as any[]).find((b) => b.id === bookingId);
+    const { error } = await supabase
+      .from("bookings")
+      .update({ admin_override: !current } as any)
+      .eq("id", bookingId);
+    if (error) {
+      toast({ title: "Fehler", description: error.message, variant: "destructive" });
+      return;
+    }
+
+    if (!current && booking?.assignment_id) {
+      await supabase
+        .from("task_assignments")
+        .update({ release_at: new Date().toISOString() } as any)
+        .eq("id", booking.assignment_id);
+    }
+
+    toast({ title: !current ? "Termin manuell freigeschaltet" : "Manuelle Freischaltung entfernt" });
+    loadData();
+  };
+
+  const enrichedBookings = useMemo(() => {
+    return (allBookings as any[])
+      .filter((b) => b.user_id && !b.application_id && b.booking_date && b.booking_time)
+      .map((b) => {
+        const profile = profiles.find((p: any) => p.user_id === b.user_id);
+        const assignment = b.assignment_id ? (assignments as any[]).find((a) => a.id === b.assignment_id) : null;
+        const template = assignment ? templates.find((t) => t.id === assignment.task_template_id) : null;
+        const releaseAt = assignment && assignment.release_at ? new Date(assignment.release_at) : null;
+        const isReleased = releaseAt ? releaseAt <= new Date() : true;
+        const group = assignment?.assignment_group === "automatisch" ? "automatisch" : "manuell";
+        return { ...b, profile, assignment, template, releaseAt, isReleased, group };
+      })
+      .filter((b) => filterStatus === "alle" || b.status === filterStatus)
+      .sort((a, b) => {
+        const da = new Date(`${a.booking_date}T${a.booking_time}`);
+        const db = new Date(`${b.booking_date}T${b.booking_time}`);
+        return db.getTime() - da.getTime();
+      });
+  }, [allBookings, profiles, assignments, templates, filterStatus]);
+
+  const autoPlan = useMemo(() => {
+    const now = Date.now();
+    const upcoming = enrichedBookings
+      .filter((b) => b.status !== "storniert" && b.status !== "cancelled")
+      .filter((b) => new Date(`${b.booking_date}T${b.booking_time}`).getTime() >= now)
+      .map((b) => ({
+        id: b.id,
+        userId: b.user_id ?? null,
+        assignmentId: b.assignment_id ?? null,
+        dateStr: b.booking_date as string,
+        timeStr: (b.booking_time as string)?.slice(0, 5) ?? "",
+      }));
+    return planAutoAssignments(upcoming, assignments as any[], templates as any[]);
+  }, [enrichedBookings, assignments, templates]);
 
   const handleAutoAssign = async () => {
     if (autoPlan.length === 0) return;
@@ -133,162 +228,308 @@ function AdminAppointmentsPage() {
     await loadData();
   };
 
-  if (loading) return <div className="p-6 space-y-4"><PageHeaderSkeleton /><TableSkeleton /></div>;
+  if (loading) return <div className="p-5 space-y-4"><div className="h-6 w-32 bg-muted rounded animate-pulse" /><div className="h-64 bg-muted/50 rounded-xl border animate-pulse" /></div>;
 
   return (
-    <div className="p-5 lg:p-6 space-y-4">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-xl bg-primary/10 grid place-items-center">
-            <CalendarDays className="h-5 w-5 text-primary" />
-          </div>
-          <div>
-            <h1 className="text-lg font-heading font-bold">Mitarbeiter-Termine</h1>
-            <p className="text-xs text-muted-foreground">
-              {upcoming.length} kommend · {openCount} ohne Auftrag
-            </p>
-          </div>
+    <div className="p-5 space-y-4">
+      <div className="flex items-center justify-between gap-4 flex-wrap">
+        <div>
+          <h1 className="text-lg font-heading font-bold text-foreground">Mitarbeiter-Termine</h1>
+          <p className="text-xs text-muted-foreground">
+            {enrichedBookings.length} Auftrags-/Mitarbeiter-Buchungen
+          </p>
         </div>
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex gap-2 flex-wrap">
           <Button
             size="sm"
-            className="h-8 text-xs gap-1.5"
+            variant="outline"
+            className="gap-1.5"
             disabled={autoRunning || autoPlan.length === 0}
             onClick={handleAutoAssign}
           >
             {autoRunning ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Wand2 className="h-3.5 w-3.5" />}
             Automatisch zuweisen{autoPlan.length > 0 ? ` (${autoPlan.length})` : ""}
           </Button>
-          <Input
-            placeholder="Mitarbeiter suchen…"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="h-8 w-48 text-sm"
-          />
-          <Button size="sm" variant={onlyOpen ? "default" : "outline"} className="h-8 text-xs" onClick={() => setOnlyOpen((v) => !v)}>
-            Nur offene
-          </Button>
-          <Button size="sm" variant={hidePast ? "default" : "outline"} className="h-8 text-xs" onClick={() => setHidePast((v) => !v)}>
-            {hidePast ? "Vergangene anzeigen" : "Vergangene ausblenden"}
-          </Button>
+          <Select value={filterStatus} onValueChange={setFilterStatus}>
+            <SelectTrigger className="h-8 w-[140px] text-xs"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="alle">Alle Status</SelectItem>
+              {BOOKING_STATUSES.map((s) => <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>)}
+            </SelectContent>
+          </Select>
+          <Button size="sm" onClick={() => setShowCreate(true)}><Plus className="h-3.5 w-3.5 mr-1" /> Termin erstellen</Button>
         </div>
       </div>
 
-      {ordered.length === 0 ? (
-        <Card>
-          <CardContent className="py-12 text-center text-sm text-muted-foreground">
-            Keine Termine gefunden
-          </CardContent>
-        </Card>
+      {enrichedBookings.length === 0 ? (
+        <EmptyState icon={CalendarDays} title="Keine Buchungen" description={filterStatus !== "alle" ? "Kein Eintrag für diesen Filter." : "Noch keine Terminbuchungen vorhanden."} />
       ) : (
-        <div className="space-y-5">
-          {groups.map((g) => (
-            <div key={g.key} className="space-y-1.5">
-              <div className="flex items-center gap-2 px-1">
-                <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{g.label}</h2>
-                <span className="text-[11px] text-muted-foreground">· {g.items.length}</span>
-              </div>
-              <div className="rounded-xl border border-border overflow-hidden divide-y divide-border">
-                {g.items.map((s) => {
-                  const isPast = s.ts < now;
-                  const cancelled = s.status === "cancelled";
-                  const hasAssignment = !!s.assignmentId && assignmentIds.has(s.assignmentId);
-                  const group = s.assignmentId ? assignmentGroups.get(s.assignmentId) : undefined;
-                  return (
-                    <div
-                      key={s.id}
-                      className={cn(
-                        "flex flex-wrap items-center gap-3 px-3 py-2.5 bg-card hover:bg-muted/30 transition-colors",
-                        (isPast || cancelled) && "opacity-60",
-                      )}
-                    >
-                      <span className="font-mono text-sm font-semibold w-14 shrink-0">{s.timeStr || "—"}</span>
-                      <div className="min-w-[160px] flex-1">
-                        <div className="text-sm font-medium truncate">{s.name}</div>
-                      </div>
-
-                      {cancelled ? (
-                        <Badge variant="destructive" className="text-[10px]">Storniert</Badge>
-                      ) : s.status === "no_show" ? (
-                        <Badge variant="outline" className="text-[10px]">No-Show</Badge>
-                      ) : null}
-
-                      <Badge
-                        variant="secondary"
-                        className={cn(
-                          "text-[10px] border",
-                          hasAssignment
-                            ? group === "automatisch"
+        <div className="border rounded-lg overflow-x-auto bg-card">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-border bg-muted/50">
+                <th className="text-left px-4 py-2.5 text-xs font-medium text-muted-foreground uppercase tracking-wider">Mitarbeiter</th>
+                <th className="text-left px-4 py-2.5 text-xs font-medium text-muted-foreground uppercase tracking-wider">Datum</th>
+                <th className="text-left px-4 py-2.5 text-xs font-medium text-muted-foreground uppercase tracking-wider">Uhrzeit</th>
+                <th className="text-left px-4 py-2.5 text-xs font-medium text-muted-foreground uppercase tracking-wider">Status</th>
+                <th className="text-left px-4 py-2.5 text-xs font-medium text-muted-foreground uppercase tracking-wider">Auftrag</th>
+                <th className="text-left px-4 py-2.5 text-xs font-medium text-muted-foreground uppercase tracking-wider">Freischaltung</th>
+                <th className="text-right px-4 py-2.5 text-xs font-medium text-muted-foreground uppercase tracking-wider">Aktionen</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-border">
+              {enrichedBookings.map((b) => {
+                const statusInfo = BOOKING_STATUSES.find((s) => s.value === b.status) ?? BOOKING_STATUSES[0];
+                return (
+                  <tr key={b.id} className="hover:bg-muted/30 transition-colors">
+                    <td className="px-4 py-3 font-medium text-foreground">{b.profile?.full_name ?? "Unbekannt"}</td>
+                    <td className="px-4 py-3 text-muted-foreground">
+                      {new Date(b.booking_date + "T00:00:00").toLocaleDateString("de-DE", { weekday: "short", day: "numeric", month: "short" })}
+                    </td>
+                    <td className="px-4 py-3 text-muted-foreground">{b.booking_time?.slice(0, 5)} Uhr</td>
+                    <td className="px-4 py-3">
+                      <Select value={b.status} onValueChange={(val) => updateBookingStatus(b.id, val)}>
+                        <SelectTrigger className="h-7 w-[130px] text-xs border-0 bg-transparent p-0">
+                          <Badge variant="secondary" className={`text-[10px] ${statusInfo.class}`}>{statusInfo.label}</Badge>
+                        </SelectTrigger>
+                        <SelectContent>
+                          {BOOKING_STATUSES.map((s) => <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>)}
+                        </SelectContent>
+                      </Select>
+                    </td>
+                    <td className="px-4 py-3">
+                      {b.assignment ? (
+                        <div className="flex items-center gap-2 flex-wrap">
+                          {b.template && <span className="text-xs text-foreground">{b.template.title}</span>}
+                          <Badge
+                            variant="secondary"
+                            className={`text-[10px] border ${b.group === "automatisch"
                               ? "bg-status-info/10 text-status-info border-status-info/25"
-                              : "bg-status-success/15 text-status-success border-status-success/30"
-                            : "bg-muted text-muted-foreground border-border",
-                        )}
-                      >
-                        {hasAssignment
-                          ? group === "automatisch" ? "Auto zugewiesen" : "Manuell zugewiesen"
-                          : "Offen"}
-                      </Badge>
-
-                      <div className="flex items-center gap-1 ml-auto">
-                        {hasAssignment ? (
-                          <>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="h-7 text-xs gap-1.5"
-                            onClick={() => navigate(`/admin/assignments/${s.assignmentId}`)}
+                              : "bg-status-success/15 text-status-success border-status-success/30"}`}
                           >
-                            <ClipboardCheck className="h-3.5 w-3.5" /> Auftrag öffnen
-                          </Button>
-                          {isPast && (
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="h-7 text-xs gap-1.5"
-                              onClick={() => setAssignFor(s)}
-                            >
-                              <Briefcase className="h-3.5 w-3.5" /> Neu zuweisen
-                            </Button>
-                          )}
-                          </>
+                            {b.group === "automatisch" ? "Auto zugewiesen" : "Manuell zugewiesen"}
+                          </Badge>
+                          <button
+                            onClick={() => {
+                              setIndividualAssignmentId(b.assignment.id);
+                              setIndividualUserId(b.user_id);
+                            }}
+                            className="text-[10px] text-primary hover:underline flex items-center gap-1"
+                            title="Individuelle Daten / PDF für diesen Mitarbeiter"
+                          >
+                            <Settings2 className="h-3 w-3" /> Individuell
+                          </button>
+                        </div>
+                      ) : (
+                        <button onClick={() => { setAssignBookingId(b.id); setSelectedAssignmentId(""); }} className="text-[10px] text-primary hover:underline flex items-center gap-1">
+                          <LinkIcon className="h-3 w-3" /> Zuweisen
+                        </button>
+                      )}
+                    </td>
+                    <td className="px-4 py-3">
+                      {b.admin_override ? (
+                        <Badge variant="secondary" className="text-[10px] bg-status-success text-status-success-foreground">
+                          <ShieldCheck className="h-3 w-3 mr-0.5" /> Admin freigeschaltet
+                        </Badge>
+                      ) : b.releaseAt ? (
+                        b.isReleased ? (
+                          <Badge variant="secondary" className="text-[10px] bg-status-success text-status-success-foreground">
+                            <Zap className="h-3 w-3 mr-0.5" /> Freigegeben
+                          </Badge>
                         ) : (
+                          <Badge variant="secondary" className="text-[10px] bg-status-pending text-status-pending-foreground">
+                            <Clock className="h-3 w-3 mr-0.5" />
+                            Noch gesperrt · {b.releaseAt.toLocaleDateString("de-DE", { day: "numeric", month: "short" })} {b.releaseAt.toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" })}
+                          </Badge>
+                        )
+                      ) : (
+                        <Badge variant="secondary" className="text-[10px] bg-muted text-foreground border border-border">
+                          Noch nicht freigegeben
+                        </Badge>
+                      )}
+                    </td>
+                    <td className="px-4 py-3 text-right">
+                      <div className="flex items-center justify-end gap-1">
+                        {!b.admin_override && !b.isReleased && (
                           <Button
-                            variant="ghost"
                             size="sm"
-                            className="h-7 text-xs gap-1.5"
-                            disabled={cancelled}
-                            onClick={() => setAssignFor(s)}
+                            variant="outline"
+                            className="h-7 px-2 text-[10px] text-foreground hover:bg-muted"
+                            onClick={() => toggleAdminOverride(b.id, false)}
+                            title="Termin manuell freischalten"
                           >
-                            <Briefcase className="h-3.5 w-3.5" /> Zuweisen
+                            <ShieldCheck className="h-3.5 w-3.5 mr-1" />
+                            Freischalten
                           </Button>
                         )}
-                        {(s.profileId || s.userId) && (
+                        {(b.profile?.id || b.user_id) && (
                           <Button
-                            variant="ghost"
                             size="sm"
-                            className="h-7 text-xs gap-1"
-                            onClick={() => navigate(`/admin/personen/${s.profileId || s.userId}`)}
+                            variant="ghost"
+                            className="h-7 px-2 text-[10px]"
+                            onClick={() => navigate(`/admin/personen/${b.profile?.id || b.user_id}`)}
                           >
-                            Öffnen <ExternalLink className="h-3 w-3" />
+                            Öffnen <ExternalLink className="h-3 w-3 ml-1" />
                           </Button>
                         )}
+                        <Button size="sm" variant="ghost" className="h-7 w-7 p-0 text-destructive hover:text-destructive" onClick={() => deleteBooking(b.id)}>
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </Button>
                       </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          ))}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
       )}
 
-      <AssignTaskDialog
-        open={!!assignFor}
-        onOpenChange={(o) => { if (!o) setAssignFor(null); }}
-        userId={assignFor?.userId ?? null}
-        bookingId={assignFor?.id ?? null}
-        defaultReleaseAt={assignFor ? `${assignFor.dateStr}T${assignFor.timeStr || "09:00"}` : null}
-      />
+      {/* Create Booking Dialog */}
+      <Dialog open={showCreate} onOpenChange={setShowCreate}>
+        <DialogContent className="max-w-md">
+          <DialogHeader><DialogTitle className="font-heading">Termin manuell erstellen</DialogTitle></DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-1.5">
+              <label className="text-xs font-medium text-muted-foreground">Mitarbeiter</label>
+              <Select value={createUserId} onValueChange={setCreateUserId}>
+                <SelectTrigger><SelectValue placeholder="Mitarbeiter wählen…" /></SelectTrigger>
+                <SelectContent>
+                  {assignableEmployees.map((p: any) => <SelectItem key={p.user_id} value={p.user_id}>{p.full_name}</SelectItem>)}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-xs font-medium text-muted-foreground">Datum</label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" className="w-full justify-start text-left font-normal h-9 text-sm">
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {createDate ? format(createDate, "PPP", { locale: de }) : "Datum wählen…"}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0">
+                  <Calendar
+                    mode="single"
+                    selected={createDate}
+                    onSelect={(d) => { setCreateDate(d); setCreateTime(""); }}
+                    disabled={(date) => date < startOfToday()}
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-xs font-medium text-muted-foreground">Uhrzeit (Admin: rund um die Uhr)</label>
+              <Select value={createTime} onValueChange={setCreateTime}>
+                <SelectTrigger><SelectValue placeholder="Uhrzeit wählen…" /></SelectTrigger>
+                <SelectContent className="max-h-72">
+                  {(() => {
+                    const isToday = createDate && isSameDay(createDate, new Date());
+                    const now = new Date();
+                    const nowMins = now.getHours() * 60 + now.getMinutes();
+                    return TIME_OPTIONS.filter((t) => {
+                      if (!isToday) return true;
+                      const [h, m] = t.value.split(":").map(Number);
+                      return h * 60 + m > nowMins;
+                    }).map((t) => <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>);
+                  })()}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-xs font-medium text-muted-foreground">Auftrag (optional)</label>
+              <Select value={createTemplateId} onValueChange={setCreateTemplateId}>
+                <SelectTrigger><SelectValue placeholder="Kein Auftrag" /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="none">Kein Auftrag</SelectItem>
+                  {templates.filter((t) => t.is_active).map((t) => (
+                    <SelectItem key={t.id} value={t.id}>{t.title}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <p className="text-[10px] text-muted-foreground">
+                Bei Auswahl öffnet sich nach dem Erstellen direkt der Dialog für individuelle Daten & SMS-Nummer.
+              </p>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button size="sm" onClick={createBooking} disabled={creating || !createUserId || !createDate || !createTime}>
+              {creating ? "Erstellen…" : "Termin erstellen"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Assign Task Dialog */}
+      <Dialog open={!!assignBookingId} onOpenChange={(o) => { if (!o) setAssignBookingId(null); }}>
+        <DialogContent className="max-w-md">
+          <DialogHeader><DialogTitle className="font-heading">Auftrag zuweisen</DialogTitle></DialogHeader>
+          <div className="space-y-4">
+            {(() => {
+              const booking = (allBookings as any[]).find((b) => b.id === assignBookingId);
+              if (!booking) return null;
+              const activeTemplates = templates.filter((t) => t.is_active);
+              if (activeTemplates.length === 0) {
+                return <p className="text-sm text-muted-foreground">Keine aktiven Auftragsvorlagen vorhanden. Bitte zuerst eine Vorlage anlegen.</p>;
+              }
+              return (
+                <>
+                  <p className="text-xs text-muted-foreground">
+                    Wähle eine Auftragsvorlage. Der Auftrag wird dem Mitarbeiter zugewiesen und mit diesem Termin verknüpft.
+                  </p>
+                  <Select value={selectedAssignmentId} onValueChange={setSelectedAssignmentId}>
+                    <SelectTrigger className="text-sm"><SelectValue placeholder="Auftragsvorlage wählen…" /></SelectTrigger>
+                    <SelectContent>
+                      {activeTemplates.map((t) => (
+                        <SelectItem key={t.id} value={t.id}>{t.title}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </>
+              );
+            })()}
+          </div>
+          <DialogFooter>
+            <Button size="sm" disabled={!selectedAssignmentId} onClick={assignTask}>Zuweisen</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Individuelle Auftragsdaten pro Mitarbeiter / Zuweisung */}
+      <Dialog
+        open={!!individualAssignmentId}
+        onOpenChange={(o) => {
+          if (!o) {
+            setIndividualAssignmentId(null);
+            setIndividualUserId(null);
+          }
+        }}
+      >
+        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="font-heading">Individuelle Auftragsdaten</DialogTitle>
+          </DialogHeader>
+          {individualAssignmentId && individualUserId && (() => {
+            const asg = (assignments as any[]).find((a) => a.id === individualAssignmentId);
+            const tpl = asg ? templates.find((t) => t.id === asg.task_template_id) : null;
+            return (
+              <AssignmentIndividualData
+                assignmentId={individualAssignmentId}
+                userId={individualUserId}
+                templateInstructions={(tpl as any)?.instructions ?? ""}
+                initial={{
+                  individual_instructions: asg?.individual_instructions ?? "",
+                  individual_phone: asg?.individual_phone ?? "",
+                  individual_hint: asg?.individual_hint ?? "",
+                  post_ident_pdf_url: asg?.post_ident_pdf_url ?? null,
+                  post_ident_pdf_name: asg?.post_ident_pdf_name ?? null,
+                }}
+                onSaved={loadData}
+              />
+            );
+          })()}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
