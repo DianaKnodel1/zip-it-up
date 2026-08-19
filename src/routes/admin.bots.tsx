@@ -194,6 +194,21 @@ function AdminBotsPage() {
         </div>
       </div>
 
+      {noProxy && (
+        <div className="rounded-xl border border-destructive/30 bg-destructive/5 p-4 flex gap-3">
+          <AlertTriangle className="h-4 w-4 text-destructive shrink-0 mt-0.5" />
+          <div className="text-xs text-muted-foreground space-y-1">
+            <p className="font-medium text-foreground">Kein aktiver Proxy hinterlegt</p>
+            <p>
+              Bot-Läufe werden nicht gestartet, solange kein aktiver Proxy vorhanden ist – jeder Lauf
+              braucht eine eigene IP. Lege im Tab „Proxys" mindestens einen Proxy an und aktiviere ihn.
+            </p>
+          </div>
+        </div>
+      )}
+
+
+
       {(() => {
         const rows = runsQ.data?.rows ?? [];
         const queued = rows.filter((r) => r.status === "queued");
