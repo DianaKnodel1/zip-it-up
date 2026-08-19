@@ -76,10 +76,19 @@ export function AssignTaskDialog({
       .single();
 
     if (error || !data) {
-      toast({ title: "Zuweisung fehlgeschlagen", description: error?.message, variant: "destructive" });
+      const dup = (error as any)?.code === "23505"
+        || String(error?.message ?? "").includes("task_assignments_user_template_uniq");
+      toast({
+        title: dup ? "Bereits zugewiesen" : "Zuweisung fehlgeschlagen",
+        description: dup
+          ? "Dieser Mitarbeiter hat den Auftrag bereits — er kann ihn kein zweites Mal erhalten."
+          : error?.message,
+        variant: "destructive",
+      });
       setSaving(false);
       return;
     }
+
 
     if (bookingId) {
       const { error: bErr } = await supabase

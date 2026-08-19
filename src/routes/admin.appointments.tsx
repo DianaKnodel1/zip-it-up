@@ -61,6 +61,35 @@ function AdminAppointmentsPage() {
   const [individualAssignmentId, setIndividualAssignmentId] = useState<string | null>(null);
   const [individualUserId, setIndividualUserId] = useState<string | null>(null);
 
+  // Auftrag nachträglich ändern
+  const [changeBookingId, setChangeBookingId] = useState<string | null>(null);
+  const [changeTemplateId, setChangeTemplateId] = useState("");
+  const [changing, setChanging] = useState(false);
+
+  const STATUS_LABEL: Record<string, string> = {
+    zugewiesen: "zugewiesen",
+    in_bearbeitung: "in Bearbeitung",
+    eingereicht: "eingereicht",
+    abgeschlossen: "abgeschlossen",
+    erledigt: "erledigt",
+  };
+
+  /** Alle Vorlagen, die dieser Mitarbeiter bereits hat (inkl. Status). */
+  const assignedByUser = (userId: string | null | undefined) => {
+    const m = new Map<string, string>();
+    if (!userId) return m;
+    for (const a of assignments as any[]) {
+      if (a.user_id === userId) m.set(a.task_template_id, String(a.status ?? "zugewiesen"));
+    }
+    return m;
+  };
+
+  const duplicateMessage = (status?: string) =>
+    `Dieser Mitarbeiter hat den Auftrag bereits — Status: ${STATUS_LABEL[status ?? ""] ?? status ?? "zugewiesen"}.`;
+
+  const isDuplicateError = (err: any) =>
+    err?.code === "23505" || String(err?.message ?? "").includes("task_assignments_user_template_uniq");
+
   const updateBookingStatus = async (bookingId: string, status: string) => {
     const { error } = await supabase.from("bookings").update({ status: status as any }).eq("id", bookingId);
     if (error) { toast({ title: "Fehler", description: error.message, variant: "destructive" }); return; }
@@ -80,6 +109,12 @@ function AdminAppointmentsPage() {
     const booking = (allBookings as any[]).find((b) => b.id === assignBookingId);
     if (!booking) return;
 
+    const taken = assignedByUser(booking.user_id);
+    if (taken.has(selectedAssignmentId)) {
+      toast({ title: "Bereits zugewiesen", description: duplicateMessage(taken.get(selectedAssignmentId)), variant: "destructive" });
+      return;
+    }
+
     const releaseAt = booking.booking_date && booking.booking_time
       ? new Date(`${booking.booking_date}T${booking.booking_time}`).toISOString()
       : null;
@@ -95,7 +130,13 @@ function AdminAppointmentsPage() {
       .select("id")
       .single();
     if (createErr || !newAssignment) {
-      toast({ title: "Fehler", description: createErr?.message ?? "Auftrag konnte nicht erstellt werden.", variant: "destructive" });
+      toast({
+        title: isDuplicateError(createErr) ? "Bereits zugewiesen" : "Fehler",
+        description: isDuplicateError(createErr)
+          ? duplicateMessage(taken.get(selectedAssignmentId))
+          : createErr?.message ?? "Auftrag konnte nicht erstellt werden.",
+        variant: "destructive",
+      });
       return;
     }
 
@@ -107,6 +148,49 @@ function AdminAppointmentsPage() {
     setIndividualUserId(booking.user_id);
     loadData();
   };
+
+  /** Vorlage einer bestehenden Zuweisung austauschen. */
+  const changeAssignedTemplate = async () => {
+    const booking = (allBookings as any[]).find((b) => b.id === changeBookingId);
+    if (!booking || !booking.assignment_id || !changeTemplateId) return;
+    const taken = assignedByUser(booking.user_id);
+    if (taken.has(changeTemplateId)) {
+      toast({ title: "Bereits zugewiesen", description: duplicateMessage(taken.get(changeTemplateId)), variant: "destructive" });
+      return;
+    }
+    setChanging(true);
+    const { error } = await supabase
+      .from("task_assignments")
+      .update({ task_template_id: changeTemplateId, assignment_group: "manuell" } as any)
+      .eq("id", booking.assignment_id);
+    setChanging(false);
+    if (error) {
+      toast({
+        title: isDuplicateError(error) ? "Bereits zugewiesen" : "Fehler",
+        description: isDuplicateError(error) ? duplicateMessage(taken.get(changeTemplateId)) : error.message,
+        variant: "destructive",
+      });
+      return;
+    }
+    toast({ title: "Auftrag geändert" });
+    setChangeBookingId(null); setChangeTemplateId("");
+    loadData();
+  };
+
+  /** Zuweisung vom Termin lösen (Auftrag bleibt bestehen? – nein, er wird entfernt). */
+  const removeAssignment = async () => {
+    const booking = (allBookings as any[]).find((b) => b.id === changeBookingId);
+    if (!booking || !booking.assignment_id) return;
+    setChanging(true);
+    await supabase.from("bookings").update({ assignment_id: null }).eq("id", booking.id);
+    const { error } = await supabase.from("task_assignments").delete().eq("id", booking.assignment_id);
+    setChanging(false);
+    if (error) { toast({ title: "Fehler", description: error.message, variant: "destructive" }); return; }
+    toast({ title: "Zuweisung entfernt", description: "Der Termin ist wieder offen." });
+    setChangeBookingId(null); setChangeTemplateId("");
+    loadData();
+  };
+
 
   const createBooking = async () => {
     if (!createUserId || !createDate || !createTime) {
@@ -300,7 +384,16 @@ function AdminAppointmentsPage() {
                     <td className="px-4 py-3">
                       {b.assignment ? (
                         <div className="flex items-center gap-2 flex-wrap">
-                          {b.template && <span className="text-xs text-foreground">{b.template.title}</span>}
+                          {b.template && (
+                            <button
+                              onClick={() => { setChangeBookingId(b.id); setChangeTemplateId(""); }}
+                              className="text-xs text-foreground hover:text-primary hover:underline"
+                              title="Anderen Auftrag zuweisen"
+                            >
+                              {b.template.title}
+                            </button>
+                          )}
+
                           <Badge
                             variant="secondary"
                             className={`text-[10px] border ${b.group === "automatisch"
@@ -468,23 +561,34 @@ function AdminAppointmentsPage() {
             {(() => {
               const booking = (allBookings as any[]).find((b) => b.id === assignBookingId);
               if (!booking) return null;
+              const taken = assignedByUser(booking.user_id);
               const activeTemplates = templates.filter((t) => t.is_active);
               if (activeTemplates.length === 0) {
                 return <p className="text-sm text-muted-foreground">Keine aktiven Auftragsvorlagen vorhanden. Bitte zuerst eine Vorlage anlegen.</p>;
               }
+              const available = activeTemplates.filter((t) => !taken.has(t.id));
               return (
                 <>
                   <p className="text-xs text-muted-foreground">
                     Wähle eine Auftragsvorlage. Der Auftrag wird dem Mitarbeiter zugewiesen und mit diesem Termin verknüpft.
+                    Bereits vergebene Aufträge sind gesperrt – kein Mitarbeiter erhält denselben Auftrag zweimal.
                   </p>
                   <Select value={selectedAssignmentId} onValueChange={setSelectedAssignmentId}>
                     <SelectTrigger className="text-sm"><SelectValue placeholder="Auftragsvorlage wählen…" /></SelectTrigger>
                     <SelectContent>
                       {activeTemplates.map((t) => (
-                        <SelectItem key={t.id} value={t.id}>{t.title}</SelectItem>
+                        <SelectItem key={t.id} value={t.id} disabled={taken.has(t.id)}>
+                          {t.title}
+                          {taken.has(t.id) ? ` — bereits ${STATUS_LABEL[taken.get(t.id)!] ?? taken.get(t.id)}` : ""}
+                        </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
+                  {available.length === 0 && (
+                    <p className="text-xs text-status-pending">
+                      Dieser Mitarbeiter hat bereits alle aktiven Aufträge.
+                    </p>
+                  )}
                 </>
               );
             })()}
@@ -494,6 +598,67 @@ function AdminAppointmentsPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Zugewiesenen Auftrag ändern / entfernen */}
+      <Dialog open={!!changeBookingId} onOpenChange={(o) => { if (!o) { setChangeBookingId(null); setChangeTemplateId(""); } }}>
+        <DialogContent className="max-w-md">
+          <DialogHeader><DialogTitle className="font-heading">Auftrag ändern</DialogTitle></DialogHeader>
+          {(() => {
+            const booking = (allBookings as any[]).find((b) => b.id === changeBookingId);
+            if (!booking) return null;
+            const assignment = (assignments as any[]).find((a) => a.id === booking.assignment_id);
+            const current = assignment ? templates.find((t) => t.id === assignment.task_template_id) : null;
+            const status = String(assignment?.status ?? "zugewiesen");
+            const started = status !== "zugewiesen";
+            const taken = assignedByUser(booking.user_id);
+            const activeTemplates = templates.filter((t) => t.is_active && t.id !== current?.id);
+            return (
+              <div className="space-y-4">
+                <div className="rounded-md border border-border bg-muted/40 px-3 py-2 text-sm">
+                  <div className="font-medium">{current?.title ?? "Unbekannter Auftrag"}</div>
+                  <div className="text-xs text-muted-foreground">
+                    Status: {STATUS_LABEL[status] ?? status}
+                  </div>
+                </div>
+
+                {started ? (
+                  <p className="text-xs text-status-pending">
+                    Der Mitarbeiter hat den Auftrag bereits begonnen bzw. abgeschlossen. Ein Austausch ist
+                    nicht möglich – du kannst die Zuweisung nur entfernen und danach neu zuweisen.
+                  </p>
+                ) : (
+                  <>
+                    <p className="text-xs text-muted-foreground">
+                      Anderen Auftrag für diesen Termin wählen. Bereits vergebene Aufträge sind gesperrt.
+                    </p>
+                    <Select value={changeTemplateId} onValueChange={setChangeTemplateId}>
+                      <SelectTrigger className="text-sm"><SelectValue placeholder="Neue Auftragsvorlage wählen…" /></SelectTrigger>
+                      <SelectContent>
+                        {activeTemplates.map((t) => (
+                          <SelectItem key={t.id} value={t.id} disabled={taken.has(t.id)}>
+                            {t.title}
+                            {taken.has(t.id) ? ` — bereits ${STATUS_LABEL[taken.get(t.id)!] ?? taken.get(t.id)}` : ""}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </>
+                )}
+              </div>
+            );
+          })()}
+          <DialogFooter className="gap-2">
+            <Button size="sm" variant="ghost" className="text-destructive" disabled={changing} onClick={removeAssignment}>
+              Zuweisung entfernen
+            </Button>
+            <Button size="sm" disabled={!changeTemplateId || changing} onClick={changeAssignedTemplate}>
+              {changing && <Loader2 className="h-3.5 w-3.5 mr-1.5 animate-spin" />}
+              Auftrag ersetzen
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
 
       {/* Individuelle Auftragsdaten pro Mitarbeiter / Zuweisung */}
       <Dialog

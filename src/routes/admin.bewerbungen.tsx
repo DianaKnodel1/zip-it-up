@@ -72,7 +72,7 @@ const PHASE_COLOR: Record<Phase, string> = {
   mitarbeiter_aktiv: "bg-primary text-primary-foreground",
 };
 
-function computePhase(a: any, sched: Date | null, prof: ProfileInfo): Phase {
+function computePhase(a: any, sched: Date | null, prof: ProfileInfo, bookingStatusRaw?: string | null): Phase {
   if (prof) {
     if (prof.status === "angenommen") return "mitarbeiter_aktiv";
     if (prof.status === "abgelehnt") return "abgelehnt";
@@ -83,13 +83,21 @@ function computePhase(a: any, sched: Date | null, prof: ProfileInfo): Phase {
   // status = Entscheidung, booking_status = Termin-Zustand,
   // interview_recommendation = Empfehlung der Auswertung.
   const status = String(a.status ?? "");
+  // No-Show/Absage stehen je nach Weg entweder an der Bewerbung (Calendly-Event)
+  // oder an der Buchung (DB-Autocomplete setzt bookings.status = 'no_show').
   const bookingStatus = String(a.booking_status ?? "");
+  const bookingRow = String(bookingStatusRaw ?? "");
+  const isNoShow = bookingStatus === "no_show" || bookingRow === "no_show";
+  const isCancelled = bookingStatus === "cancelled" || bookingRow === "cancelled" || bookingRow === "storniert";
   const rec = String(a.interview_recommendation ?? "");
 
-  if (status === "abgelehnt" || rec === "reject") return "abgelehnt";
+  // Termin-Zustand hat Vorrang vor der Empfehlung – nur eine echte Ablehnung
+  // durch dich überschreibt ihn.
+  if (status === "abgelehnt") return "abgelehnt";
+  if (isNoShow) return "no_show";
+  if (isCancelled) return "abgesagt";
+  if (rec === "reject") return "abgelehnt";
   if (status === "akzeptiert" || status === "angenommen" || rec === "invite") return "angenommen";
-  if (bookingStatus === "no_show") return "no_show";
-  if (bookingStatus === "cancelled") return "abgesagt";
   if (a.interview_completed_at || bookingStatus === "completed") return "auswertung_fehler";
 
   if (sched) {
@@ -103,6 +111,7 @@ function computePhase(a: any, sched: Date | null, prof: ProfileInfo): Phase {
 
   return "termin_offen";
 }
+
 
 function phaseToStages(p: Phase): Stage[] {
   const s = (state: Stage["state"], label: string, key: string): Stage => ({ key, label, state });
@@ -190,18 +199,26 @@ function AdminBewerbungenPage() {
     return { byUid, byEmail, byApplicationId };
   }, [profiles]);
 
+  // Liefert Termin-Zeitpunkt UND Buchungsstatus – der No-Show wird von der
+  // DB-Automatik an der Buchung gesetzt, nicht an der Bewerbung.
   const bookingByApp = useMemo(() => {
-    const m = new Map<string, Date>();
+    const m = new Map<string, { date: Date | null; status: string | null }>();
     for (const b of allBookings as any[]) {
       const appId = b.application_id || b.app_id;
       if (!appId) continue;
       const d = b.booking_date && b.booking_time
         ? new Date(`${b.booking_date}T${b.booking_time}`)
         : b.scheduled_at ? new Date(b.scheduled_at) : null;
-      if (d) m.set(appId, d);
+      const prev = m.get(appId);
+      const status = b.status ? String(b.status) : null;
+      // Neueste Buchung gewinnt.
+      if (!prev || !prev.date || (d && d.getTime() > prev.date.getTime())) {
+        m.set(appId, { date: d, status });
+      }
     }
     return m;
   }, [allBookings]);
+
 
   const [landingById, setLandingById] = useState<Map<string, { slug: string; firmenname: string | null }>>(new Map());
   useEffect(() => {
@@ -243,8 +260,10 @@ function AdminBewerbungenPage() {
         status: p.status ?? null,
         contractSigned: !!p.contract_signed_at,
       } : null;
-      const sched = bookingByApp.get(a.id) ?? (a.scheduled_at ? new Date(a.scheduled_at) : null);
-      const phase = computePhase(a, sched, prof);
+      const bk = bookingByApp.get(a.id) ?? null;
+      const sched = bk?.date ?? (a.scheduled_at ? new Date(a.scheduled_at) : null);
+      const phase = computePhase(a, sched, prof, bk?.status ?? null);
+
       return {
         id: a.id,
         name: a.full_name || `${a.first_name ?? ""} ${a.last_name ?? ""}`.trim() || email || "—",
