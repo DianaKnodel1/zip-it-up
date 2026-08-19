@@ -386,6 +386,75 @@ window.WHATSAPP_NUMBER = "${esc(wa)}";
   return /<\/head>/i.test(cleanHtml) ? cleanHtml.replace(/<\/head>/i, block + "</head>") : block + cleanHtml;
 }
 
+// Entfernt doppelte Impressum-/Datenschutz-Links aus dem Theme-Footer.
+function stripThemeLegalLinks(html) {
+  return html.replace(/<footer[\s\S]*?<\/footer>/gi, (footer) => {
+    let out = footer.replace(/<(li|p|div|span)([^>]*)>\s*<a[^>]*>\s*(?:Impressum|Datenschutz(?:erkl[\u00e4a]rung)?)\s*<\/a>\s*<\/\1>/gi, "");
+    out = out.replace(/<a[^>]*>\s*(?:Impressum|Datenschutz(?:erkl[\u00e4a]rung)?)\s*<\/a>/gi, "");
+    for (let i = 0; i < 2; i++) out = out.replace(/<(ul|nav|div)([^>]*)>\s*<\/\1>/gi, "");
+    return out;
+  });
+}
+
+// Vollwertiger Rechts-/Kontakt-Footer f\u00fcr Themes ohne {{legal_block}}.
+function injectTrustFooter(html, b) {
+  if (/lv-legal-block/.test(html)) return html;
+  html = stripThemeLegalLinks(html);
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const plzStadt = [b.plz, b.stadt].filter(Boolean).join(" ");
+  const regLine = [b.registergericht ? `Registergericht ${esc(b.registergericht)}` : "", b.hrb ? `HRB ${esc(b.hrb)}` : ""].filter(Boolean).join(", ");
+  const legalItems = [
+    b.firmenname ? `<strong>${esc(b.firmenname)}</strong>` : "",
+    b.strasse ? esc(b.strasse) : "",
+    plzStadt ? esc(plzStadt) : "",
+    b.geschaeftsfuehrer ? `Gesch\u00e4ftsf\u00fchrung: ${esc(b.geschaeftsfuehrer)}` : "",
+    regLine,
+    b.ust_id ? `USt-IdNr.: ${esc(b.ust_id)}` : (b.steuernummer ? `Steuernummer: ${esc(b.steuernummer)}` : "")
+  ].filter(Boolean);
+  const contactItems = [
+    b.telefon ? `<a href="tel:${esc(b.telefon)}" style="color:inherit;text-decoration:none;font-weight:600;">${esc(b.telefon)}</a>` : "",
+    b.email ? `<a href="mailto:${esc(b.email)}" style="color:inherit;text-decoration:none;">${esc(b.email)}</a>` : ""
+  ].filter(Boolean);
+  const addrHtml = [b.strasse, plzStadt].filter(Boolean).map(esc).join("<br/>");
+  const headStyle = "font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#94a3b8;margin-bottom:16px;";
+  const linkStyle = "color:#e2e8f0;text-decoration:none;";
+  const claim = String(b.flow_type || "") === "fast"
+    ? "Schnell, digital und pers\u00f6nlich begleitet \u2014 von der Bewerbung bis zum Start."
+    : "Ihre Personalvermittlung \u2014 wir bringen Sie mit passenden Partnerunternehmen zusammen.";
+  const block = `
+<section class="lv-trust-footer lv-legal-block" style="background:#0f172a;color:#e2e8f0;padding:64px 24px 32px;margin-top:64px;font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;">
+  <div style="max-width:1180px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:40px;">
+    <div>
+      <div style="font-size:20px;font-weight:800;color:#f8fafc;margin-bottom:12px;">${esc(b.firmenname)}</div>
+      <div style="font-size:14.5px;line-height:1.75;color:#cbd5e1;max-width:280px;">${esc(claim)}</div>
+    </div>
+    <div>
+      <div style="${headStyle}">Kontakt</div>
+      ${addrHtml ? `<div style="font-size:14px;line-height:1.7;color:#cbd5e1;margin-bottom:12px;">${addrHtml}</div>` : ""}
+      ${contactItems.length ? `<div style="font-size:15px;line-height:1.9;color:#f8fafc;">${contactItems.join("<br/>")}</div>` : ""}
+    </div>
+    <div>
+      <div style="${headStyle}">N\u00fctzliche Links</div>
+      <ul style="list-style:none;padding:0;margin:0;font-size:14.5px;line-height:2;">
+        <li><a href="#top" style="${linkStyle}">Startseite</a></li>
+        <li><a href="#bewerbung-form" style="${linkStyle}">Jetzt bewerben</a></li>
+        <li><a href="/impressum.html" style="${linkStyle}">Impressum</a></li>
+        <li><a href="/datenschutz.html" style="${linkStyle}">Datenschutzerkl\u00e4rung</a></li>
+      </ul>
+    </div>
+    <div>
+      <div style="${headStyle}">Anbieterkennzeichnung</div>
+      <div style="font-size:14.5px;line-height:1.8;color:#e2e8f0;">${legalItems.join("<br/>")}</div>
+      <div style="margin-top:18px;font-size:13px;line-height:1.7;color:#94a3b8;">Die \u00dcbertragung Ihrer Bewerbungsdaten erfolgt TLS-verschl\u00fcsselt.</div>
+    </div>
+  </div>
+  <div style="max-width:1180px;margin:32px auto 0;padding-top:20px;border-top:1px solid rgba(226,232,240,.1);font-size:12.5px;color:#94a3b8;text-align:center;">
+    \u00a9 ${new Date().getFullYear()} ${esc(b.firmenname)}. Alle Rechte vorbehalten.
+  </div>
+</section>`;
+  return /<\/body>/i.test(html) ? html.replace(/<\/body>/i, block + "\n</body>") : html + block;
+}
+
 function cleanEmptyMeta(html, branding, domain) {
   let out = html;
   if (!branding?.seo_image) {
