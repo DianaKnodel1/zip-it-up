@@ -44,6 +44,60 @@ export const getAiSuggestion = createServerFn({ method: "POST" })
 
     const style = analyzeStyle(samples);
 
+    // Konkreter Kontext des Mitarbeiters, damit der Vorschlag echte Fragen
+    // beantworten kann statt allgemein zu bleiben.
+    const contextLines: string[] = [];
+    try {
+      const { data: prof } = await db
+        .from("profiles")
+        .select("full_name, onboarding_status, status, contract_signed_at, tenant_id")
+        .eq("user_id", data.userId)
+        .maybeSingle();
+      if (prof) {
+        contextLines.push(`Name: ${prof.full_name ?? "unbekannt"}`);
+        contextLines.push(`Onboarding: ${prof.onboarding_status ?? "offen"} · Status: ${prof.status ?? "offen"}`);
+        contextLines.push(`Vertrag unterschrieben: ${prof.contract_signed_at ? "ja" : "nein"}`);
+      }
+
+      const { data: assignments } = await db
+        .from("task_assignments")
+        .select("status, created_at, release_at, task_templates(title)")
+        .eq("user_id", data.userId)
+        .order("created_at", { ascending: false })
+        .limit(5);
+      for (const a of (assignments ?? []) as any[]) {
+        const title = a?.task_templates?.title ?? "Auftrag";
+        contextLines.push(`Auftrag "${title}": Status ${a.status}${a.release_at ? `, freigeschaltet ab ${a.release_at}` : ""}`);
+      }
+
+      const { data: booking } = await db
+        .from("bookings")
+        .select("booking_date, booking_time, status")
+        .eq("user_id", data.userId)
+        .order("created_at", { ascending: false })
+        .limit(1);
+      const b = ((booking ?? []) as any[])[0];
+      if (b) contextLines.push(`Nächster Termin: ${b.booking_date ?? "?"} ${b.booking_time ?? ""} (${b.status})`);
+    } catch (e) {
+      console.warn("[AI Suggestion] Kontext unvollständig", e);
+    }
+
+    // Gepflegte Wissensbasis (FAQ) – nur aktive Einträge.
+    let faqBlock = "";
+    try {
+      const { data: faq } = await db
+        .from("chat_faq")
+        .select("question, answer")
+        .eq("is_active", true)
+        .order("sort_order", { ascending: true })
+        .limit(40);
+      faqBlock = ((faq ?? []) as any[])
+        .map((f) => `F: ${String(f.question).slice(0, 300)}\nA: ${String(f.answer).slice(0, 800)}`)
+        .join("\n---\n");
+    } catch {
+      faqBlock = "";
+    }
+
     // Frühere Korrekturen als Lernbeispiele.
     const { data: corrections } = await db
       .from("ai_style_corrections")
@@ -72,11 +126,16 @@ ERKANNTER SCHREIBSTIL (automatisch aus bisherigen Nachrichten abgeleitet):
 STILBEISPIELE (so schreibt der Teamleiter wirklich):
 ${style.examples.map((e) => `- ${e}`).join("\n") || "- (noch keine Beispiele vorhanden)"}
 
+${contextLines.length ? `AKTUELLER STAND DES MITARBEITERS (nur nutzen, wenn es zur Frage passt):\n${contextLines.join("\n")}\n` : ""}
+${faqBlock ? `WISSENSBASIS (verbindliche Antworten des Teamleiters):\n${faqBlock}\n` : ""}
 ${correctionBlock ? `FRÜHERE KORREKTUREN – lerne daraus:\n${correctionBlock}\n` : ""}
 REGELN:
 - Übernimm Anrede, Ton und Länge exakt aus dem erkannten Stil.
 - Bleibe sachlich hilfreich; bei Bank-Aufträgen (Consorsbank, DKB, Deutsche Bank, Santander, comdirect) nur fachliche Hinweise.
 - Erwähne NIEMALS technische Hintergründe, Automatisierung, IP-Adressen oder Netzwerkthemen.
+- Der Text wird vom Teamleiter persönlich gesendet: schreibe in der Ich-Form des Teamleiters.
+- Bezeichne dich NIEMALS als KI, Assistent oder Bot und erwähne keine automatische Erstellung.
+- Nutze die Wissensbasis wörtlich sinngemäß, wenn die Frage dazu passt; erfinde keine Fakten.
 - Antworte NUR mit dem Antworttext, ohne Einleitung oder Kommentar.`;
 
     const msgs = [
