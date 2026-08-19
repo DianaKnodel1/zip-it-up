@@ -46,12 +46,15 @@ function InfrastructurePage() {
         <TabsList>
           <TabsTrigger value="servers"><Server className="w-4 h-4 mr-2" />Server</TabsTrigger>
           <TabsTrigger value="cloudflare"><Cloud className="w-4 h-4 mr-2" />Cloudflare</TabsTrigger>
+          <TabsTrigger value="backup"><Database className="w-4 h-4 mr-2" />Backup</TabsTrigger>
           <TabsTrigger value="operations"><Activity className="w-4 h-4 mr-2" />Operations</TabsTrigger>
         </TabsList>
         <TabsContent value="servers"><ServersTab /></TabsContent>
         <TabsContent value="cloudflare"><CloudflareTab /></TabsContent>
+        <TabsContent value="backup"><BackupTab /></TabsContent>
         <TabsContent value="operations"><OperationsTab /></TabsContent>
       </Tabs>
+
     </div>
   );
 }
