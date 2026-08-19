@@ -80,6 +80,12 @@ function AdminChatPage() {
   const logCorrectionFn = useServerFn(logAiCorrection);
   // Letzter KI-Vorschlag – dient dem stillen Nachlernen beim Senden.
   const lastSuggestionRef = useRef<string>("");
+  // Steht im Eingabefeld gerade ein (noch nicht bearbeiteter) Vorschlag?
+  const [suggestionActive, setSuggestionActive] = useState(false);
+  // Pro Unterhaltung merken, für welche eingegangene Nachricht schon automatisch
+  // ein Vorschlag erzeugt wurde – verhindert unnötige Anfragen.
+  const autoSuggestedRef = useRef<Map<string, string>>(new Map());
+
   const [filterTab] = useState<"all" | "escalated" | "open">("all");
   const [viewTab, setViewTab] = useState<"active" | "hidden">("active");
   const [tenantFilter, setTenantFilter] = useState<string>("all"); // tenant_id oder "all"
