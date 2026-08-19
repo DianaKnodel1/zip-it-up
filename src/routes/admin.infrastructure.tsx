@@ -615,19 +615,21 @@ function BackupTab() {
       <Card>
         <CardHeader>
           <CardTitle>Setup-Anleitung</CardTitle>
-          <CardDescription>So richtest du automatische 6-Stunden-Backups ein</CardDescription>
+          <CardDescription>Empfohlen: dedizierter Backup-Server mit Orchestrator</CardDescription>
         </CardHeader>
         <CardContent className="space-y-3 text-sm text-muted-foreground">
-          <p>1. Auf dem neuen Backup-Server: <code className="text-foreground">bash scripts/setup-backup-server.sh</code></p>
-          <p>2. Vom Portal-Server: <code className="text-foreground">ssh-copy-id -i ~/.ssh/id_rsa.pub backup@&lt;BACKUP_IP&gt;</code></p>
-          <p>3. Auf dem Portal-Server: <code className="text-foreground">cp scripts/backup.env.example scripts/backup.env</code> ausfüllen und dann <code className="text-foreground">bash scripts/install-backup-timer.sh</code></p>
-          <p>4. Testlauf: <code className="text-foreground">bash scripts/backup.sh full</code></p>
+          <p>1. Backup-VPS bestellen (Ubuntu 22.04/24.04, 2 vCPU, 4 GB, ausreichend SSD).</p>
+          <p>2. Auf dem Backup-Server: <code className="text-foreground">bash scripts/setup-backup-server.sh</code></p>
+          <p>3. Von jedem Produktions-Server: <code className="text-foreground">ssh-copy-id -i /root/.ssh/id_rsa.pub root@&lt;BACKUP_IP&gt;</code></p>
+          <p>4. Auf dem Backup-Server <code className="text-foreground">scripts/backup-orchestrator.env</code> aus der Example anlegen und füllen, dann <code className="text-foreground">bash scripts/install-backup-orchestrator.sh</code></p>
+          <p>5. Testlauf: <code className="text-foreground">bash scripts/backup-orchestrator.sh full</code></p>
           <p className="pt-2">Wiederherstellung im Katastrophenfall: <code className="text-foreground">docs/DISASTER-RECOVERY.md</code></p>
         </CardContent>
       </Card>
     </div>
   );
 }
+
 
 // ════════════════════════════════════════════════════════════════════════════
 // TAB: Operations (Audit-Log)
