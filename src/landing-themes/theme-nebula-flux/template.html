@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>{{seo_title}}</title>
+<meta name="description" content="{{seo_description}}" />
+<meta property="og:title" content="{{seo_title}}" />
+<meta property="og:description" content="{{seo_description}}" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<!-- Akzentfarbe wird ueber script.js gesetzt ({{accent_color}}) -->
+<div class="nf-bg" aria-hidden="true"></div>
+<div class="nf-noise" aria-hidden="true"></div>
+
+<!-- ===== Header ===== -->
+<header class="nf-hdr">
+  <div class="nf-wrap nf-hdr-inner">
+    <a href="#" class="nf-brand">
+      <span class="nf-brand-mark" aria-hidden="true"></span>
+      <span>
+        <span class="nf-brand-name">{{brand_name}}</span>
+        <span class="nf-brand-sub">{{brand_tagline}}</span>
+      </span>
+    </a>
+    <nav class="nf-nav" aria-label="Hauptnavigation">
+      <a href="#leistungen">Leistungen</a>
+      <a href="#prozess">Prozess</a>
+      <a href="#dashboard">Plattform</a>
+      <a href="#tester">Tester</a>
+      <a href="#projekte">Projekte</a>
+    </nav>
+    <a href="#bewerbung-form" class="nf-btn nf-btn-pri">{{nav_cta}}</a>
+  </div>
+</header>
+
+<!-- ===== Hero ===== -->
+<section class="nf-hero">
+  <div class="nf-wrap nf-hero-grid">
+    <div data-reveal>
+      <span class="nf-eyebrow">{{hero_eyebrow}}</span>
+      <h1 class="nf-h1" style="margin-top:22px">
+        <span>{{hero_title}}</span>
+        <span class="nf-grad-text"> Vertrauen digital schaffen.</span>
+      </h1>
+      <p class="nf-lead" style="margin-top:22px">{{hero_subtitle}}</p>
+      <div class="nf-hero-ctas">
+        <a href="#bewerbung-form" class="nf-btn nf-btn-pri">
+          <span>{{hero_cta_primary}}</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a href="#tester" class="nf-btn nf-btn-sec">{{hero_cta_secondary}}</a>
+      </div>
+      <div class="nf-hero-badges">
+        <span class="nf-badge">{{hero_badge_1}}</span>
+        <span class="nf-badge">{{hero_badge_2}}</span>
+        <span class="nf-badge">{{hero_badge_3}}</span>
+        <span class="nf-badge">{{hero_badge_4}}</span>
+      </div>
+    </div>
+
+    <!-- 3D scene -->
+    <div class="nf-scene" data-reveal aria-hidden="true">
+      <div class="nf-tablet">
+        <div class="nf-screen">
+          <div class="nf-scr-bar"></div>
+          <div class="nf-scr-bar b2"></div>
+          <div class="nf-scr-bar b3"></div>
+        </div>
+      </div>
+      <div class="nf-monitor">
+        <div class="nf-screen">
+          <div class="nf-scr-bar"></div>
+          <div class="nf-scr-chart">
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <div class="nf-scr-bar b2"></div>
+          <div class="nf-scr-bar b3"></div>
+        </div>
+      </div>
+      <div class="nf-phone">
+        <div class="nf-screen">
+          <div class="nf-scr-bar"></div>
+          <div class="nf-scr-bar b2"></div>
+          <div class="nf-scr-bar b3"></div>
+          <div class="nf-scr-bar b2"></div>
+        </div>
+      </div>
+      <span class="nf-orb o1"></span>
+      <span class="nf-orb o2"></span>
+      <span class="nf-orb o3"></span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Marquee logos ===== -->
+<div class="nf-marquee" aria-hidden="true">
+  <div class="nf-marquee-inner">
+    <span>· Enterprise SaaS</span><span>· Fintech</span><span>· Health-Tech</span><span>· E-Commerce</span><span>· Mobility</span><span>· Media</span><span>· AI Platforms</span><span>· Cloud Infrastructure</span>
+    <span>· Enterprise SaaS</span><span>· Fintech</span><span>· Health-Tech</span><span>· E-Commerce</span><span>· Mobility</span><span>· Media</span><span>· AI Platforms</span><span>· Cloud Infrastructure</span>
+  </div>
+</div>
+
+<!-- ===== Services ===== -->
+<section id="leistungen">
+  <div class="nf-wrap">
+    <div data-reveal>
+      <span class="nf-eyebrow">{{eyebrow_2}}</span>
+      <h2 class="nf-h2">{{section_title_1}} <span class="nf-grad-text">{{section_title_1_accent}}</span></h2>
+      <p class="nf-lead">{{lead_2}}</p>
+    </div>
+    <div class="nf-svc-grid">
+      <!-- 10 tiles -->
+      <div class="nf-svc" data-reveal><div class="nf-svc-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 20h8M12 18v2"/></svg></div><h3 class="nf-h3">{{card_title_1}}</h3><p>{{card_text_1}}</p></div>
+      <div class="nf-svc" data-reveal><div class="nf-svc-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/></svg></div><h3 class="nf-h3">{{card_title_2}}</h3><p>{{card_text_2}}</p></div>
+      <div class="nf-svc" data-reveal><div class="nf-svc-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M2 12s3-6 10-6 10 6 10 6-3 6-10 6S2 12 2 12z"/></svg></div><h3 class="nf-h3">{{card_title_3}}</h3><p>{{card_text_3}}</p></div>
+      <div class="nf-svc" data-reveal><div class="nf-svc-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 22c0-4 3.5-7 8-7s8 3 8 7"/></svg></div><h3 class="nf-h3">{{card_title_4}}</h3><p>{{card_text_4}}</p></div>
+      <div class="nf-svc" data-reveal><div class="nf-svc-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2c3 3 3 17 0 20M12 2c-3 3-3 17 0 20"/></svg></div><h3 class="nf-h3">{{card_title_5}}</h3><p>{{card_text_5}}</p></div>
+      <div class="nf-svc" data-reveal><div class="nf-svc-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg></div><h3 class="nf-h3">{{card_title_6}}</h3><p>{{card_text_6}}</p></div>
+      <div class="nf-svc" data-reveal><div class="nf-svc-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6z"/></svg></div><h3 class="nf-h3">{{card_title_7}}</h3><p>{{card_text_7}}</p></div>
+      <div class="nf-svc" data-reveal><div class="nf-svc-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5l3 2"/></svg></div><h3 class="nf-h3">{{card_title_8}}</h3><p>{{card_text_8}}</p></div>
+      <div class="nf-svc" data-reveal><div class="nf-svc-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M4 10h16M10 4v16"/></svg></div><h3 class="nf-h3">{{card_title_9}}</h3><p>{{card_text_9}}</p></div>
+      <div class="nf-svc" data-reveal><div class="nf-svc-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="14" height="10" rx="2"/><rect x="14" y="10" width="8" height="10" rx="2"/></svg></div><h3 class="nf-h3">{{card_title_10}}</h3><p>{{card_text_10}}</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Timeline ===== -->
+<section id="prozess">
+  <div class="nf-wrap">
+    <div data-reveal>
+      <span class="nf-eyebrow">{{eyebrow_3}}</span>
+      <h2 class="nf-h2">{{section_title_2}} <span class="nf-grad-text">{{section_title_2_accent}}</span></h2>
+    </div>
+    <div class="nf-tl">
+      <div class="nf-tl-step" data-reveal><div class="nf-tl-num">{{step_num_1}}</div><h3 class="nf-h3">{{card_title_11}}</h3><p>{{step_text_1}}</p></div>
+      <div class="nf-tl-step" data-reveal><div class="nf-tl-num">{{step_num_2}}</div><h3 class="nf-h3">{{card_title_12}}</h3><p>{{step_text_2}}</p></div>
+      <div class="nf-tl-step" data-reveal><div class="nf-tl-num">{{step_num_3}}</div><h3 class="nf-h3">{{card_title_13}}</h3><p>{{step_text_3}}</p></div>
+      <div class="nf-tl-step" data-reveal><div class="nf-tl-num">{{step_num_4}}</div><h3 class="nf-h3">{{card_title_14}}</h3><p>{{step_text_4}}</p></div>
+      <div class="nf-tl-step" data-reveal><div class="nf-tl-num">{{step_num_5}}</div><h3 class="nf-h3">{{card_title_15}}</h3><p>{{step_text_5}}</p></div>
+      <div class="nf-tl-step" data-reveal><div class="nf-tl-num">{{step_num_6}}</div><h3 class="nf-h3">{{card_title_16}}</h3><p>{{step_text_6}}</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Dashboard ===== -->
+<section id="dashboard">
+  <div class="nf-wrap">
+    <div data-reveal>
+      <span class="nf-eyebrow">{{eyebrow_4}}</span>
+      <h2 class="nf-h2">{{section_title_3}} <span class="nf-grad-text">{{section_title_3_accent}}</span></h2>
+      <p class="nf-lead">{{lead_3}}</p>
+    </div>
+    <div class="nf-dash" data-reveal>
+      <div class="nf-dash-head">
+        <div class="nf-dash-title">Quality Overview · Sprint 24</div>
+        <span class="nf-dash-pill">● LIVE</span>
+      </div>
+      <div class="nf-dash-grid">
+        <div class="nf-dash-card">
+          <h4>Bug-Priorität — Trend 14 Tage</h4>
+          <div class="nf-dash-chart">
+            <span style="height:60%"></span><span style="height:75%"></span><span style="height:45%"></span><span style="height:82%"></span><span style="height:55%"></span><span style="height:90%"></span><span style="height:70%"></span><span style="height:40%"></span><span style="height:65%"></span><span style="height:88%"></span><span style="height:50%"></span><span style="height:72%"></span><span style="height:35%"></span><span style="height:60%"></span>
+          </div>
+          <h4 style="margin-top:24px">Geräte-Heatmap</h4>
+          <div class="nf-heat">
+            <span></span><span class="h1"></span><span class="h2"></span><span class="h3"></span><span class="h2"></span><span class="h1"></span><span></span><span class="h1"></span><span class="h2"></span><span class="h3"></span><span class="h2"></span><span class="h1"></span><span></span><span class="h1"></span>
+            <span class="h1"></span><span class="h2"></span><span class="h3"></span><span class="h2"></span><span class="h1"></span><span></span><span class="h1"></span><span class="h2"></span><span class="h3"></span><span class="h2"></span><span class="h1"></span><span></span><span class="h1"></span><span class="h2"></span>
+            <span class="h2"></span><span class="h3"></span><span class="h2"></span><span class="h1"></span><span></span><span class="h1"></span><span class="h2"></span><span class="h3"></span><span class="h2"></span><span class="h1"></span><span></span><span class="h1"></span><span class="h2"></span><span class="h3"></span>
+          </div>
+        </div>
+        <div class="nf-dash-metrics">
+          <div class="nf-metric"><div class="nf-metric-lbl">{{metric_label_1}}</div><div class="nf-metric-val" style="color:var(--nf-accent-3)">98,4 %</div></div>
+          <div class="nf-metric"><div class="nf-metric-lbl">{{metric_label_2}}</div><div class="nf-metric-val" style="color:var(--nf-accent)">3</div></div>
+          <div class="nf-metric"><div class="nf-metric-lbl">{{metric_label_3}}</div><div class="nf-metric-val" style="color:var(--nf-accent-2)">42</div></div>
+          <div class="nf-metric"><div class="nf-metric-lbl">{{metric_label_4}}</div><div class="nf-metric-val">87 %</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Für Unternehmen ===== -->
+<section id="unternehmen">
+  <div class="nf-wrap">
+    <div data-reveal>
+      <span class="nf-eyebrow">{{eyebrow_5}}</span>
+      <h2 class="nf-h2">{{section_title_4}} <span class="nf-grad-text">{{section_title_4_accent}}</span></h2>
+    </div>
+    <div class="nf-two">
+      <div data-reveal>
+        <div class="nf-benefit"><div class="nf-benefit-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></svg></div><div><h4>{{benefit_title_1}}</h4><p>{{benefit_text_1}}</p></div></div>
+        <div class="nf-benefit"><div class="nf-benefit-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16M12 4v16"/></svg></div><div><h4>{{benefit_title_2}}</h4><p>{{benefit_text_2}}</p></div></div>
+        <div class="nf-benefit"><div class="nf-benefit-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg></div><div><h4>{{benefit_title_3}}</h4><p>{{benefit_text_3}}</p></div></div>
+        <div class="nf-benefit"><div class="nf-benefit-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12h8"/></svg></div><div><h4>{{benefit_title_4}}</h4><p>{{benefit_text_4}}</p></div></div>
+        <div class="nf-benefit"><div class="nf-benefit-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9l5 5v13H6z"/><path d="M14 3v6h6"/></svg></div><div><h4>{{benefit_title_5}}</h4><p>{{benefit_text_5}}</p></div></div>
+        <div class="nf-benefit"><div class="nf-benefit-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18"/></svg></div><div><h4>{{benefit_title_6}}</h4><p>{{benefit_text_6}}</p></div></div>
+      </div>
+      <div class="nf-illu" data-reveal aria-hidden="true">
+        <svg viewBox="0 0 400 400">
+          <defs>
+            <radialGradient id="g1" cx="50%" cy="50%"><stop offset="0%" stop-color="#22d3ee" stop-opacity=".6"/><stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/></radialGradient>
+            <linearGradient id="g2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#22d3ee"/><stop offset="100%" stop-color="#7c3aed"/></linearGradient>
+          </defs>
+          <circle cx="200" cy="200" r="180" fill="url(#g1)"/>
+          <circle cx="200" cy="200" r="120" fill="none" stroke="url(#g2)" stroke-width="1.5" stroke-dasharray="4 6"/>
+          <circle cx="200" cy="200" r="70" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".5"/>
+          <g stroke="url(#g2)" stroke-width="1.2" fill="none">
+            <path d="M200 80 L280 180 L200 320 L120 180 Z"/>
+            <path d="M80 200 L200 120 L320 200 L200 280 Z"/>
+          </g>
+          <g fill="#22d3ee">
+            <circle cx="200" cy="80" r="5"/><circle cx="280" cy="180" r="5"/><circle cx="200" cy="320" r="5"/><circle cx="120" cy="180" r="5"/>
+            <circle cx="80" cy="200" r="5" fill="#7c3aed"/><circle cx="320" cy="200" r="5" fill="#7c3aed"/>
+          </g>
+          <circle cx="200" cy="200" r="14" fill="#7c3aed"/>
+          <circle cx="200" cy="200" r="6" fill="#fff"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Für Tester ===== -->
+<section id="tester">
+  <div class="nf-wrap">
+    <div class="nf-tester" data-reveal>
+      <div class="nf-tester-inner">
+        <div>
+          <span class="nf-eyebrow">{{eyebrow_6}}</span>
+          <h2 class="nf-h2" style="margin-top:18px">{{section_title_5}} <span class="nf-grad-text">{{section_title_5_accent}}</span></h2>
+          <p class="nf-lead">{{lead_4}}</p>
+          <div class="nf-tester-list">
+            <div class="nf-tester-item">100 % Remote-Arbeit</div>
+            <div class="nf-tester-item">Flexible Projektauswahl</div>
+            <div class="nf-tester-item">Faire, transparente Vergütung</div>
+            <div class="nf-tester-item">Verschiedene Testkategorien</div>
+            <div class="nf-tester-item">Persönliches Dashboard</div>
+            <div class="nf-tester-item">Klare Projekt­übersicht</div>
+          </div>
+          <div class="nf-hero-ctas" style="margin-top:32px">
+            <a href="#bewerbung-form" class="nf-btn nf-btn-pri">Jetzt Tester werden</a>
+          </div>
+        </div>
+        <div class="nf-illu" aria-hidden="true">
+          <svg viewBox="0 0 400 400">
+            <defs><linearGradient id="tg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#22d3ee"/></linearGradient></defs>
+            <rect x="60" y="80" width="200" height="140" rx="10" fill="none" stroke="url(#tg)" stroke-width="1.5"/>
+            <rect x="180" y="180" width="120" height="180" rx="16" fill="none" stroke="url(#tg)" stroke-width="1.5"/>
+            <circle cx="120" cy="130" r="20" fill="#22d3ee" opacity=".3"/>
+            <circle cx="120" cy="130" r="12" fill="#22d3ee"/>
+            <rect x="150" y="120" width="90" height="8" rx="4" fill="#7c3aed" opacity=".6"/>
+            <rect x="150" y="140" width="60" height="6" rx="3" fill="#22d3ee" opacity=".5"/>
+            <circle cx="240" cy="280" r="30" fill="url(#tg)" opacity=".3"/>
+            <path d="M225 280 l10 10 l20 -20" stroke="#22d3ee" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Offene Projekte ===== -->
+<section id="projekte">
+  <div class="nf-wrap">
+    <div data-reveal>
+      <span class="nf-eyebrow">{{eyebrow_7}}</span>
+      <h2 class="nf-h2">{{section_title_7}}</h2>
+    </div>
+    <div class="nf-proj-grid">
+      <div class="nf-proj" data-reveal>
+        <span class="nf-proj-tag">Finance</span>
+        <h3 class="nf-h3">{{card_title_17}}</h3>
+        <p style="color:var(--nf-mut);font-size:.92rem">Onboarding, Überweisungen, biometrischer Login auf iOS & Android.</p>
+        <div class="nf-proj-meta"><div><span>Vergütung</span><strong>80 €</strong></div><div><span>Dauer</span><strong>2 h</strong></div><div><span>Plattform</span><strong>iOS/Android</strong></div><div><span>Level</span><strong>Fortgeschritten</strong></div></div>
+        <a href="#bewerbung-form" class="nf-proj-btn">Bewerben →</a>
+      </div>
+      <div class="nf-proj" data-reveal>
+        <span class="nf-proj-tag">Health</span>
+        <h3 class="nf-h3">{{card_title_18}}</h3>
+        <p style="color:var(--nf-mut);font-size:.92rem">Accessibility, Formular-Logik und Datenschutz-Flows.</p>
+        <div class="nf-proj-meta"><div><span>Vergütung</span><strong>65 €</strong></div><div><span>Dauer</span><strong>1,5 h</strong></div><div><span>Plattform</span><strong>Web</strong></div><div><span>Level</span><strong>Einsteiger</strong></div></div>
+        <a href="#bewerbung-form" class="nf-proj-btn">Bewerben →</a>
+      </div>
+      <div class="nf-proj" data-reveal>
+        <span class="nf-proj-tag">E-Commerce</span>
+        <h3 class="nf-h3">{{card_title_19}}</h3>
+        <p style="color:var(--nf-mut);font-size:.92rem">Checkout, Zahlarten, Rabatt-Codes, Retouren-Flow.</p>
+        <div class="nf-proj-meta"><div><span>Vergütung</span><strong>55 €</strong></div><div><span>Dauer</span><strong>1 h</strong></div><div><span>Plattform</span><strong>Web/Mobile</strong></div><div><span>Level</span><strong>Einsteiger</strong></div></div>
+        <a href="#bewerbung-form" class="nf-proj-btn">Bewerben →</a>
+      </div>
+      <div class="nf-proj" data-reveal>
+        <span class="nf-proj-tag">AI</span>
+        <h3 class="nf-h3">{{card_title_20}}</h3>
+        <p style="color:var(--nf-mut);font-size:.92rem">Chat-UX, Prompt-Handling, Fehler- und Edge-Cases.</p>
+        <div class="nf-proj-meta"><div><span>Vergütung</span><strong>95 €</strong></div><div><span>Dauer</span><strong>2,5 h</strong></div><div><span>Plattform</span><strong>Web</strong></div><div><span>Level</span><strong>Fortgeschritten</strong></div></div>
+        <a href="#bewerbung-form" class="nf-proj-btn">Bewerben →</a>
+      </div>
+      <div class="nf-proj" data-reveal>
+        <span class="nf-proj-tag">Corporate</span>
+        <h3 class="nf-h3">{{card_title_21}}</h3>
+        <p style="color:var(--nf-mut);font-size:.92rem">Content, Formulare, Cookie-Banner, Performance.</p>
+        <div class="nf-proj-meta"><div><span>Vergütung</span><strong>45 €</strong></div><div><span>Dauer</span><strong>1 h</strong></div><div><span>Plattform</span><strong>Web</strong></div><div><span>Level</span><strong>Einsteiger</strong></div></div>
+        <a href="#bewerbung-form" class="nf-proj-btn">Bewerben →</a>
+      </div>
+      <div class="nf-proj" data-reveal>
+        <span class="nf-proj-tag">Mobile UX</span>
+        <h3 class="nf-h3">{{card_title_22}}</h3>
+        <p style="color:var(--nf-mut);font-size:.92rem">Nutzerpfade, Gesten, Fehlerzustände, Onboarding.</p>
+        <div class="nf-proj-meta"><div><span>Vergütung</span><strong>70 €</strong></div><div><span>Dauer</span><strong>2 h</strong></div><div><span>Plattform</span><strong>iOS/Android</strong></div><div><span>Level</span><strong>Mittel</strong></div></div>
+        <a href="#bewerbung-form" class="nf-proj-btn">Bewerben →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Kennzahlen ===== -->
+<section>
+  <div class="nf-wrap">
+    <div data-reveal>
+      <span class="nf-eyebrow">{{eyebrow_8}}</span>
+      <h2 class="nf-h2">{{section_title_8}}</h2>
+    </div>
+    <div class="nf-stats">
+      <div class="nf-stat" data-reveal><div class="nf-stat-val" data-counter data-suffix="+">{{stat_value_1}}</div><div class="nf-stat-lbl">{{stat_label_1}}</div></div>
+      <div class="nf-stat" data-reveal><div class="nf-stat-val" data-counter data-suffix="+">{{stat_value_2}}</div><div class="nf-stat-lbl">{{stat_label_2}}</div></div>
+      <div class="nf-stat" data-reveal><div class="nf-stat-val" data-counter data-suffix=" %">{{stat_value_3}}</div><div class="nf-stat-lbl">{{stat_label_3}}</div></div>
+      <div class="nf-stat" data-reveal><div class="nf-stat-val" data-counter data-suffix="+">{{stat_value_4}}</div><div class="nf-stat-lbl">{{stat_label_4}}</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Testimonials ===== -->
+<section>
+  <div class="nf-wrap">
+    <div data-reveal>
+      <span class="nf-eyebrow">{{eyebrow_9}}</span>
+      <h2 class="nf-h2">{{section_title_6}} <span class="nf-grad-text">{{section_title_6_accent}}</span></h2>
+    </div>
+    <div class="nf-test-grid">
+      <div class="nf-test" data-reveal>
+        <div class="nf-test-stars">★★★★★</div>
+        <p class="nf-test-quote">{{testimonial_quote_1}}</p>
+        <div class="nf-test-who"><div class="nf-test-av">LM</div><div><div class="nf-test-name">{{testimonial_name_1}}</div><div class="nf-test-role">{{testimonial_role_1}}</div></div></div>
+      </div>
+      <div class="nf-test" data-reveal>
+        <div class="nf-test-stars">★★★★★</div>
+        <p class="nf-test-quote">{{testimonial_quote_2}}</p>
+        <div class="nf-test-who"><div class="nf-test-av">TS</div><div><div class="nf-test-name">{{testimonial_name_2}}</div><div class="nf-test-role">{{testimonial_role_2}}</div></div></div>
+      </div>
+      <div class="nf-test" data-reveal>
+        <div class="nf-test-stars">★★★★★</div>
+        <p class="nf-test-quote">{{testimonial_quote_3}}</p>
+        <div class="nf-test-who"><div class="nf-test-av">AK</div><div><div class="nf-test-name">{{testimonial_name_3}}</div><div class="nf-test-role">{{testimonial_role_3}}</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Final CTA ===== -->
+<section>
+  <div class="nf-wrap">
+    <div class="nf-fcta" data-reveal>
+      <div class="nf-fcta-inner">
+        <span class="nf-eyebrow">{{eyebrow_10}}</span>
+        <h2 class="nf-h2" style="margin-top:20px">{{cta_title}}</h2>
+        <p class="nf-lead" style="margin:0 auto">{{cta_sub}}</p>
+        <div class="nf-fcta-ctas" style="margin-top:32px">
+          <a href="#bewerbung-form" class="nf-btn nf-btn-pri">{{cta_primary}}</a>
+          <a href="#bewerbung-form" class="nf-btn nf-btn-sec">{{cta_secondary}}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Footer ===== -->
+<footer class="nf-ftr">
+  <div class="nf-wrap">
+    <div class="nf-ftr-grid">
+      <div>
+        <div class="nf-brand">
+          <span class="nf-brand-mark" aria-hidden="true"></span>
+          <span>
+            <span class="nf-brand-name">{{brand_name}}</span>
+            <span class="nf-brand-sub">{{brand_tagline}}</span>
+          </span>
+        </div>
+        <p style="margin-top:16px;max-width:280px">Enterprise-Grade Quality Assurance für digitale Produkte.</p>
+        <p style="margin-top:12px">{{footer_phone}}</p>
+      </div>
+      <div>
+        <h5>Plattform</h5>
+        <ul><li><a href="#leistungen">Leistungen</a></li><li><a href="#prozess">Prozess</a></li><li><a href="#dashboard">Dashboard</a></li><li><a href="#projekte">Projekte</a></li></ul>
+      </div>
+      <div>
+        <h5>Kontakt</h5>
+        <ul><li><a href="#bewerbung-form">Jetzt bewerben</a></li><li><a href="#tester">Tester werden</a></li><li><a href="#projekte">Projekte</a></li></ul>
+      </div>
+      <div>
+        <h5>Rechtliches</h5>
+        <ul><li><a href="{{impressum_url}}">Impressum</a></li><li><a href="{{datenschutz_url}}">Datenschutz</a></li></ul>
+      </div>
+    </div>
+    <div class="nf-ftr-bottom">
+      <span>© <span id="nf-year">2026</span> <span>{{footer_company}}</span> · Alle Rechte vorbehalten</span>
+      <span>{{footer_email}}</span>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

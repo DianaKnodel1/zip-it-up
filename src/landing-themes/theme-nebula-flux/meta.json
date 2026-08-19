@@ -1,0 +1,763 @@
+{
+  "id": "theme-nebula-flux",
+  "name": "Nebula Flux — Enterprise Tech Premium",
+  "description": "Enterprise-Grade Dark-Premium-Theme im Stil von OpenAI, Vercel, NVIDIA, IBM Quantum und Cloudflare. Volle Storyline: 3D-Device-Hero mit Parallax, animierte Mesh-Gradients & Grid-Layer, 10 Service-Kacheln mit Glow-Hover, 6-Schritt-Prozess-Timeline, Live-Dashboard-Mockup mit Charts & Heatmap, Unternehmens- & Tester-Bereiche, offene Projekt-Karten, animierte Kennzahlen, Glass-Testimonials, Fullscreen-CTA. Space Grotesk × Inter × JetBrains Mono. Ideal für QA/Testing, KI-, Cloud- oder Cybersecurity-Plattformen.",
+  "slots": [
+    {
+      "key": "seo_title",
+      "label": "SEO Titel",
+      "type": "text",
+      "default": "Qualität sichtbar machen — Premium Testing Platform"
+    },
+    {
+      "key": "seo_description",
+      "label": "SEO Beschreibung",
+      "type": "longtext",
+      "default": "Professionelle Qualitätssicherung für Websites, Apps und digitale Produkte — durchgeführt von echten Testern und unterstützt durch moderne Analyseprozesse."
+    },
+    {
+      "key": "landing_domain",
+      "label": "Domain (ohne https://)",
+      "type": "text",
+      "default": ""
+    },
+    {
+      "key": "accent_color",
+      "label": "Akzentfarbe (Hex — Cyan #22d3ee)",
+      "type": "text",
+      "default": "#22d3ee"
+    },
+    {
+      "key": "brand_name",
+      "label": "Marke / Firmenname",
+      "type": "text",
+      "default": "NEBULA"
+    },
+    {
+      "key": "brand_tagline",
+      "label": "Marke — Untertitel",
+      "type": "text",
+      "default": "Digital Quality Platform"
+    },
+    {
+      "key": "nav_cta",
+      "label": "Nav Button",
+      "type": "text",
+      "default": "Jetzt bewerben"
+    },
+    {
+      "key": "hero_eyebrow",
+      "label": "Hero — Eyebrow",
+      "type": "text",
+      "default": "Next-Gen Quality Assurance"
+    },
+    {
+      "key": "hero_title",
+      "label": "Hero — Headline",
+      "type": "longtext",
+      "default": "Qualität sichtbar machen. Vertrauen digital schaffen."
+    },
+    {
+      "key": "hero_subtitle",
+      "label": "Hero — Untertitel",
+      "type": "longtext",
+      "default": "Professionelle Qualitätssicherung für Websites, Apps und digitale Produkte — durchgeführt von echten Testern und unterstützt durch moderne Analyseprozesse."
+    },
+    {
+      "key": "hero_cta_primary",
+      "label": "Hero — Button primär",
+      "type": "text",
+      "default": "Jetzt bewerben"
+    },
+    {
+      "key": "hero_cta_secondary",
+      "label": "Hero — Button sekundär",
+      "type": "text",
+      "default": "Tester werden"
+    },
+    {
+      "key": "cta_title",
+      "label": "Final CTA — Headline",
+      "type": "longtext",
+      "default": "Jede digitale Erfahrung beginnt mit perfekter Qualität."
+    },
+    {
+      "key": "cta_sub",
+      "label": "Final CTA — Untertitel",
+      "type": "longtext",
+      "default": "Starten Sie heute Ihr Testprojekt oder werden Sie Teil unseres Tester-Netzwerks."
+    },
+    {
+      "key": "cta_primary",
+      "label": "Final CTA — Button primär",
+      "type": "text",
+      "default": "Jetzt bewerben"
+    },
+    {
+      "key": "cta_secondary",
+      "label": "Final CTA — Button sekundär",
+      "type": "text",
+      "default": "Kostenlos registrieren"
+    },
+    {
+      "key": "footer_company",
+      "label": "Footer — Firmenname",
+      "type": "text",
+      "default": "Nebula Quality GmbH"
+    },
+    {
+      "key": "footer_email",
+      "label": "Footer — E-Mail",
+      "type": "text",
+      "default": ""
+    },
+    {
+      "key": "footer_phone",
+      "label": "Footer — Telefon",
+      "type": "text",
+      "default": "+49 30 1234 5678"
+    },
+    {
+      "key": "section_title_1",
+      "label": "Abschnitt — Überschrift",
+      "type": "text",
+      "default": "Ein Testing-Stack für"
+    },
+    {
+      "key": "section_title_1_accent",
+      "label": "Abschnitt — Überschrift (farbig)",
+      "type": "text",
+      "default": "jede digitale Ebene."
+    },
+    {
+      "key": "section_title_2",
+      "label": "Abschnitt — Überschrift",
+      "type": "text",
+      "default": "Sechs Schritte —"
+    },
+    {
+      "key": "section_title_2_accent",
+      "label": "Abschnitt — Überschrift (farbig)",
+      "type": "text",
+      "default": "von der Analyse zur Optimierung."
+    },
+    {
+      "key": "section_title_3",
+      "label": "Abschnitt — Überschrift",
+      "type": "text",
+      "default": "Alle Metriken auf einem"
+    },
+    {
+      "key": "section_title_3_accent",
+      "label": "Abschnitt — Überschrift (farbig)",
+      "type": "text",
+      "default": "Dashboard."
+    },
+    {
+      "key": "section_title_4",
+      "label": "Abschnitt — Überschrift",
+      "type": "text",
+      "default": "Weniger Fehler."
+    },
+    {
+      "key": "section_title_4_accent",
+      "label": "Abschnitt — Überschrift (farbig)",
+      "type": "text",
+      "default": "Bessere Releases."
+    },
+    {
+      "key": "section_title_5",
+      "label": "Abschnitt — Überschrift",
+      "type": "text",
+      "default": "Werde Teil unseres"
+    },
+    {
+      "key": "section_title_5_accent",
+      "label": "Abschnitt — Überschrift (farbig)",
+      "type": "text",
+      "default": "professionellen Tester-Netzwerks."
+    },
+    {
+      "key": "section_title_6",
+      "label": "Abschnitt — Überschrift",
+      "type": "text",
+      "default": "Vertrauen von"
+    },
+    {
+      "key": "section_title_6_accent",
+      "label": "Abschnitt — Überschrift (farbig)",
+      "type": "text",
+      "default": "führenden Teams."
+    },
+    {
+      "key": "section_title_7",
+      "label": "Abschnitt — Überschrift",
+      "type": "text",
+      "default": "Aktuell suchen wir Tester für:"
+    },
+    {
+      "key": "section_title_8",
+      "label": "Abschnitt — Überschrift",
+      "type": "text",
+      "default": "Zahlen, die für sich sprechen."
+    },
+    {
+      "key": "eyebrow_2",
+      "label": "Abschnitt — Kleintitel",
+      "type": "text",
+      "default": "Leistungen"
+    },
+    {
+      "key": "eyebrow_3",
+      "label": "Abschnitt — Kleintitel",
+      "type": "text",
+      "default": "Prozess"
+    },
+    {
+      "key": "eyebrow_4",
+      "label": "Abschnitt — Kleintitel",
+      "type": "text",
+      "default": "Live Plattform"
+    },
+    {
+      "key": "eyebrow_5",
+      "label": "Abschnitt — Kleintitel",
+      "type": "text",
+      "default": "Für Unternehmen"
+    },
+    {
+      "key": "eyebrow_6",
+      "label": "Abschnitt — Kleintitel",
+      "type": "text",
+      "default": "Für Tester"
+    },
+    {
+      "key": "eyebrow_7",
+      "label": "Abschnitt — Kleintitel",
+      "type": "text",
+      "default": "Offene Projekte"
+    },
+    {
+      "key": "eyebrow_8",
+      "label": "Abschnitt — Kleintitel",
+      "type": "text",
+      "default": "Kennzahlen"
+    },
+    {
+      "key": "eyebrow_9",
+      "label": "Abschnitt — Kleintitel",
+      "type": "text",
+      "default": "Kundenstimmen"
+    },
+    {
+      "key": "eyebrow_10",
+      "label": "Abschnitt — Kleintitel",
+      "type": "text",
+      "default": "Jetzt bewerben"
+    },
+    {
+      "key": "hero_badge_1",
+      "label": "Hero — Badge",
+      "type": "text",
+      "default": "ISO 27001 Prozesse"
+    },
+    {
+      "key": "hero_badge_2",
+      "label": "Hero — Badge",
+      "type": "text",
+      "default": "DSGVO-konform"
+    },
+    {
+      "key": "hero_badge_3",
+      "label": "Hero — Badge",
+      "type": "text",
+      "default": "Real Devices"
+    },
+    {
+      "key": "hero_badge_4",
+      "label": "Hero — Badge",
+      "type": "text",
+      "default": "3.000+ Tester"
+    },
+    {
+      "key": "lead_2",
+      "label": "Abschnitt — Einleitung",
+      "type": "longtext",
+      "default": "Von funktionalen Tests bis Security-Audits — ein durchgängiger Prüfprozess auf echten Geräten, dokumentiert in strukturierten Reports."
+    },
+    {
+      "key": "lead_3",
+      "label": "Abschnitt — Einleitung",
+      "type": "longtext",
+      "default": "Teststatus, Fehlerpriorität, Geräteabdeckung und Live-Performance — in Echtzeit für Ihr gesamtes Team."
+    },
+    {
+      "key": "lead_4",
+      "label": "Abschnitt — Einleitung",
+      "type": "longtext",
+      "default": "Remote, flexibel, faire Vergütung. Arbeite an spannenden Projekten führender Marken."
+    },
+    {
+      "key": "card_title_1",
+      "label": "Karte — Titel",
+      "type": "text",
+      "default": "Website Testing"
+    },
+    {
+      "key": "card_title_2",
+      "label": "Karte — Titel",
+      "type": "text",
+      "default": "App Testing"
+    },
+    {
+      "key": "card_title_3",
+      "label": "Karte — Titel",
+      "type": "text",
+      "default": "UX Reviews"
+    },
+    {
+      "key": "card_title_4",
+      "label": "Karte — Titel",
+      "type": "text",
+      "default": "Accessibility"
+    },
+    {
+      "key": "card_title_5",
+      "label": "Karte — Titel",
+      "type": "text",
+      "default": "Cross Browser"
+    },
+    {
+      "key": "card_title_6",
+      "label": "Karte — Titel",
+      "type": "text",
+      "default": "Performance"
+    },
+    {
+      "key": "card_title_7",
+      "label": "Karte — Titel",
+      "type": "text",
+      "default": "Security Checks"
+    },
+    {
+      "key": "card_title_8",
+      "label": "Karte — Titel",
+      "type": "text",
+      "default": "Bug Reports"
+    },
+    {
+      "key": "card_title_9",
+      "label": "Karte — Titel",
+      "type": "text",
+      "default": "Qualitätsmanagement"
+    },
+    {
+      "key": "card_title_10",
+      "label": "Karte — Titel",
+      "type": "text",
+      "default": "Gerätekompatibilität"
+    },
+    {
+      "key": "card_title_11",
+      "label": "Karte — Titel",
+      "type": "text",
+      "default": "Analyse"
+    },
+    {
+      "key": "card_title_12",
+      "label": "Karte — Titel",
+      "type": "text",
+      "default": "Testplanung"
+    },
+    {
+      "key": "card_title_13",
+      "label": "Karte — Titel",
+      "type": "text",
+      "default": "Live-Test"
+    },
+    {
+      "key": "card_title_14",
+      "label": "Karte — Titel",
+      "type": "text",
+      "default": "Fehleranalyse"
+    },
+    {
+      "key": "card_title_15",
+      "label": "Karte — Titel",
+      "type": "text",
+      "default": "Qualitätsbericht"
+    },
+    {
+      "key": "card_title_16",
+      "label": "Karte — Titel",
+      "type": "text",
+      "default": "Optimierung"
+    },
+    {
+      "key": "card_title_17",
+      "label": "Karte — Titel",
+      "type": "text",
+      "default": "Banking-App testen"
+    },
+    {
+      "key": "card_title_18",
+      "label": "Karte — Titel",
+      "type": "text",
+      "default": "Gesundheitsportal prüfen"
+    },
+    {
+      "key": "card_title_19",
+      "label": "Karte — Titel",
+      "type": "text",
+      "default": "E-Commerce-Shop analysieren"
+    },
+    {
+      "key": "card_title_20",
+      "label": "Karte — Titel",
+      "type": "text",
+      "default": "KI-Webanwendung evaluieren"
+    },
+    {
+      "key": "card_title_21",
+      "label": "Karte — Titel",
+      "type": "text",
+      "default": "Unternehmenswebsite testen"
+    },
+    {
+      "key": "card_title_22",
+      "label": "Karte — Titel",
+      "type": "text",
+      "default": "Mobile App auf UX prüfen"
+    },
+    {
+      "key": "step_num_1",
+      "label": "Prozess — Schritt-Nr.",
+      "type": "text",
+      "default": "STEP · 01"
+    },
+    {
+      "key": "step_num_2",
+      "label": "Prozess — Schritt-Nr.",
+      "type": "text",
+      "default": "STEP · 02"
+    },
+    {
+      "key": "step_num_3",
+      "label": "Prozess — Schritt-Nr.",
+      "type": "text",
+      "default": "STEP · 03"
+    },
+    {
+      "key": "step_num_4",
+      "label": "Prozess — Schritt-Nr.",
+      "type": "text",
+      "default": "STEP · 04"
+    },
+    {
+      "key": "step_num_5",
+      "label": "Prozess — Schritt-Nr.",
+      "type": "text",
+      "default": "STEP · 05"
+    },
+    {
+      "key": "step_num_6",
+      "label": "Prozess — Schritt-Nr.",
+      "type": "text",
+      "default": "STEP · 06"
+    },
+    {
+      "key": "stat_label_1",
+      "label": "Kennzahl — Text",
+      "type": "text",
+      "default": "Durchgeführte Tests"
+    },
+    {
+      "key": "stat_label_2",
+      "label": "Kennzahl — Text",
+      "type": "text",
+      "default": "Aktive Tester"
+    },
+    {
+      "key": "stat_label_3",
+      "label": "Kennzahl — Text",
+      "type": "text",
+      "default": "Kundenzufriedenheit"
+    },
+    {
+      "key": "stat_label_4",
+      "label": "Kennzahl — Text",
+      "type": "text",
+      "default": "Unterstützte Plattformen"
+    },
+    {
+      "key": "metric_label_1",
+      "label": "Dashboard — Kennzahl",
+      "type": "text",
+      "default": "Teststatus"
+    },
+    {
+      "key": "metric_label_2",
+      "label": "Dashboard — Kennzahl",
+      "type": "text",
+      "default": "Kritische Bugs"
+    },
+    {
+      "key": "metric_label_3",
+      "label": "Dashboard — Kennzahl",
+      "type": "text",
+      "default": "Devices heute"
+    },
+    {
+      "key": "metric_label_4",
+      "label": "Dashboard — Kennzahl",
+      "type": "text",
+      "default": "Coverage"
+    },
+    {
+      "key": "testimonial_quote_1",
+      "label": "Kundenstimme — Zitat",
+      "type": "longtext",
+      "default": "„Die QA-Reports sind so präzise, dass unser Engineering-Team direkt an die Umsetzung gehen kann. Enorme Zeitersparnis vor jedem Release.\""
+    },
+    {
+      "key": "testimonial_quote_2",
+      "label": "Kundenstimme — Zitat",
+      "type": "longtext",
+      "default": "„Das Tester-Netzwerk deckt Geräte und Szenarien ab, die wir intern nie testen könnten. Wir haben unsere Crash-Rate um 70 % reduziert.\""
+    },
+    {
+      "key": "testimonial_quote_3",
+      "label": "Kundenstimme — Zitat",
+      "type": "longtext",
+      "default": "„Endlich ein Partner, der Accessibility ernst nimmt. Struktur, Reporting und Kommunikation auf höchstem Niveau.\""
+    },
+    {
+      "key": "testimonial_name_1",
+      "label": "Kundenstimme — Name",
+      "type": "text",
+      "default": "Lena Meier"
+    },
+    {
+      "key": "testimonial_name_2",
+      "label": "Kundenstimme — Name",
+      "type": "text",
+      "default": "Timo Schulz"
+    },
+    {
+      "key": "testimonial_name_3",
+      "label": "Kundenstimme — Name",
+      "type": "text",
+      "default": "Anna Kraus"
+    },
+    {
+      "key": "testimonial_role_1",
+      "label": "Kundenstimme — Rolle",
+      "type": "text",
+      "default": "Head of Product · Fintech Scale-up"
+    },
+    {
+      "key": "testimonial_role_2",
+      "label": "Kundenstimme — Rolle",
+      "type": "text",
+      "default": "CTO · E-Commerce Plattform"
+    },
+    {
+      "key": "testimonial_role_3",
+      "label": "Kundenstimme — Rolle",
+      "type": "text",
+      "default": "Digital Director · Health-Tech"
+    },
+    {
+      "key": "stat_value_1",
+      "label": "Kennzahl — Wert",
+      "type": "text",
+      "default": "25000"
+    },
+    {
+      "key": "stat_value_2",
+      "label": "Kennzahl — Wert",
+      "type": "text",
+      "default": "3000"
+    },
+    {
+      "key": "stat_value_3",
+      "label": "Kennzahl — Wert",
+      "type": "text",
+      "default": "99"
+    },
+    {
+      "key": "stat_value_4",
+      "label": "Kennzahl — Wert",
+      "type": "text",
+      "default": "60"
+    },
+    {
+      "key": "card_text_1",
+      "label": "Karte — Text",
+      "type": "longtext",
+      "default": "Funktionale Tests, Layout-Prüfung und Content-QA über alle Auflösungen."
+    },
+    {
+      "key": "card_text_2",
+      "label": "Karte — Text",
+      "type": "text",
+      "default": "iOS & Android auf echten Geräten — von Onboarding bis Push."
+    },
+    {
+      "key": "card_text_3",
+      "label": "Karte — Text",
+      "type": "longtext",
+      "default": "Heuristische Reviews & Nutzerpfad-Analysen mit priorisiertem Backlog."
+    },
+    {
+      "key": "card_text_4",
+      "label": "Karte — Text",
+      "type": "text",
+      "default": "WCAG 2.2, Screenreader, Kontrast & Tastaturbedienung."
+    },
+    {
+      "key": "card_text_5",
+      "label": "Karte — Text",
+      "type": "text",
+      "default": "Chrome, Safari, Firefox, Edge — bis zu 3 Versionen tief."
+    },
+    {
+      "key": "card_text_6",
+      "label": "Karte — Text",
+      "type": "text",
+      "default": "Core Web Vitals, LCP/CLS/INP mit Handlungs­empfehlungen."
+    },
+    {
+      "key": "card_text_7",
+      "label": "Karte — Text",
+      "type": "text",
+      "default": "OWASP-Kategorien, Auth-Flows, Session & Rate-Limit Reviews."
+    },
+    {
+      "key": "card_text_8",
+      "label": "Karte — Text",
+      "type": "text",
+      "default": "Reproduzierbar, mit Screenshots, Logs und Priorität."
+    },
+    {
+      "key": "card_text_9",
+      "label": "Karte — Text",
+      "type": "text",
+      "default": "Release-Gates, Regression-Suites & KPI-Tracking."
+    },
+    {
+      "key": "card_text_10",
+      "label": "Karte — Text",
+      "type": "text",
+      "default": "Reales Gerätelab: 60+ Geräte, OS-Versionen und Auflösungen."
+    },
+    {
+      "key": "step_text_1",
+      "label": "Prozess — Text",
+      "type": "longtext",
+      "default": "Discovery-Call, Scope-Definition, Zielgruppen & Risiko-Priorisierung."
+    },
+    {
+      "key": "step_text_2",
+      "label": "Prozess — Text",
+      "type": "longtext",
+      "default": "Testcases, Devices, Browser-Matrix, Zeitplan & Reporting-Format."
+    },
+    {
+      "key": "step_text_3",
+      "label": "Prozess — Text",
+      "type": "text",
+      "default": "Manuelle Tests durch echte Nutzer, dokumentiert in Echtzeit."
+    },
+    {
+      "key": "step_text_4",
+      "label": "Prozess — Text",
+      "type": "text",
+      "default": "Reproduktion, Impact-Bewertung, Root-Cause & Priorität."
+    },
+    {
+      "key": "step_text_5",
+      "label": "Prozess — Text",
+      "type": "longtext",
+      "default": "Strukturierter Report mit KPIs, Screenshots, Videos, Empfehlungen."
+    },
+    {
+      "key": "step_text_6",
+      "label": "Prozess — Text",
+      "type": "longtext",
+      "default": "Retest-Zyklus, Regression, kontinuierliche Qualitäts­sicherung."
+    },
+    {
+      "key": "benefit_title_1",
+      "label": "Vorteil — Titel",
+      "type": "text",
+      "default": "Höhere Produktqualität"
+    },
+    {
+      "key": "benefit_text_1",
+      "label": "Vorteil — Text",
+      "type": "longtext",
+      "default": "Systematische Tests statt Bauchgefühl — messbar, dokumentiert, wiederholbar."
+    },
+    {
+      "key": "benefit_title_2",
+      "label": "Vorteil — Titel",
+      "type": "text",
+      "default": "Weniger Supportanfragen"
+    },
+    {
+      "key": "benefit_text_2",
+      "label": "Vorteil — Text",
+      "type": "longtext",
+      "default": "Fehler abfangen, bevor Ihre Kunden sie melden. Weniger Tickets, weniger Kosten."
+    },
+    {
+      "key": "benefit_title_3",
+      "label": "Vorteil — Titel",
+      "type": "text",
+      "default": "Schnellere Releases"
+    },
+    {
+      "key": "benefit_text_3",
+      "label": "Vorteil — Text",
+      "type": "longtext",
+      "default": "Klare Freigabe-Kriterien und Regression-Suites verkürzen Deploy-Zyklen."
+    },
+    {
+      "key": "benefit_title_4",
+      "label": "Vorteil — Titel",
+      "type": "text",
+      "default": "Zufriedene Nutzer"
+    },
+    {
+      "key": "benefit_text_4",
+      "label": "Vorteil — Text",
+      "type": "longtext",
+      "default": "Reibungslose UX steigert Retention, Conversion und NPS spürbar."
+    },
+    {
+      "key": "benefit_title_5",
+      "label": "Vorteil — Titel",
+      "type": "text",
+      "default": "Detaillierte Berichte"
+    },
+    {
+      "key": "benefit_text_5",
+      "label": "Vorteil — Text",
+      "type": "longtext",
+      "default": "PDF-Reports und Live-Dashboards für Product, Engineering und Management."
+    },
+    {
+      "key": "benefit_title_6",
+      "label": "Vorteil — Titel",
+      "type": "text",
+      "default": "Flexible Testprojekte"
+    },
+    {
+      "key": "benefit_text_6",
+      "label": "Vorteil — Text",
+      "type": "longtext",
+      "default": "Einmalige Audits, laufende Sprint-QA oder dedizierte Test-Teams."
+    }
+  ]
+}

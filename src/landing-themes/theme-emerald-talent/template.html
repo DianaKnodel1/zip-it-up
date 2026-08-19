@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>{{seo_title}}</title><meta name="description" content="{{seo_description}}" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body class="theme-emerald">
+<header class="em-nav"><div class="em-container">
+    <a href="#" class="em-brand">{{brand_name}}</a>
+    <nav class="em-menu">
+      <a href="#prozess">Prozess</a>
+      <a href="#ueber-uns">Über uns</a>
+      <a href="#kontakt">Kontakt</a>
+      <a href="#bewerbung-form" class="em-nav-cta">{{hero_cta}}</a>
+    </nav>
+</div></header>
+
+<main>
+  <section class="em-hero"><div class="em-container em-grid">
+    <div class="em-hero-content">
+      <h1>{{hero_title}}</h1><p>{{hero_sub}}</p>
+      <div class="em-actions">
+        <a href="#bewerbung-form" class="em-btn-primary">{{hero_cta}}</a>
+        <a href="#prozess" class="em-btn-secondary">{{hero_cta_sec}}</a>
+      </div>
+    </div>
+    <div class="em-hero-media"><img src="{{hero_image}}" alt="Emerald Career" /></div>
+  </div></section>
+
+  <section class="em-trust"><div class="em-container">
+    <div class="em-trust-grid">
+      <div class="em-trust-item"><h3>{{t1_t}}</h3></div>
+      <div class="em-trust-item"><h3>{{t2_t}}</h3></div>
+      <div class="em-trust-item"><h3>{{t3_t}}</h3></div>
+    </div>
+  </div></section>
+
+  <section id="prozess" class="em-process"><div class="em-container">
+    <h2>{{process_title}}</h2>
+    <div class="em-steps">
+      <div class="em-step"><span>01</span><h3>{{s1_t}}</h3><p>{{s1_d}}</p></div>
+      <div class="em-step"><span>02</span><h3>{{s2_t}}</h3><p>{{s2_d}}</p></div>
+      <div class="em-step"><span>03</span><h3>{{s3_t}}</h3><p>{{s3_d}}</p></div>
+    </div>
+  </div></section>
+</main>
+
+<footer id="kontakt" class="em-footer"><div class="em-container">
+  <h3>{{firmenname}}</h3><p>{{contact_address}}</p><p>{{contact_phone}}</p><p>{{contact_email}}</p>
+  <div class="em-legal">{{legal_block}}</div>
+</div></footer>
+<script src="script.js"></script>
+</body>
+</html>

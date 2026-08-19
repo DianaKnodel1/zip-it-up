@@ -1,0 +1,25 @@
+{
+  "id": "theme-emerald-talent",
+  "name": "Emerald — Talent Solutions",
+  "description": "Talent-orientiert, frisch und modern. Ideal für IT und kreative Vermittlung.",
+  "slots": {
+    "hero_title": "Finde deinen nächsten Karriereschritt",
+    "hero_sub": "Wir verbinden erstklassige Talente mit den spannendsten Unternehmen der Branche.",
+    "hero_cta": "Jetzt bewerben",
+    "hero_cta_sec": "Mehr erfahren",
+    "hero_image": "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=1200",
+    "trust_title": "Warum Emerald?",
+    "t1_t": "Individuelles Coaching",
+    "t2_t": "Direktkontakt zu Entscheidern",
+    "t3_t": "100% Kostenlose Vermittlung",
+    "process_title": "Dein Weg zum neuen Job",
+    "s1_t": "Schnellcheck",
+    "s1_d": "Kurze Online-Bewerbung in nur 2 Minuten.",
+    "s2_t": "Kennenlernen",
+    "s2_d": "Persönliches Gespräch über deine Ziele.",
+    "s3_t": "Match-Day",
+    "s3_d": "Vorstellung bei deinem Wunsch-Arbeitgeber.",
+    "about_title": "Über uns",
+    "about_text": "Emerald Talent Solutions steht für nachhaltige Karriereentwicklung. Wir sehen nicht nur den Lebenslauf, sondern den Menschen dahinter."
+  }
+}

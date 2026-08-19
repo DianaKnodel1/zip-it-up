@@ -1,0 +1,781 @@
+{
+  "id": "theme-quantum-tech",
+  "name": "Quantum Tech — Futuristic Dark Premium",
+  "description": "Futuristisches High-End Tech-Theme im Stil von OpenAI, Vercel, NVIDIA und Cloudflare. Tiefschwarz + Mitternachtsblau mit Cyan/Violett/Türkis-Akzenten, animierte Mesh-Gradients, 3D-Device-Komposition im Hero, holografisches Dashboard-Mockup, vertikale Prozess-Timeline, interaktive Service-Kacheln mit Glow, animierte Zahlen, Testimonials in Glass-Cards. Space Grotesk × Inter Tight. Alle Texte editierbar — ideal für QA/Testing, KI-, Cloud- oder Security-Plattformen.",
+  "slots": [
+    {
+      "key": "seo_title",
+      "label": "SEO Titel",
+      "type": "text",
+      "default": "Qualität sichtbar machen — Premium Testing für Web, App & Software"
+    },
+    {
+      "key": "seo_description",
+      "label": "SEO Beschreibung",
+      "type": "longtext",
+      "default": "Professionelle Qualitätssicherung für Websites, Apps und digitale Produkte — durchgeführt von echten Testern und unterstützt durch moderne Analyseprozesse."
+    },
+    {
+      "key": "landing_domain",
+      "label": "Domain (ohne https://)",
+      "type": "text",
+      "default": ""
+    },
+    {
+      "key": "accent_color",
+      "label": "Akzentfarbe (Hex — Cyan #22d3ee, Violett #a78bfa)",
+      "type": "text",
+      "default": "#22d3ee"
+    },
+    {
+      "key": "brand_name",
+      "label": "Marke / Firmenname",
+      "type": "text",
+      "default": "QUANTUM"
+    },
+    {
+      "key": "brand_tagline",
+      "label": "Marke — Untertitel",
+      "type": "text",
+      "default": "Digital Quality Platform"
+    },
+    {
+      "key": "nav_1",
+      "label": "Nav 1",
+      "type": "text",
+      "default": "Plattform"
+    },
+    {
+      "key": "nav_2",
+      "label": "Nav 2",
+      "type": "text",
+      "default": "Leistungen"
+    },
+    {
+      "key": "nav_3",
+      "label": "Nav 3",
+      "type": "text",
+      "default": "Prozess"
+    },
+    {
+      "key": "nav_4",
+      "label": "Nav 4",
+      "type": "text",
+      "default": "Tester"
+    },
+    {
+      "key": "nav_cta",
+      "label": "Nav Button",
+      "type": "text",
+      "default": "Jetzt bewerben"
+    },
+    {
+      "key": "hero_eyebrow",
+      "label": "Hero — Eyebrow",
+      "type": "text",
+      "default": "Next-Gen Quality Assurance"
+    },
+    {
+      "key": "hero_title",
+      "label": "Hero — Headline",
+      "type": "longtext",
+      "default": "Qualität sichtbar machen. Vertrauen digital schaffen."
+    },
+    {
+      "key": "hero_subtitle",
+      "label": "Hero — Untertitel",
+      "type": "longtext",
+      "default": "Professionelle Qualitätssicherung für Websites, Apps und digitale Produkte — durchgeführt von echten Testern und unterstützt durch moderne Analyseprozesse."
+    },
+    {
+      "key": "hero_cta_primary",
+      "label": "Hero — Button primär",
+      "type": "text",
+      "default": "Jetzt bewerben"
+    },
+    {
+      "key": "hero_cta_secondary",
+      "label": "Hero — Button sekundär",
+      "type": "text",
+      "default": "Tester werden"
+    },
+    {
+      "key": "hero_badge_1",
+      "label": "Hero — Badge 1",
+      "type": "text",
+      "default": "ISO 27001 Prozesse"
+    },
+    {
+      "key": "hero_badge_2",
+      "label": "Hero — Badge 2",
+      "type": "text",
+      "default": "DSGVO-konform"
+    },
+    {
+      "key": "hero_badge_3",
+      "label": "Hero — Badge 3",
+      "type": "text",
+      "default": "Real Devices"
+    },
+    {
+      "key": "services_eyebrow",
+      "label": "Leistungen — Eyebrow",
+      "type": "text",
+      "default": "Leistungen"
+    },
+    {
+      "key": "services_title",
+      "label": "Leistungen — Titel",
+      "type": "longtext",
+      "default": "Ein Testing-Stack für jede digitale Ebene."
+    },
+    {
+      "key": "svc_1_title",
+      "label": "Service 1 — Titel",
+      "type": "text",
+      "default": "Website Testing"
+    },
+    {
+      "key": "svc_1_text",
+      "label": "Service 1 — Text",
+      "type": "longtext",
+      "default": "Funktionale Tests, Layout-Prüfung und Content-QA über alle Auflösungen."
+    },
+    {
+      "key": "svc_2_title",
+      "label": "Service 2 — Titel",
+      "type": "text",
+      "default": "App Testing"
+    },
+    {
+      "key": "svc_2_text",
+      "label": "Service 2 — Text",
+      "type": "longtext",
+      "default": "iOS & Android auf echten Geräten — von Onboarding bis Push-Notifications."
+    },
+    {
+      "key": "svc_3_title",
+      "label": "Service 3 — Titel",
+      "type": "text",
+      "default": "UX Reviews"
+    },
+    {
+      "key": "svc_3_text",
+      "label": "Service 3 — Text",
+      "type": "longtext",
+      "default": "Heuristische Reviews & Nutzerpfad-Analysen mit priorisiertem Backlog."
+    },
+    {
+      "key": "svc_4_title",
+      "label": "Service 4 — Titel",
+      "type": "text",
+      "default": "Accessibility"
+    },
+    {
+      "key": "svc_4_text",
+      "label": "Service 4 — Text",
+      "type": "longtext",
+      "default": "WCAG 2.2, Screenreader, Kontrast & Tastaturbedienung."
+    },
+    {
+      "key": "svc_5_title",
+      "label": "Service 5 — Titel",
+      "type": "text",
+      "default": "Cross Browser"
+    },
+    {
+      "key": "svc_5_text",
+      "label": "Service 5 — Text",
+      "type": "longtext",
+      "default": "Chrome, Safari, Firefox, Edge — bis zu 3 Versionen tief."
+    },
+    {
+      "key": "svc_6_title",
+      "label": "Service 6 — Titel",
+      "type": "text",
+      "default": "Performance"
+    },
+    {
+      "key": "svc_6_text",
+      "label": "Service 6 — Text",
+      "type": "longtext",
+      "default": "Core Web Vitals, Lighthouse & realistische Netzwerkprofile."
+    },
+    {
+      "key": "svc_7_title",
+      "label": "Service 7 — Titel",
+      "type": "text",
+      "default": "Security Checks"
+    },
+    {
+      "key": "svc_7_text",
+      "label": "Service 7 — Text",
+      "type": "longtext",
+      "default": "OWASP-Basis-Checks, Auth-Flows und sensible Daten."
+    },
+    {
+      "key": "svc_8_title",
+      "label": "Service 8 — Titel",
+      "type": "text",
+      "default": "Bug Reports"
+    },
+    {
+      "key": "svc_8_text",
+      "label": "Service 8 — Text",
+      "type": "longtext",
+      "default": "Reproduzierbar, mit Video, Screenshot & Konsolen-Logs."
+    },
+    {
+      "key": "svc_9_title",
+      "label": "Service 9 — Titel",
+      "type": "text",
+      "default": "QM & Reporting"
+    },
+    {
+      "key": "svc_9_text",
+      "label": "Service 9 — Text",
+      "type": "longtext",
+      "default": "Wöchentliche Qualitätsberichte mit Trend-KPIs."
+    },
+    {
+      "key": "process_eyebrow",
+      "label": "Prozess — Eyebrow",
+      "type": "text",
+      "default": "So arbeiten wir"
+    },
+    {
+      "key": "process_title",
+      "label": "Prozess — Titel",
+      "type": "longtext",
+      "default": "Von der Analyse bis zur Optimierung — sechs Schritte."
+    },
+    {
+      "key": "step_1_title",
+      "label": "Schritt 1 — Titel",
+      "type": "text",
+      "default": "Analyse"
+    },
+    {
+      "key": "step_1_text",
+      "label": "Schritt 1 — Text",
+      "type": "longtext",
+      "default": "Wir verstehen Produkt, Zielgruppe und kritische Nutzerpfade."
+    },
+    {
+      "key": "step_2_title",
+      "label": "Schritt 2 — Titel",
+      "type": "text",
+      "default": "Testplanung"
+    },
+    {
+      "key": "step_2_text",
+      "label": "Schritt 2 — Text",
+      "type": "longtext",
+      "default": "Auswahl von Testern, Geräten und Szenarien mit klaren Zielen."
+    },
+    {
+      "key": "step_3_title",
+      "label": "Schritt 3 — Titel",
+      "type": "text",
+      "default": "Live-Test"
+    },
+    {
+      "key": "step_3_text",
+      "label": "Schritt 3 — Text",
+      "type": "longtext",
+      "default": "Durchführung auf echten Geräten mit Video, Log und Screenshots."
+    },
+    {
+      "key": "step_4_title",
+      "label": "Schritt 4 — Titel",
+      "type": "text",
+      "default": "Fehleranalyse"
+    },
+    {
+      "key": "step_4_text",
+      "label": "Schritt 4 — Text",
+      "type": "longtext",
+      "default": "Konsolidierung, Priorisierung und Reproduktion aller Findings."
+    },
+    {
+      "key": "step_5_title",
+      "label": "Schritt 5 — Titel",
+      "type": "text",
+      "default": "Qualitätsbericht"
+    },
+    {
+      "key": "step_5_text",
+      "label": "Schritt 5 — Text",
+      "type": "longtext",
+      "default": "Transparenter Report mit KPIs, Trends & konkreten Empfehlungen."
+    },
+    {
+      "key": "step_6_title",
+      "label": "Schritt 6 — Titel",
+      "type": "text",
+      "default": "Optimierung"
+    },
+    {
+      "key": "step_6_text",
+      "label": "Schritt 6 — Text",
+      "type": "longtext",
+      "default": "Retests, Regressionschecks und kontinuierliche Verbesserung."
+    },
+    {
+      "key": "dash_eyebrow",
+      "label": "Dashboard — Eyebrow",
+      "type": "text",
+      "default": "Live Insights"
+    },
+    {
+      "key": "dash_title",
+      "label": "Dashboard — Titel",
+      "type": "longtext",
+      "default": "Ein Cockpit für Ihre digitale Qualität."
+    },
+    {
+      "key": "dash_text",
+      "label": "Dashboard — Text",
+      "type": "longtext",
+      "default": "Alle laufenden Tests, Fehlerprioritäten, Geräteabdeckung und Performance-Kurven — in Echtzeit auf einem Blick."
+    },
+    {
+      "key": "dash_kpi_1",
+      "label": "Dashboard KPI 1",
+      "type": "text",
+      "default": "Tests aktiv"
+    },
+    {
+      "key": "dash_kpi_1_val",
+      "label": "Dashboard KPI 1 Wert",
+      "type": "text",
+      "default": "142"
+    },
+    {
+      "key": "dash_kpi_2",
+      "label": "Dashboard KPI 2",
+      "type": "text",
+      "default": "Kritisch"
+    },
+    {
+      "key": "dash_kpi_2_val",
+      "label": "Dashboard KPI 2 Wert",
+      "type": "text",
+      "default": "07"
+    },
+    {
+      "key": "dash_kpi_3",
+      "label": "Dashboard KPI 3",
+      "type": "text",
+      "default": "Coverage"
+    },
+    {
+      "key": "dash_kpi_3_val",
+      "label": "Dashboard KPI 3 Wert",
+      "type": "text",
+      "default": "98%"
+    },
+    {
+      "key": "biz_eyebrow",
+      "label": "Unternehmen — Eyebrow",
+      "type": "text",
+      "default": "Für Unternehmen"
+    },
+    {
+      "key": "biz_title",
+      "label": "Unternehmen — Titel",
+      "type": "longtext",
+      "default": "Weniger Bugs. Bessere Releases. Zufriedenere Nutzer."
+    },
+    {
+      "key": "biz_1",
+      "label": "Vorteil 1",
+      "type": "text",
+      "default": "Höhere Produktqualität"
+    },
+    {
+      "key": "biz_2",
+      "label": "Vorteil 2",
+      "type": "text",
+      "default": "Weniger Supportanfragen"
+    },
+    {
+      "key": "biz_3",
+      "label": "Vorteil 3",
+      "type": "text",
+      "default": "Schnellere Release-Zyklen"
+    },
+    {
+      "key": "biz_4",
+      "label": "Vorteil 4",
+      "type": "text",
+      "default": "Zufriedenere Nutzer"
+    },
+    {
+      "key": "biz_5",
+      "label": "Vorteil 5",
+      "type": "text",
+      "default": "Detaillierte Reports"
+    },
+    {
+      "key": "biz_6",
+      "label": "Vorteil 6",
+      "type": "text",
+      "default": "Flexible Testprojekte"
+    },
+    {
+      "key": "tester_eyebrow",
+      "label": "Tester — Eyebrow",
+      "type": "text",
+      "default": "Für Tester"
+    },
+    {
+      "key": "tester_title",
+      "label": "Tester — Titel",
+      "type": "longtext",
+      "default": "Werde Teil unseres professionellen Tester-Netzwerks."
+    },
+    {
+      "key": "tester_text",
+      "label": "Tester — Text",
+      "type": "longtext",
+      "default": "Ortsunabhängig, flexibel und fair vergütet — teste die Produkte der spannendsten digitalen Marken."
+    },
+    {
+      "key": "tester_1",
+      "label": "Tester Punkt 1",
+      "type": "text",
+      "default": "Remote-Arbeit"
+    },
+    {
+      "key": "tester_2",
+      "label": "Tester Punkt 2",
+      "type": "text",
+      "default": "Flexible Projekte"
+    },
+    {
+      "key": "tester_3",
+      "label": "Tester Punkt 3",
+      "type": "text",
+      "default": "Faire Vergütung"
+    },
+    {
+      "key": "tester_4",
+      "label": "Tester Punkt 4",
+      "type": "text",
+      "default": "Persönliches Dashboard"
+    },
+    {
+      "key": "tester_cta",
+      "label": "Tester Button",
+      "type": "text",
+      "default": "Als Tester bewerben"
+    },
+    {
+      "key": "jobs_eyebrow",
+      "label": "Projekte — Eyebrow",
+      "type": "text",
+      "default": "Offene Projekte"
+    },
+    {
+      "key": "jobs_title",
+      "label": "Projekte — Titel",
+      "type": "longtext",
+      "default": "Aktuelle Test-Aufträge."
+    },
+    {
+      "key": "job_1_title",
+      "label": "Job 1",
+      "type": "text",
+      "default": "Banking-App testen"
+    },
+    {
+      "key": "job_1_pay",
+      "label": "Job 1 Vergütung",
+      "type": "text",
+      "default": "85 €"
+    },
+    {
+      "key": "job_1_dur",
+      "label": "Job 1 Dauer",
+      "type": "text",
+      "default": "90 Min"
+    },
+    {
+      "key": "job_1_plat",
+      "label": "Job 1 Plattform",
+      "type": "text",
+      "default": "iOS · Android"
+    },
+    {
+      "key": "job_1_lvl",
+      "label": "Job 1 Level",
+      "type": "text",
+      "default": "Fortgeschritten"
+    },
+    {
+      "key": "job_2_title",
+      "label": "Job 2",
+      "type": "text",
+      "default": "Gesundheitsportal prüfen"
+    },
+    {
+      "key": "job_2_pay",
+      "label": "Job 2 Vergütung",
+      "type": "text",
+      "default": "60 €"
+    },
+    {
+      "key": "job_2_dur",
+      "label": "Job 2 Dauer",
+      "type": "text",
+      "default": "60 Min"
+    },
+    {
+      "key": "job_2_plat",
+      "label": "Job 2 Plattform",
+      "type": "text",
+      "default": "Web"
+    },
+    {
+      "key": "job_2_lvl",
+      "label": "Job 2 Level",
+      "type": "text",
+      "default": "Einsteiger"
+    },
+    {
+      "key": "job_3_title",
+      "label": "Job 3",
+      "type": "text",
+      "default": "E-Commerce-Shop analysieren"
+    },
+    {
+      "key": "job_3_pay",
+      "label": "Job 3 Vergütung",
+      "type": "text",
+      "default": "70 €"
+    },
+    {
+      "key": "job_3_dur",
+      "label": "Job 3 Dauer",
+      "type": "text",
+      "default": "75 Min"
+    },
+    {
+      "key": "job_3_plat",
+      "label": "Job 3 Plattform",
+      "type": "text",
+      "default": "Web · Mobile"
+    },
+    {
+      "key": "job_3_lvl",
+      "label": "Job 3 Level",
+      "type": "text",
+      "default": "Mittel"
+    },
+    {
+      "key": "job_4_title",
+      "label": "Job 4",
+      "type": "text",
+      "default": "KI-Webanwendung evaluieren"
+    },
+    {
+      "key": "job_4_pay",
+      "label": "Job 4 Vergütung",
+      "type": "text",
+      "default": "120 €"
+    },
+    {
+      "key": "job_4_dur",
+      "label": "Job 4 Dauer",
+      "type": "text",
+      "default": "120 Min"
+    },
+    {
+      "key": "job_4_plat",
+      "label": "Job 4 Plattform",
+      "type": "text",
+      "default": "Web"
+    },
+    {
+      "key": "job_4_lvl",
+      "label": "Job 4 Level",
+      "type": "text",
+      "default": "Experte"
+    },
+    {
+      "key": "stat_1_num",
+      "label": "Kennzahl 1",
+      "type": "text",
+      "default": "25000"
+    },
+    {
+      "key": "stat_1_label",
+      "label": "Kennzahl 1 Label",
+      "type": "text",
+      "default": "durchgeführte Tests"
+    },
+    {
+      "key": "stat_2_num",
+      "label": "Kennzahl 2",
+      "type": "text",
+      "default": "3000"
+    },
+    {
+      "key": "stat_2_label",
+      "label": "Kennzahl 2 Label",
+      "type": "text",
+      "default": "aktive Tester"
+    },
+    {
+      "key": "stat_3_num",
+      "label": "Kennzahl 3",
+      "type": "text",
+      "default": "99"
+    },
+    {
+      "key": "stat_3_label",
+      "label": "Kennzahl 3 Label",
+      "type": "text",
+      "default": "% Kundenzufriedenheit"
+    },
+    {
+      "key": "stat_4_num",
+      "label": "Kennzahl 4",
+      "type": "text",
+      "default": "60"
+    },
+    {
+      "key": "stat_4_label",
+      "label": "Kennzahl 4 Label",
+      "type": "text",
+      "default": "unterstützte Plattformen"
+    },
+    {
+      "key": "test_eyebrow",
+      "label": "Testimonials — Eyebrow",
+      "type": "text",
+      "default": "Stimmen"
+    },
+    {
+      "key": "test_title",
+      "label": "Testimonials — Titel",
+      "type": "longtext",
+      "default": "Was Kunden über uns sagen."
+    },
+    {
+      "key": "test_1_quote",
+      "label": "Testimonial 1",
+      "type": "longtext",
+      "default": "Innerhalb von zwei Wochen hatten wir mehr belastbare Findings als in sechs Monaten interner QA."
+    },
+    {
+      "key": "test_1_name",
+      "label": "Testimonial 1 Name",
+      "type": "text",
+      "default": "Julia Wenger"
+    },
+    {
+      "key": "test_1_role",
+      "label": "Testimonial 1 Rolle",
+      "type": "text",
+      "default": "Head of Product · Fintech AG"
+    },
+    {
+      "key": "test_2_quote",
+      "label": "Testimonial 2",
+      "type": "longtext",
+      "default": "Die Reports sind so klar, dass unsere Entwickler direkt loslegen konnten."
+    },
+    {
+      "key": "test_2_name",
+      "label": "Testimonial 2 Name",
+      "type": "text",
+      "default": "Markus Baumann"
+    },
+    {
+      "key": "test_2_role",
+      "label": "Testimonial 2 Rolle",
+      "type": "text",
+      "default": "CTO · Health Platform"
+    },
+    {
+      "key": "test_3_quote",
+      "label": "Testimonial 3",
+      "type": "longtext",
+      "default": "Endlich echte Nutzer statt Simulator — der Unterschied ist massiv."
+    },
+    {
+      "key": "test_3_name",
+      "label": "Testimonial 3 Name",
+      "type": "text",
+      "default": "Sarah Klein"
+    },
+    {
+      "key": "test_3_role",
+      "label": "Testimonial 3 Rolle",
+      "type": "text",
+      "default": "Lead Designer · E-Commerce"
+    },
+    {
+      "key": "final_title",
+      "label": "Final CTA — Titel",
+      "type": "longtext",
+      "default": "Jede digitale Erfahrung beginnt mit perfekter Qualität."
+    },
+    {
+      "key": "final_sub",
+      "label": "Final CTA — Untertitel",
+      "type": "longtext",
+      "default": "Starten Sie Ihr Testprojekt in unter 48 Stunden."
+    },
+    {
+      "key": "final_cta_1",
+      "label": "Final CTA — Button 1",
+      "type": "text",
+      "default": "Jetzt bewerben"
+    },
+    {
+      "key": "final_cta_2",
+      "label": "Final CTA — Button 2",
+      "type": "text",
+      "default": "Kostenlos registrieren"
+    },
+    {
+      "key": "footer_note",
+      "label": "Footer — Slogan",
+      "type": "longtext",
+      "default": "Digital Quality Platform — made with precision."
+    },
+    {
+      "key": "footer_email",
+      "label": "Footer — E-Mail",
+      "type": "text",
+      "default": ""
+    },
+    {
+      "key": "footer_phone",
+      "label": "Footer — Telefon",
+      "type": "text",
+      "default": "+49 30 123 456 78"
+    },
+    {
+      "key": "footer_address",
+      "label": "Footer — Adresse",
+      "type": "text",
+      "default": "Berlin · Hamburg · München"
+    },
+    {
+      "key": "telefon",
+      "label": "Kontakt Telefon",
+      "type": "text",
+      "default": "+49 30 123 456 78"
+    },
+    {
+      "key": "email",
+      "label": "Kontakt E-Mail",
+      "type": "text",
+      "default": ""
+    }
+  ]
+}

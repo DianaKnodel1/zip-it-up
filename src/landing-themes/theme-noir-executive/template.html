@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>{{seo_title}}</title>
+<meta name="description" content="{{seo_description}}" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body class="theme-noir">
+<header class="noir-nav">
+  <div class="noir-container">
+    <div class="noir-nav-inner">
+      <a href="#" class="noir-brand">{{brand_name}}</a>
+      <nav class="noir-menu">
+        <a href="#bewerber">Für Bewerber</a>
+        <a href="#unternehmen">Für Unternehmen</a>
+        <a href="#ueber-uns">Über uns</a>
+        <a href="#vermittlung">Vermittlung</a>
+        <a href="#faq">FAQ</a>
+        <a href="#kontakt">Kontakt</a>
+      </nav>
+      <a href="#bewerbung-form" class="noir-nav-cta">{{hero_cta}}</a>
+      <button class="noir-menu-toggle" aria-label="Menü"><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="noir-hero">
+    <div class="noir-container">
+      <div class="noir-hero-grid">
+        <div class="noir-hero-content">
+          <h1 class="noir-reveal">{{hero_title}}</h1>
+          <p class="noir-fade-in noir-delay-1">{{hero_sub}}</p>
+          <div class="noir-hero-actions noir-fade-in noir-delay-2">
+            <a href="#bewerbung-form" class="noir-btn-primary">{{hero_cta}}</a>
+            <a href="#vermittlung" class="noir-btn-secondary">{{hero_cta_sec}}</a>
+          </div>
+        </div>
+        <div class="noir-hero-media noir-fade-in noir-delay-3">
+          <div class="noir-image-reveal">
+            <img src="{{hero_image}}" alt="Executive Success" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="noir-trust">
+    <div class="noir-container">
+      <div class="noir-trust-grid">
+        <div class="noir-trust-label">{{trust_title}}</div>
+        <div class="noir-trust-items">
+          <div class="noir-trust-item"><span>01</span> {{t1_t}}</div>
+          <div class="noir-trust-item"><span>02</span> {{t2_t}}</div>
+          <div class="noir-trust-item"><span>03</span> {{t3_t}}</div>
+          <div class="noir-trust-item"><span>04</span> {{t4_t}}</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="vermittlung" class="noir-process">
+    <div class="noir-container">
+      <h2 class="noir-section-title">{{process_title}}</h2>
+      <div class="noir-steps">
+        <div class="noir-step-line"></div>
+        <div class="noir-step">
+          <span class="noir-step-nr">01</span>
+          <div class="noir-step-content">
+            <h3>{{s1_t}}</h3>
+            <p>{{s1_d}}</p>
+          </div>
+        </div>
+        <div class="noir-step">
+          <span class="noir-step-nr">02</span>
+          <div class="noir-step-content">
+            <h3>{{s2_t}}</h3>
+            <p>{{s2_d}}</p>
+          </div>
+        </div>
+        <div class="noir-step">
+          <span class="noir-step-nr">03</span>
+          <div class="noir-step-content">
+            <h3>{{s3_t}}</h3>
+            <p>{{s3_d}}</p>
+          </div>
+        </div>
+        <div class="noir-step">
+          <span class="noir-step-nr">04</span>
+          <div class="noir-step-content">
+            <h3>{{s4_t}}</h3>
+            <p>{{s4_d}}</p>
+          </div>
+        </div>
+        <div class="noir-step">
+          <span class="noir-step-nr">05</span>
+          <div class="noir-step-content">
+            <h3>{{s5_t}}</h3>
+            <p>{{s5_d}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="bewerber" class="noir-feature noir-dark-alt">
+    <div class="noir-container">
+      <div class="noir-feature-grid">
+        <div class="noir-feature-content">
+          <h2>{{applicant_title}}</h2>
+          <p>{{applicant_text}}</p>
+          <ul class="noir-list">
+            <li>Persönliche Betreuung</li>
+            <li>Gezieltes Matching</li>
+            <li>Passende Partnerunternehmen</li>
+            <li>Strukturierter Prozess</li>
+            <li>Professioneller Kontakt</li>
+          </ul>
+          <a href="#bewerbung-form" class="noir-btn-primary">{{hero_cta}}</a>
+        </div>
+        <div class="noir-feature-visual">
+          <div class="noir-deco-rect"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="unternehmen" class="noir-feature">
+    <div class="noir-container">
+      <div class="noir-feature-grid noir-reverse">
+        <div class="noir-feature-content">
+          <h2>{{company_title}}</h2>
+          <p>{{company_text}}</p>
+          <a href="#bewerbung-form" class="noir-btn-outline">Jetzt Kontakt aufnehmen</a>
+        </div>
+        <div class="noir-feature-media">
+          <img src="{{company_image}}" alt="Moderne Unternehmenskultur" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="noir-brand-statement">
+    <div class="noir-container">
+      <div class="noir-statement-wrap">
+        <h2 class="noir-reveal-split">{{brand_statement}}</h2>
+      </div>
+    </div>
+  </section>
+
+  <section id="ueber-uns" class="noir-about">
+    <div class="noir-container">
+      <div class="noir-about-grid">
+        <div class="noir-about-media">
+          <img src="{{about_image}}" alt="Unser Team" />
+        </div>
+        <div class="noir-about-content">
+          <h2 class="noir-section-title">{{about_title}}</h2>
+          <p>{{about_text}}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" class="noir-faq">
+    <div class="noir-container">
+      <h2 class="noir-section-title">{{faq_title}}</h2>
+      <div class="noir-accordion">
+        <div class="noir-acc-item">
+          <button class="noir-acc-trigger">Wie lange dauert die Vermittlung?</button>
+          <div class="noir-acc-content"><p>Die Dauer variiert je nach Profil und Marktsituation, meist liegen zwischen Erstkontakt und Vorstellung bei Partnern 2–4 Wochen.</p></div>
+        </div>
+        <div class="noir-acc-item">
+          <button class="noir-acc-trigger">Ist die Vermittlung für Bewerber kostenlos?</button>
+          <div class="noir-acc-content"><p>Ja, unsere Beratung und Vermittlung ist für Kandidaten zu jedem Zeitpunkt vollständig kostenfrei.</p></div>
+        </div>
+        <div class="noir-acc-item">
+          <button class="noir-acc-trigger">Wie diskret werden meine Daten behandelt?</button>
+          <div class="noir-acc-content"><p>Diskretion steht an erster Stelle. Daten werden erst nach expliziter Rücksprache mit Ihnen an Partner weitergegeben.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="noir-cta-final">
+    <div class="noir-container text-center">
+      <h2 class="noir-reveal">{{final_title}}</h2>
+      <a href="#bewerbung-form" class="noir-btn-large noir-fade-in">{{final_cta}}</a>
+    </div>
+  </section>
+</main>
+
+<footer id="kontakt" class="noir-footer">
+  <div class="noir-container">
+    <div class="noir-footer-grid">
+      <div class="noir-footer-brand">
+        <span class="noir-brand">{{brand_name}}</span>
+      </div>
+      <div class="noir-footer-info">
+        <p>E-Mail: {{contact_email}}</p>
+        <p>Tel: {{contact_phone}}</p>
+      </div>
+      <div class="noir-footer-links">
+        <a href="{{impressum_url}}">Impressum</a>
+        <a href="{{datenschutz_url}}">Datenschutz</a>
+      </div>
+    </div>
+    <div class="noir-footer-bottom">
+      <p>&copy; 2026 {{brand_name}} — Premium Personalberatung.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="de" data-qap-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>{{seo_title}}</title>
+<meta name="description" content="{{seo_description}}" />
+<meta property="og:title" content="{{seo_title}}" />
+<meta property="og:description" content="{{seo_description}}" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://{{landing_domain}}/" />
+<meta property="og:image" content="{{seo_image}}" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="canonical" href="https://{{landing_domain}}/" />
+<link rel="icon" href="{{favicon_image}}" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+<style>:root{--qap-accent:{{accent_color}};}</style>
+</head>
+<body>
+
+<div class="qap-bg" aria-hidden="true">
+  <span class="qap-orb qap-orb-1"></span>
+  <span class="qap-orb qap-orb-2"></span>
+  <span class="qap-grid"></span>
+</div>
+
+<header class="qap-nav" id="qap-nav">
+  <div class="qap-container qap-nav-inner">
+    <a href="#top" class="qap-brand"><span class="qap-brand-mark"></span>{{brand_name}}</a>
+    <nav class="qap-nav-links">
+      <a href="#audience">{{nav_link_1}}</a>
+      <a href="#audience" data-qap-tab-target="tester">{{nav_link_2}}</a>
+      <a href="#jobs">{{nav_link_3}}</a>
+      <a href="#pricing">{{nav_link_4}}</a>
+      <a href="#faq">{{nav_link_5}}</a>
+    </nav>
+    <div class="qap-nav-actions">
+      <button class="qap-theme-toggle" id="qap-theme-toggle" aria-label="Farbmodus wechseln">
+        <span class="qap-sun">☀</span><span class="qap-moon">☾</span>
+      </button>
+      <a href="#bewerbung-form" class="qap-btn qap-btn-primary">{{nav_cta}}</a>
+      <button class="qap-burger" id="qap-burger" aria-label="Menü"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+  <div class="qap-mobile-nav" id="qap-mobile-nav">
+    <a href="#audience">{{nav_link_1}}</a>
+    <a href="#audience">{{nav_link_2}}</a>
+    <a href="#jobs">{{nav_link_3}}</a>
+    <a href="#pricing">{{nav_link_4}}</a>
+    <a href="#faq">{{nav_link_5}}</a>
+    <a href="#bewerbung-form" class="qap-btn qap-btn-primary">{{nav_cta}}</a>
+  </div>
+</header>
+
+<section class="qap-hero" id="top">
+  <div class="qap-container qap-hero-grid">
+    <div class="qap-hero-copy" data-qap-animate>
+      <span class="qap-eyebrow"><span class="qap-eyebrow-dot"></span>{{hero_eyebrow}}</span>
+      <h1 class="qap-hero-title">
+        <span>{{hero_title_1}}</span>
+        <span class="qap-gradient-text">{{hero_title_2}}</span>
+        <span>{{hero_title_3}}</span>
+      </h1>
+      <p class="qap-hero-sub">{{hero_subtitle}}</p>
+      <div class="qap-hero-ctas">
+        <a href="#bewerbung-form" class="qap-btn qap-btn-primary qap-btn-lg">{{hero_cta_primary}} <span class="qap-arrow">→</span></a>
+        <a href="#pricing" class="qap-btn qap-btn-ghost qap-btn-lg">{{hero_cta_secondary}}</a>
+      </div>
+      <div class="qap-hero-badges">
+        <span class="qap-badge">✓ {{hero_badge_1}}</span>
+        <span class="qap-badge">✓ {{hero_badge_2}}</span>
+        <span class="qap-badge">✓ {{hero_badge_3}}</span>
+      </div>
+    </div>
+    <div class="qap-hero-visual" data-qap-animate>
+      <div class="qap-hero-card qap-glass">
+        <div class="qap-hero-card-header">
+          <span class="qap-dot qap-dot-r"></span>
+          <span class="qap-dot qap-dot-y"></span>
+          <span class="qap-dot qap-dot-g"></span>
+          <span class="qap-hero-card-title">{{brand_name}} · Live Dashboard</span>
+        </div>
+        <div class="qap-hero-card-body">
+          <div class="qap-mini-metric"><span class="qap-mini-label">Aktive Sessions</span><span class="qap-mini-value qap-count" data-qap-target="47">0</span></div>
+          <div class="qap-mini-metric"><span class="qap-mini-label">Bugs heute</span><span class="qap-mini-value qap-count" data-qap-target="128">0</span></div>
+          <div class="qap-mini-metric"><span class="qap-mini-label">Ø Reaktion</span><span class="qap-mini-value">2.4 h</span></div>
+          <div class="qap-mini-bars">
+            <span style="--h:38%"></span><span style="--h:62%"></span><span style="--h:48%"></span>
+            <span style="--h:80%"></span><span style="--h:55%"></span><span style="--h:92%"></span>
+            <span style="--h:70%"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="qap-stats">
+  <div class="qap-container qap-stats-grid">
+    <div data-qap-animate><strong class="qap-count" data-qap-target-text="{{stat_1_num}}">{{stat_1_num}}</strong><span>{{stat_1_label}}</span></div>
+    <div data-qap-animate><strong class="qap-count" data-qap-target-text="{{stat_2_num}}">{{stat_2_num}}</strong><span>{{stat_2_label}}</span></div>
+    <div data-qap-animate><strong class="qap-count" data-qap-target-text="{{stat_3_num}}">{{stat_3_num}}</strong><span>{{stat_3_label}}</span></div>
+    <div data-qap-animate><strong class="qap-count" data-qap-target-text="{{stat_4_num}}">{{stat_4_num}}</strong><span>{{stat_4_label}}</span></div>
+  </div>
+</section>
+
+<section class="qap-section" id="audience">
+  <div class="qap-container">
+    <div class="qap-section-head" data-qap-animate>
+      <h2>{{audience_title}}</h2>
+      <p>{{audience_sub}}</p>
+    </div>
+    <div class="qap-audience-tabs" role="tablist">
+      <button class="qap-tab is-active" data-qap-tab="biz" role="tab">{{aud_biz_title}}</button>
+      <button class="qap-tab" data-qap-tab="tester" role="tab">{{aud_test_title}}</button>
+    </div>
+    <div class="qap-audience-panel qap-glass is-active" data-qap-panel="biz" data-qap-animate>
+      <ul class="qap-check-list">
+        <li>{{aud_biz_1}}</li>
+        <li>{{aud_biz_2}}</li>
+        <li>{{aud_biz_3}}</li>
+        <li>{{aud_biz_4}}</li>
+      </ul>
+      <a href="#bewerbung-form" class="qap-btn qap-btn-primary">{{aud_biz_cta}}</a>
+    </div>
+    <div class="qap-audience-panel qap-glass" data-qap-panel="tester" data-qap-animate>
+      <ul class="qap-check-list">
+        <li>{{aud_test_1}}</li>
+        <li>{{aud_test_2}}</li>
+        <li>{{aud_test_3}}</li>
+        <li>{{aud_test_4}}</li>
+      </ul>
+      <a href="#bewerbung-form" class="qap-btn qap-btn-primary">{{aud_test_cta}}</a>
+    </div>
+  </div>
+</section>
+
+<section class="qap-section" id="services">
+  <div class="qap-container">
+    <div class="qap-section-head" data-qap-animate>
+      <span class="qap-eyebrow"><span class="qap-eyebrow-dot"></span>{{services_eyebrow}}</span>
+      <h2>{{services_title}}</h2>
+    </div>
+    <div class="qap-services-grid">
+      <div class="qap-service qap-glass" data-qap-animate>
+        <div class="qap-svc-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="2" width="12" height="20" rx="2"/><line x1="10" y1="18" x2="14" y2="18"/></svg>
+        </div>
+        <h3>{{svc_1_title}}</h3><p>{{svc_1_text}}</p>
+      </div>
+      <div class="qap-service qap-glass" data-qap-animate>
+        <div class="qap-svc-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="4" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+        </div>
+        <h3>{{svc_2_title}}</h3><p>{{svc_2_text}}</p>
+      </div>
+      <div class="qap-service qap-glass" data-qap-animate>
+        <div class="qap-svc-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+        </div>
+        <h3>{{svc_3_title}}</h3><p>{{svc_3_text}}</p>
+      </div>
+      <div class="qap-service qap-glass" data-qap-animate>
+        <div class="qap-svc-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 2a10 10 0 0 1 10 10M2 12A10 10 0 0 1 12 2"/></svg>
+        </div>
+        <h3>{{svc_4_title}}</h3><p>{{svc_4_text}}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="qap-section" id="how">
+  <div class="qap-container">
+    <div class="qap-section-head" data-qap-animate><h2>{{how_title}}</h2></div>
+    <ol class="qap-steps">
+      <li data-qap-animate><span class="qap-step-num">01</span><h3>{{how_1_title}}</h3><p>{{how_1_text}}</p></li>
+      <li data-qap-animate><span class="qap-step-num">02</span><h3>{{how_2_title}}</h3><p>{{how_2_text}}</p></li>
+      <li data-qap-animate><span class="qap-step-num">03</span><h3>{{how_3_title}}</h3><p>{{how_3_text}}</p></li>
+      <li data-qap-animate><span class="qap-step-num">04</span><h3>{{how_4_title}}</h3><p>{{how_4_text}}</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="qap-section qap-dash-section" id="dashboard">
+  <div class="qap-container">
+    <div class="qap-section-head" data-qap-animate>
+      <h2>{{dash_title}}</h2>
+      <p>{{dash_sub}}</p>
+    </div>
+    <div class="qap-dash qap-glass" data-qap-animate>
+      <div class="qap-dash-tabs">
+        <button class="qap-dash-tab is-active" data-qap-dtab="bugs">{{dash_tab_1}}</button>
+        <button class="qap-dash-tab" data-qap-dtab="sessions">{{dash_tab_2}}</button>
+        <button class="qap-dash-tab" data-qap-dtab="payouts">{{dash_tab_3}}</button>
+      </div>
+
+      <div class="qap-dash-panel is-active" data-qap-dpanel="bugs">
+        <div class="qap-dash-kpis">
+          <div><span>Kritisch</span><strong class="qap-count" data-qap-target="14">0</strong></div>
+          <div><span>Hoch</span><strong class="qap-count" data-qap-target="38">0</strong></div>
+          <div><span>Mittel</span><strong class="qap-count" data-qap-target="62">0</strong></div>
+          <div><span>Niedrig</span><strong class="qap-count" data-qap-target="27">0</strong></div>
+        </div>
+        <svg class="qap-chart-bars" viewBox="0 0 400 160" preserveAspectRatio="none">
+          <g class="qap-bar-group">
+            <rect x="10" y="160" width="30" height="0" data-qap-h="55"/><rect x="60" y="160" width="30" height="0" data-qap-h="80"/>
+            <rect x="110" y="160" width="30" height="0" data-qap-h="45"/><rect x="160" y="160" width="30" height="0" data-qap-h="110"/>
+            <rect x="210" y="160" width="30" height="0" data-qap-h="72"/><rect x="260" y="160" width="30" height="0" data-qap-h="128"/>
+            <rect x="310" y="160" width="30" height="0" data-qap-h="95"/>
+          </g>
+        </svg>
+        <div class="qap-chart-labels"><span>Mo</span><span>Di</span><span>Mi</span><span>Do</span><span>Fr</span><span>Sa</span><span>So</span></div>
+      </div>
+
+      <div class="qap-dash-panel" data-qap-dpanel="sessions">
+        <div class="qap-dash-kpis">
+          <div><span>Läuft</span><strong class="qap-count" data-qap-target="12">0</strong></div>
+          <div><span>Abgeschlossen</span><strong class="qap-count" data-qap-target="87">0</strong></div>
+          <div><span>Ø Score</span><strong>4,7</strong></div>
+          <div><span>NPS</span><strong>+68</strong></div>
+        </div>
+        <svg class="qap-chart-line" viewBox="0 0 400 160" preserveAspectRatio="none">
+          <path class="qap-line-path" d="M0,120 C50,110 80,60 130,70 C180,80 210,30 260,40 C310,50 340,20 400,25" fill="none" stroke="url(#qapLine)" stroke-width="2.5"/>
+          <defs><linearGradient id="qapLine" x1="0" x2="1"><stop offset="0" stop-color="var(--qap-accent)"/><stop offset="1" stop-color="#a78bfa"/></linearGradient></defs>
+        </svg>
+        <div class="qap-chart-labels"><span>W1</span><span>W2</span><span>W3</span><span>W4</span><span>W5</span><span>W6</span><span>W7</span></div>
+      </div>
+
+      <div class="qap-dash-panel" data-qap-dpanel="payouts">
+        <div class="qap-dash-kpis">
+          <div><span>Ausgezahlt</span><strong>18.420 €</strong></div>
+          <div><span>Ausstehend</span><strong>3.680 €</strong></div>
+          <div><span>Aktive Tester</span><strong class="qap-count" data-qap-target="248">0</strong></div>
+          <div><span>Ø / Tester</span><strong>412 €</strong></div>
+        </div>
+        <ul class="qap-payout-list">
+          <li><span class="qap-po-name">Elena S.</span><span class="qap-po-count">14 Sessions</span><span class="qap-po-amount">1.240 €</span><span class="qap-tag qap-tag-ok">ausgezahlt</span></li>
+          <li><span class="qap-po-name">Jonas K.</span><span class="qap-po-count">9 Sessions</span><span class="qap-po-amount">780 €</span><span class="qap-tag qap-tag-ok">ausgezahlt</span></li>
+          <li><span class="qap-po-name">Miriam H.</span><span class="qap-po-count">6 Sessions</span><span class="qap-po-amount">540 €</span><span class="qap-tag qap-tag-pending">in Prüfung</span></li>
+          <li><span class="qap-po-name">Ahmed T.</span><span class="qap-po-count">11 Sessions</span><span class="qap-po-amount">960 €</span><span class="qap-tag qap-tag-ok">ausgezahlt</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="qap-section" id="jobs">
+  <div class="qap-container">
+    <div class="qap-section-head" data-qap-animate>
+      <span class="qap-eyebrow"><span class="qap-eyebrow-dot"></span>{{jobs_eyebrow}}</span>
+      <h2>{{jobs_title}}</h2>
+      <p>{{jobs_sub}}</p>
+    </div>
+    <div class="qap-jobs-grid">
+      <article class="qap-job qap-glass" data-qap-active="{{job_1_active}}" data-qap-animate>
+        <header class="qap-job-head">
+          <span class="qap-job-type">{{job_1_type}}</span>
+          <span class="qap-job-payout">{{job_1_payout}}</span>
+        </header>
+        <h3>{{job_1_title}}</h3>
+        <div class="qap-job-company">{{job_1_company}}</div>
+        <p class="qap-job-desc">{{job_1_desc}}</p>
+        <ul class="qap-job-meta">
+          <li>📍 {{job_1_location}}</li><li>⏱ {{job_1_duration}}</li><li>✓ {{job_1_req}}</li>
+        </ul>
+        <a href="#bewerbung-form" class="qap-btn qap-btn-primary qap-job-cta">{{job_apply_label}}</a>
+        <div class="qap-job-locked"><span>🔒 {{job_unavailable_label}}</span></div>
+      </article>
+      <article class="qap-job qap-glass" data-qap-active="{{job_2_active}}" data-qap-animate>
+        <header class="qap-job-head">
+          <span class="qap-job-type">{{job_2_type}}</span>
+          <span class="qap-job-payout">{{job_2_payout}}</span>
+        </header>
+        <h3>{{job_2_title}}</h3>
+        <div class="qap-job-company">{{job_2_company}}</div>
+        <p class="qap-job-desc">{{job_2_desc}}</p>
+        <ul class="qap-job-meta">
+          <li>📍 {{job_2_location}}</li><li>⏱ {{job_2_duration}}</li><li>✓ {{job_2_req}}</li>
+        </ul>
+        <a href="#bewerbung-form" class="qap-btn qap-btn-primary qap-job-cta">{{job_apply_label}}</a>
+        <div class="qap-job-locked"><span>🔒 {{job_unavailable_label}}</span></div>
+      </article>
+      <article class="qap-job qap-glass" data-qap-active="{{job_3_active}}" data-qap-animate>
+        <header class="qap-job-head">
+          <span class="qap-job-type">{{job_3_type}}</span>
+          <span class="qap-job-payout">{{job_3_payout}}</span>
+        </header>
+        <h3>{{job_3_title}}</h3>
+        <div class="qap-job-company">{{job_3_company}}</div>
+        <p class="qap-job-desc">{{job_3_desc}}</p>
+        <ul class="qap-job-meta">
+          <li>📍 {{job_3_location}}</li><li>⏱ {{job_3_duration}}</li><li>✓ {{job_3_req}}</li>
+        </ul>
+        <a href="#bewerbung-form" class="qap-btn qap-btn-primary qap-job-cta">{{job_apply_label}}</a>
+        <div class="qap-job-locked"><span>🔒 {{job_unavailable_label}}</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="qap-section" id="pricing">
+  <div class="qap-container">
+    <div class="qap-section-head" data-qap-animate>
+      <span class="qap-eyebrow"><span class="qap-eyebrow-dot"></span>{{pricing_eyebrow}}</span>
+      <h2>{{pricing_title}}</h2>
+    </div>
+    <div class="qap-price-grid">
+      <div class="qap-price qap-glass" data-qap-animate>
+        <h3>{{price_1_name}}</h3>
+        <div class="qap-price-amount">{{price_1_amount}} <span>{{price_1_period}}</span></div>
+        <div class="qap-price-features" data-qap-features="{{price_1_features}}"></div>
+        <a href="#bewerbung-form" class="qap-btn qap-btn-ghost">Auswählen</a>
+      </div>
+      <div class="qap-price qap-glass qap-price-featured" data-qap-animate>
+        <span class="qap-price-badge">Beliebt</span>
+        <h3>{{price_2_name}}</h3>
+        <div class="qap-price-amount">{{price_2_amount}} <span>{{price_2_period}}</span></div>
+        <div class="qap-price-features" data-qap-features="{{price_2_features}}"></div>
+        <a href="#bewerbung-form" class="qap-btn qap-btn-primary">Auswählen</a>
+      </div>
+      <div class="qap-price qap-glass" data-qap-animate>
+        <h3>{{price_3_name}}</h3>
+        <div class="qap-price-amount">{{price_3_amount}} <span>{{price_3_period}}</span></div>
+        <div class="qap-price-features" data-qap-features="{{price_3_features}}"></div>
+        <a href="#bewerbung-form" class="qap-btn qap-btn-ghost">Kontakt</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="qap-section" id="testimonials">
+  <div class="qap-container">
+    <div class="qap-section-head" data-qap-animate><h2>{{test_title}}</h2></div>
+    <div class="qap-test-grid">
+      <figure class="qap-test qap-glass" data-qap-animate>
+        <div class="qap-stars">★★★★★</div>
+        <blockquote>„{{test_1_text}}"</blockquote>
+        <figcaption><strong>{{test_1_name}}</strong><span>{{test_1_role}}</span></figcaption>
+      </figure>
+      <figure class="qap-test qap-glass" data-qap-animate>
+        <div class="qap-stars">★★★★★</div>
+        <blockquote>„{{test_2_text}}"</blockquote>
+        <figcaption><strong>{{test_2_name}}</strong><span>{{test_2_role}}</span></figcaption>
+      </figure>
+      <figure class="qap-test qap-glass" data-qap-animate>
+        <div class="qap-stars">★★★★★</div>
+        <blockquote>„{{test_3_text}}"</blockquote>
+        <figcaption><strong>{{test_3_name}}</strong><span>{{test_3_role}}</span></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="qap-section" id="faq">
+  <div class="qap-container qap-faq-wrap">
+    <div class="qap-section-head" data-qap-animate><h2>{{faq_title}}</h2></div>
+    <div class="qap-faq">
+      <details data-qap-animate><summary>{{faq_1_q}}</summary><p>{{faq_1_a}}</p></details>
+      <details data-qap-animate><summary>{{faq_2_q}}</summary><p>{{faq_2_a}}</p></details>
+      <details data-qap-animate><summary>{{faq_3_q}}</summary><p>{{faq_3_a}}</p></details>
+      <details data-qap-animate><summary>{{faq_4_q}}</summary><p>{{faq_4_a}}</p></details>
+      <details data-qap-animate><summary>{{faq_5_q}}</summary><p>{{faq_5_a}}</p></details>
+      <details data-qap-animate><summary>{{faq_6_q}}</summary><p>{{faq_6_a}}</p></details>
+    </div>
+  </div>
+</section>
+
+<section class="qap-cta">
+  <div class="qap-container qap-cta-inner qap-glass" data-qap-animate>
+    <h2>{{cta_title}}</h2>
+    <p>{{cta_sub}}</p>
+    <div class="qap-cta-btns">
+      <a href="#bewerbung-form" class="qap-btn qap-btn-primary qap-btn-lg">{{cta_primary}} <span class="qap-arrow">→</span></a>
+      <a href="#pricing" class="qap-btn qap-btn-ghost qap-btn-lg">{{cta_secondary}}</a>
+    </div>
+  </div>
+</section>
+
+<section id="bewerbung-form"></section>
+
+<footer class="qap-footer">
+  <div class="qap-container qap-footer-inner">
+    <div class="qap-footer-brand">
+      <div class="qap-brand"><span class="qap-brand-mark"></span>{{brand_name}}</div>
+      <p>{{footer_tagline}}</p>
+    </div>
+    {{contact_block}}
+    {{legal_block}}
+    <div class="qap-footer-links">
+      <a href="/impressum.html">Impressum</a>
+      <a href="/datenschutz.html">Datenschutz</a>
+      <a href="/agb.html">AGB</a>
+    </div>
+  </div>
+  <div class="qap-footer-bottom qap-container">
+    <span>© <span id="qap-year"></span> {{brand_name}}. Alle Rechte vorbehalten.</span>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

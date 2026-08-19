@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>{{seo_title}}</title>
+<meta name="description" content="{{seo_description}}" />
+<meta property="og:title" content="{{seo_title}}" />
+<meta property="og:description" content="{{seo_description}}" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://{{landing_domain}}/" />
+<meta property="og:image" content="{{seo_image}}" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="canonical" href="https://{{landing_domain}}/" />
+<link rel="icon" href="{{favicon_image}}" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+<style>:root{--mp-accent:{{accent_color}};}</style>
+</head>
+<body>
+
+<div class="mp-bg-orbs" aria-hidden="true">
+  <span class="mp-orb mp-orb-1"></span>
+  <span class="mp-orb mp-orb-2"></span>
+  <span class="mp-orb mp-orb-3"></span>
+</div>
+
+<header class="mp-nav" id="mp-nav">
+  <div class="mp-container mp-nav-inner">
+    <a href="#top" class="mp-brand"><img class="mp-brand-logo" src="{{logo_image}}" alt="{{brand_name}}" data-mp-logo /><span class="mp-brand-mark"></span>{{brand_name}}</a>
+    <nav class="mp-nav-links">
+      <a href="#leistungen">{{nav_link_1}}</a>
+      <a href="#warum">{{nav_link_2}}</a>
+      <a href="#referenzen">{{nav_link_3}}</a>
+      <a href="#ueber-uns">{{nav_link_4}}</a>
+    </nav>
+    <a href="#bewerbung-form" class="mp-btn mp-btn-primary mp-nav-cta">{{nav_cta}}</a>
+    <button class="mp-burger" id="mp-burger" aria-label="Menü"><span></span><span></span><span></span></button>
+  </div>
+  <div class="mp-mobile-nav" id="mp-mobile-nav">
+    <a href="#leistungen">{{nav_link_1}}</a>
+    <a href="#warum">{{nav_link_2}}</a>
+    <a href="#referenzen">{{nav_link_3}}</a>
+    <a href="#ueber-uns">{{nav_link_4}}</a>
+    <a href="#bewerbung-form" class="mp-btn mp-btn-primary">{{nav_cta}}</a>
+  </div>
+</header>
+
+<section class="mp-hero" id="top">
+  <div class="mp-container mp-hero-grid">
+    <div class="mp-hero-copy" data-mp-animate>
+      <span class="mp-eyebrow"><span class="mp-eyebrow-dot"></span>{{hero_eyebrow}}</span>
+      <h1 class="mp-hero-title">
+        <span>{{hero_title_1}}</span>
+        <span class="mp-gradient-text">{{hero_title_2}}</span>
+        <span>{{hero_title_3}}</span>
+      </h1>
+      <p class="mp-hero-sub">{{hero_subtitle}}</p>
+      <div class="mp-hero-ctas">
+        <a href="#bewerbung-form" class="mp-btn mp-btn-primary mp-btn-lg">{{hero_cta_primary}}<span class="mp-btn-arrow">→</span></a>
+        <a href="#referenzen" class="mp-btn mp-btn-ghost mp-btn-lg">{{hero_cta_secondary}}</a>
+      </div>
+      <div class="mp-hero-stats">
+        <div><strong>{{hero_stat_1_num}}</strong><span>{{hero_stat_1_label}}</span></div>
+        <div><strong>{{hero_stat_2_num}}</strong><span>{{hero_stat_2_label}}</span></div>
+        <div><strong>{{hero_stat_3_num}}</strong><span>{{hero_stat_3_label}}</span></div>
+      </div>
+    </div>
+    <div class="mp-hero-visual" data-mp-animate>
+      <div class="mp-hero-card mp-glass">
+        <div class="mp-hero-card-header">
+          <span class="mp-dot mp-dot-r"></span>
+          <span class="mp-dot mp-dot-y"></span>
+          <span class="mp-dot mp-dot-g"></span>
+          <span class="mp-hero-card-title">{{brand_name}} · Dashboard</span>
+        </div>
+        <div class="mp-hero-card-body">
+          <div class="mp-hero-bar"><span style="width:82%"></span></div>
+          <div class="mp-hero-bar"><span style="width:64%"></span></div>
+          <div class="mp-hero-bar"><span style="width:91%"></span></div>
+          <div class="mp-hero-mini-grid">
+            <div><b>{{hero_stat_1_num}}</b><i>{{hero_stat_1_label}}</i></div>
+            <div><b>{{hero_stat_2_num}}</b><i>{{hero_stat_2_label}}</i></div>
+            <div><b>{{hero_stat_3_num}}</b><i>{{hero_stat_3_label}}</i></div>
+          </div>
+        </div>
+      </div>
+      <div class="mp-hero-glow"></div>
+    </div>
+  </div>
+</section>
+
+<section class="mp-logos" data-mp-animate>
+  <div class="mp-container">
+    <p class="mp-logos-title">{{logos_title}}</p>
+    <div class="mp-logo-row">
+      <span>{{logo_1}}</span><span>{{logo_2}}</span><span>{{logo_3}}</span>
+      <span>{{logo_4}}</span><span>{{logo_5}}</span><span>{{logo_6}}</span>
+    </div>
+  </div>
+</section>
+
+<section class="mp-section" id="leistungen">
+  <div class="mp-container">
+    <div class="mp-section-head" data-mp-animate>
+      <span class="mp-eyebrow"><span class="mp-eyebrow-dot"></span>{{services_eyebrow}}</span>
+      <h2 class="mp-h2">{{services_title}}</h2>
+      <p class="mp-lead">{{services_sub}}</p>
+    </div>
+    <div class="mp-service-grid">
+      <article class="mp-service mp-glass" data-mp-animate>
+        <div class="mp-service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6z"/></svg></div>
+        <h3>{{svc_1_title}}</h3>
+        <p>{{svc_1_text}}</p>
+      </article>
+      <article class="mp-service mp-glass" data-mp-animate>
+        <div class="mp-service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></div>
+        <h3>{{svc_2_title}}</h3>
+        <p>{{svc_2_text}}</p>
+      </article>
+      <article class="mp-service mp-glass" data-mp-animate>
+        <div class="mp-service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m7 8-4 4 4 4M17 8l4 4-4 4M14 4l-4 16"/></svg></div>
+        <h3>{{svc_3_title}}</h3>
+        <p>{{svc_3_text}}</p>
+      </article>
+      <article class="mp-service mp-glass" data-mp-animate>
+        <div class="mp-service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 15 4-4 4 4 5-6"/></svg></div>
+        <h3>{{svc_4_title}}</h3>
+        <p>{{svc_4_text}}</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="mp-section mp-section-alt" id="warum">
+  <div class="mp-container">
+    <div class="mp-section-head" data-mp-animate>
+      <span class="mp-eyebrow"><span class="mp-eyebrow-dot"></span>{{why_eyebrow}}</span>
+      <h2 class="mp-h2">{{why_title}}</h2>
+      <p class="mp-lead">{{why_sub}}</p>
+    </div>
+    <div class="mp-why-grid">
+      <article class="mp-why" data-mp-animate><div class="mp-why-num">01</div><h4>{{why_1_title}}</h4><p>{{why_1_text}}</p></article>
+      <article class="mp-why" data-mp-animate><div class="mp-why-num">02</div><h4>{{why_2_title}}</h4><p>{{why_2_text}}</p></article>
+      <article class="mp-why" data-mp-animate><div class="mp-why-num">03</div><h4>{{why_3_title}}</h4><p>{{why_3_text}}</p></article>
+      <article class="mp-why" data-mp-animate><div class="mp-why-num">04</div><h4>{{why_4_title}}</h4><p>{{why_4_text}}</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="mp-section" id="referenzen">
+  <div class="mp-container">
+    <div class="mp-section-head" data-mp-animate>
+      <span class="mp-eyebrow"><span class="mp-eyebrow-dot"></span>{{work_eyebrow}}</span>
+      <h2 class="mp-h2">{{work_title}}</h2>
+    </div>
+    <div class="mp-work-grid">
+      <article class="mp-work mp-glass" data-mp-animate>
+        <div class="mp-work-media" data-mp-bg="{{work_1_image}}"></div>
+        <div class="mp-work-body"><span class="mp-tag">{{work_1_tag}}</span><h4>{{work_1_title}}</h4><p>{{work_1_text}}</p></div>
+      </article>
+      <article class="mp-work mp-glass" data-mp-animate>
+        <div class="mp-work-media" data-mp-bg="{{work_2_image}}"></div>
+        <div class="mp-work-body"><span class="mp-tag">{{work_2_tag}}</span><h4>{{work_2_title}}</h4><p>{{work_2_text}}</p></div>
+      </article>
+      <article class="mp-work mp-glass" data-mp-animate>
+        <div class="mp-work-media" data-mp-bg="{{work_3_image}}"></div>
+        <div class="mp-work-body"><span class="mp-tag">{{work_3_tag}}</span><h4>{{work_3_title}}</h4><p>{{work_3_text}}</p></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="mp-section mp-section-alt">
+  <div class="mp-container">
+    <div class="mp-section-head" data-mp-animate>
+      <span class="mp-eyebrow"><span class="mp-eyebrow-dot"></span>{{testimonials_eyebrow}}</span>
+      <h2 class="mp-h2">{{testimonials_title}}</h2>
+    </div>
+    <div class="mp-t-grid">
+      <blockquote class="mp-t mp-glass" data-mp-animate><p>"{{t_1_text}}"</p><footer><strong>{{t_1_name}}</strong><span>{{t_1_role}}</span></footer></blockquote>
+      <blockquote class="mp-t mp-glass" data-mp-animate><p>"{{t_2_text}}"</p><footer><strong>{{t_2_name}}</strong><span>{{t_2_role}}</span></footer></blockquote>
+      <blockquote class="mp-t mp-glass" data-mp-animate><p>"{{t_3_text}}"</p><footer><strong>{{t_3_name}}</strong><span>{{t_3_role}}</span></footer></blockquote>
+    </div>
+  </div>
+</section>
+
+<section class="mp-section" id="ueber-uns">
+  <div class="mp-container mp-about-grid">
+    <div data-mp-animate>
+      <span class="mp-eyebrow"><span class="mp-eyebrow-dot"></span>{{about_eyebrow}}</span>
+      <h2 class="mp-h2">{{about_title}}</h2>
+      <p class="mp-lead">{{about_text}}</p>
+    </div>
+    <div class="mp-about-visual mp-glass" data-mp-animate data-mp-bg="{{about_image}}">
+      <div class="mp-about-glow"></div>
+    </div>
+  </div>
+</section>
+
+<section class="mp-cta-final">
+  <div class="mp-container">
+    <div class="mp-cta-card mp-glass" data-mp-animate>
+      <h2>{{cta_title}}</h2>
+      <p>{{cta_sub}}</p>
+      <a href="#bewerbung-form" class="mp-btn mp-btn-primary mp-btn-lg">{{cta_button}}<span class="mp-btn-arrow">→</span></a>
+    </div>
+  </div>
+</section>
+
+<footer class="mp-footer" id="kontakt">
+  <div class="mp-container mp-footer-grid">
+    <div>
+      <div class="mp-brand mp-brand-footer"><img class="mp-brand-logo" src="{{logo_image}}" alt="{{brand_name}}" data-mp-logo /><span class="mp-brand-mark"></span>{{brand_name}}</div>
+      <p class="mp-footer-tag">{{contact_sub}}</p>
+    </div>
+    <div>
+      <h5>{{contact_title}}</h5>
+      <p><a href="mailto:{{contact_email}}">{{contact_email}}</a></p>
+      <p>{{contact_phone}}</p>
+      <p>{{contact_address}}</p>
+    </div>
+    <div>
+      <h5>Rechtliches</h5>
+      <div class="mp-legal-block">{{legal_block}}</div>
+      <p><a href="{{impressum_url}}">Impressum</a></p>
+      <p><a href="{{datenschutz_url}}">Datenschutz</a></p>
+    </div>
+  </div>
+  <div class="mp-container mp-footer-bottom">© <span id="mp-year"></span> {{firmenname}}. Alle Rechte vorbehalten.</div>
+</footer>
+
+<button class="mp-top" id="mp-top" aria-label="Nach oben">↑</button>
+
+<script src="script.js"></script>
+</body>
+</html>

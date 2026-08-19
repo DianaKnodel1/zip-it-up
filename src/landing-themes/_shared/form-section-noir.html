@@ -1,0 +1,42 @@
+<section id="bewerbung-form" class="noir-form-section">
+  <div class="noir-form-container">
+    <div class="noir-form-header">
+      <h2 class="noir-form-title">Ihr nächster Karriereschritt</h2>
+      <p class="noir-form-sub">Bewerben Sie sich diskret in unter 2 Minuten.</p>
+    </div>
+    
+    <form id="application-form" class="noir-form">
+      <div class="noir-form-group">
+        <label for="full_name">Vollständiger Name</label>
+        <input type="text" id="full_name" name="full_name" required placeholder="z. B. Max Mustermann">
+      </div>
+      
+      <div class="noir-form-row">
+        <div class="noir-form-group">
+          <label for="email">E-Mail Adresse</label>
+          <input type="email" id="email" name="email" required placeholder="max@beispiel.de">
+        </div>
+        <div class="noir-form-group">
+          <label for="phone">Telefonnummer</label>
+          <input type="tel" id="phone" name="phone" required placeholder="+49 123 456789">
+        </div>
+      </div>
+
+      <div class="noir-form-group">
+        <label for="current_position">Aktuelle Position (Optional)</label>
+        <input type="text" id="current_position" name="current_position" placeholder="z. B. Senior Project Manager">
+      </div>
+
+      <div class="noir-form-group">
+        <label class="noir-checkbox-label">
+          <input type="checkbox" name="privacy_agreed" required>
+          <span>Ich stimme der <a href="{{datenschutz_url}}" target="_blank">Datenschutzerklärung</a> zu.</span>
+        </label>
+      </div>
+
+      <button type="submit" class="noir-form-submit">Bewerbung absenden</button>
+      
+      <div id="form-status" class="noir-form-status"></div>
+    </form>
+  </div>
+</section>
