@@ -119,6 +119,20 @@ cd "$PROJECT_DIR"
 
   log "5/5  restart"
   systemctl restart "$SERVICE_NAME"
+  # Der Browser-Runner ist ein eigener Dienst. Setup ist idempotent und legt
+  # eine fehlende Unit/Chromium-Installation beim ersten Deploy automatisch an.
+  if [ -f "$PROJECT_DIR/scripts/setup-bot-runner.sh" ]; then
+    log "  Bot-Runner installieren/aktualisieren"
+    PROJECT_DIR="$PROJECT_DIR" bash "$PROJECT_DIR/scripts/setup-bot-runner.sh"
+    systemctl is-active --quiet bot-runner.service || {
+      systemctl status bot-runner.service --no-pager || true
+      echo "  ✗ Bot-Runner konnte nicht gestartet werden." >&2
+      exit 1
+    }
+  else
+    echo "  ✗ setup-bot-runner.sh fehlt." >&2
+    exit 1
+  fi
   # Automatischer Sync nach .123 am Ende jedes Deploys
   if [ -f "$PROJECT_DIR/scripts/sync-to-backend.sh" ]; then
     log "Zusatz: Synchronisiere Backend-Status nach .123..."

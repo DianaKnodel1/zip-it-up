@@ -28,9 +28,9 @@ After=network.target
 
 [Service]
 WorkingDirectory=/opt/apps/portal/bot-runner
-Environment=SUPABASE_URL=https://<backend-host>
-Environment=SERVICE_ROLE_KEY=<service-role-key>
+EnvironmentFile=/opt/apps/portal/.env.server
 Environment=HEADLESS=true
+Environment=REQUIRE_PROXY=true
 ExecStart=/usr/local/bin/bun run server.ts
 Restart=always
 RestartSec=5
