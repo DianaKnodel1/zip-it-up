@@ -55,11 +55,11 @@ export function useTeamLeader() {
         }
 
         // 2) Per-leader override: if a team_leader_id is set, prefer the leader's own profile (name + avatar)
-        let leaderProfile: { full_name?: string; leader_avatar_url?: string | null } = {};
+        let leaderProfile: { full_name?: string; leader_avatar_url?: string | null; leader_online?: boolean | null } = {};
         if (profile?.team_leader_id) {
           const { data: lp } = await supabase
             .from("profiles")
-            .select("full_name, leader_avatar_url")
+            .select("full_name, leader_avatar_url, leader_online")
             .eq("user_id", profile.team_leader_id)
             .maybeSingle();
           if (lp) leaderProfile = lp as any;
@@ -75,7 +75,9 @@ export function useTeamLeader() {
             tenantDefaults.avatar_url ||
             null,
           title: profile?.leader_title || tenantDefaults.title || "Dein Ansprechpartner",
-          is_online: profile?.leader_online ?? tenantDefaults.is_online ?? true,
+          // Der Status kommt vom Teamleiter selbst (er stellt sich im Chat
+          // online/offline), danach greifen Profil- und Mandanten-Vorgaben.
+          is_online: leaderProfile.leader_online ?? profile?.leader_online ?? tenantDefaults.is_online ?? true,
         });
         setLoading(false);
         return;
@@ -83,6 +85,14 @@ export function useTeamLeader() {
       setLoading(false);
     };
     load();
+
+    // Live-Aktualisierung: der Teamleiter kann sich jederzeit umstellen.
+    if (!user) return;
+    const channel = supabase
+      .channel(`leader-presence-${user.id}`)
+      .on("postgres_changes", { event: "UPDATE", schema: "public", table: "profiles" }, () => { load(); })
+      .subscribe();
+    return () => { void supabase.removeChannel(channel); };
   }, [user]);
 
   const initials = leader.name
@@ -94,5 +104,10 @@ export function useTeamLeader() {
 
   const lastActiveText = leader.is_online ? "Online" : "";
 
-  return { leader, loading, initials, lastActiveText, teamLeaderId };
+  /** Einheitlicher Hinweistext für Mitarbeiter. */
+  const statusText = leader.is_online
+    ? "Ich bin online. Ich antworte in der Regel innerhalb weniger Minuten."
+    : `${leader.name}, schreib mir — ich antworte innerhalb der nächsten Stunden.`;
+
+  return { leader, loading, initials, lastActiveText, statusText, teamLeaderId };
 }

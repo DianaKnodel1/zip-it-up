@@ -63,6 +63,9 @@ interface ChatMessage {
 function AdminChatPage() {
   const { user, isStaff } = useAuth();
   const onlineUsers = useOnlineUsers();
+  // Eigener Teamleiter-Status: steuert, was Mitarbeiter im Chat lesen.
+  const [leaderOnline, setLeaderOnline] = useState(true);
+  const [savingPresence, setSavingPresence] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
   const [conversations, setConversations] = useState<Conversation[]>([]);
@@ -539,6 +542,56 @@ function AdminChatPage() {
   };
 
 
+  // Eigenen Online-Status laden (Profil des Teamleiters).
+  useEffect(() => {
+    if (!user) return;
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase
+        .from("profiles")
+        .select("leader_online")
+        .eq("user_id", user.id)
+        .maybeSingle();
+      if (!cancelled && data) setLeaderOnline((data as any).leader_online ?? true);
+    })();
+    return () => { cancelled = true; };
+  }, [user]);
+
+  /** Schreibt den Status auf das eigene Profil und den Mandanten. */
+  const setLeaderPresence = async (next: boolean) => {
+    if (!user) return;
+    setSavingPresence(true);
+    const previous = leaderOnline;
+    setLeaderOnline(next);
+    try {
+      const { data: me } = await supabase
+        .from("profiles")
+        .select("tenant_id")
+        .eq("user_id", user.id)
+        .maybeSingle();
+      const { error } = await supabase
+        .from("profiles")
+        .update({ leader_online: next } as any)
+        .eq("user_id", user.id);
+      if (error) throw error;
+      const tenantId = (me as any)?.tenant_id;
+      if (tenantId) {
+        await supabase.from("tenants").update({ team_leader_online: next } as any).eq("id", tenantId);
+      }
+      toast({
+        title: next ? "Du bist online" : "Du bist offline",
+        description: next
+          ? "Mitarbeiter sehen: Antwort in der Regel innerhalb weniger Minuten."
+          : "Mitarbeiter sehen: Antwort innerhalb der nächsten Stunden.",
+      });
+    } catch (e: any) {
+      setLeaderOnline(previous);
+      toast({ title: "Status nicht gespeichert", description: e?.message ?? "Unbekannter Fehler", variant: "destructive" });
+    } finally {
+      setSavingPresence(false);
+    }
+  };
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); }
   };
@@ -580,7 +633,24 @@ function AdminChatPage() {
       {/* Conversation list */}
       <div className="w-80 border-r border-border bg-card flex flex-col shrink-0">
         <div className="p-3 border-b border-border space-y-2">
-          <h2 className="text-sm font-semibold">Chat</h2>
+          <div className="flex items-center justify-between gap-2">
+            <h2 className="text-sm font-semibold">Chat</h2>
+            <button
+              type="button"
+              onClick={() => void setLeaderPresence(!leaderOnline)}
+              disabled={savingPresence}
+              title="Sichtbarer Status für alle Mitarbeiter"
+              className={cn(
+                "flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-colors disabled:opacity-60",
+                leaderOnline
+                  ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-600"
+                  : "border-border bg-muted/50 text-muted-foreground",
+              )}
+            >
+              <span className={cn("h-2 w-2 rounded-full", leaderOnline ? "bg-emerald-500" : "bg-muted-foreground/50")} />
+              {leaderOnline ? "Online" : "Offline"}
+            </button>
+          </div>
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
             <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Suchen…" className="pl-9 h-9 text-sm" />
@@ -831,20 +901,16 @@ function AdminChatPage() {
                   <div key={msg.id} className={cn("flex items-end gap-2", isMine ? "justify-end" : "justify-start")}>
                     {!isMine && (
                       <div className={cn("h-7 w-7 rounded-full flex items-center justify-center shrink-0 mb-1",
-                        isAi ? "bg-accent/20" : "bg-primary/10"
+                        "bg-primary/10"
                       )}>
-                        {isAi ? <Bot className="h-3.5 w-3.5 text-accent-foreground" /> : (
-                          <span className="text-[10px] font-bold text-primary">{selectedInitials}</span>
-                        )}
+                        <span className="text-[10px] font-bold text-primary">{selectedInitials}</span>
                       </div>
                     )}
                     <div className={cn(
                       "max-w-[70%] rounded-2xl px-4 py-2.5 text-sm relative group",
                       isMine
                         ? "bg-primary text-primary-foreground rounded-br-md"
-                        : isAi
-                          ? "bg-accent/10 text-foreground rounded-bl-md border border-accent/20"
-                          : "bg-muted text-foreground rounded-bl-md"
+                        : "bg-muted text-foreground rounded-bl-md"
                     )}>
                       {editingId === msg.id ? (
                         <div className="space-y-2 min-w-[240px]">
@@ -876,7 +942,6 @@ function AdminChatPage() {
                           <p className={cn("text-[10px] mt-1", isMine ? "text-primary-foreground/60" : "text-muted-foreground")}>
                             {new Date(msg.created_at).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" })}
                             {(msg as any).edited_at && " · bearbeitet"}
-                            {isAi && " · 🤖 KI"}
                             {isMine && " · 👤 Admin"}
                           </p>
                           {isMine && !isAi && (

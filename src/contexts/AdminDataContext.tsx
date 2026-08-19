@@ -47,6 +47,8 @@ export interface SubmissionRow {
 export interface SubmissionAnswerRow { id: string; question_id: string; answer: string; }
 
 export interface BookingRow { id: string; user_id: string; time_slot_id: string | null; assignment_id: string | null; status: string; created_at: string; booking_date: string | null; booking_time: string | null; application_id?: string | null; app_id?: string | null; scheduled_at?: string | null; admin_override?: boolean | null; }
+/** Interview-Termine. Die DB-Automatik setzt hier 'no_show'/'completed'. */
+export interface InterviewAppointmentRow { id: string; application_id: string | null; starts_at: string | null; ends_at: string | null; status: string | null; }
 export interface TransactionRow { id: string; user_id: string; assignment_id: string; amount: number; status: string; created_at: string; }
 export interface ChatConversationRow { id: string; user_id: string; status: string; escalated_at: string | null; created_at: string; updated_at: string; }
 
@@ -58,6 +60,7 @@ interface AdminDataContextType {
   assignments: AssignmentRow[];
   
   allBookings: BookingRow[];
+  interviewAppointments: InterviewAppointmentRow[];
   allTransactions: TransactionRow[];
   chatConversations: ChatConversationRow[];
   adminUserIds: Set<string>;
@@ -100,6 +103,7 @@ export function AdminDataProvider({ children }: { children: ReactNode }) {
   const [assignments, setAssignments] = useState<AssignmentRow[]>([]);
   
   const [allBookings, setAllBookings] = useState<BookingRow[]>([]);
+  const [interviewAppointments, setInterviewAppointments] = useState<InterviewAppointmentRow[]>([]);
   const [allTransactions, setAllTransactions] = useState<TransactionRow[]>([]);
   const [chatConversations, setChatConversations] = useState<ChatConversationRow[]>([]);
   const [adminUserIds, setAdminUserIds] = useState<Set<string>>(new Set());
@@ -174,6 +178,19 @@ export function AdminDataProvider({ children }: { children: ReactNode }) {
         track("Buchungen",
           () => fetchAll<BookingRow>(() => supabase.from("bookings").select(BOOKING_OVERVIEW_COLUMNS).order("created_at", { ascending: false })),
           setAllBookings),
+        track("Interview-Termine",
+          async () => {
+            try {
+              return await fetchAll<InterviewAppointmentRow>(() =>
+                supabase.from("interview_appointments")
+                  .select("id, application_id, starts_at, ends_at, status")
+                  .order("starts_at", { ascending: false }));
+            } catch {
+              // Tabelle existiert auf älteren Systemen evtl. noch nicht.
+              return [] as InterviewAppointmentRow[];
+            }
+          },
+          setInterviewAppointments),
         track("Admin-Rollen",
           () => fetchAll<{ user_id: string; role: string }>(() => supabase.from("user_roles").select("user_id, role").eq("role", "admin")),
           (rows) => setAdminUserIds(new Set(rows.map((r) => r.user_id)))),
@@ -241,7 +258,7 @@ export function AdminDataProvider({ children }: { children: ReactNode }) {
 
   return (
     <AdminDataContext.Provider value={{
-      applications, profiles, kycList, templates, assignments, allBookings, allTransactions, chatConversations,
+      applications, profiles, kycList, templates, assignments, allBookings, interviewAppointments, allTransactions, chatConversations,
       adminUserIds, emailConfirmedUserIds, userEmails, loading, loadingApplications, loadingProfiles, loadData, setProfiles, setKycList, setAllTransactions, getProfileForUser,
     }}>
       {children}

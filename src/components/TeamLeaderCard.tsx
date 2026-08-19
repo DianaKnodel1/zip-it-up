@@ -7,7 +7,7 @@ import { useTeamLeader } from "@/hooks/use-team-leader";
 import { cn } from "@/lib/utils";
 
 export function TeamLeaderCard() {
-  const { leader, initials } = useTeamLeader();
+  const { leader, initials, statusText } = useTeamLeader();
   const navigate = useNavigate();
 
   return (
@@ -33,7 +33,7 @@ export function TeamLeaderCard() {
           </p>
           <p className="font-heading font-bold text-sm text-foreground truncate">{leader.name}</p>
           <p className="text-xs text-muted-foreground">
-            {leader.is_online ? "● Online — antwortet meist in wenigen Minuten" : leader.response_time}
+            {leader.is_online ? "● " : "○ "}{statusText}
           </p>
         </div>
         <Button

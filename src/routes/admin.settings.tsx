@@ -175,6 +175,7 @@ const SECTIONS: { value: string; hint: string; tiles: TileDef[] }[] = [
     hint: "Eigenes Konto, Team und Protokoll.",
     tiles: [
       { to: "/admin/team-leader-settings", title: "Teamleiter", desc: "Profil, Avatar, Online-Status", icon: UsersIcon },
+      { to: "/admin/chat-faq", title: "Chat-Wissensbasis", desc: "Antworten, die der Chat-Vorschlag nutzen darf", icon: FileText },
       { to: "/admin/activity", title: "Protokoll", desc: "Aktivitäts-Log aller Admin-Aktionen", icon: History },
     ],
   },
