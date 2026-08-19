@@ -63,6 +63,9 @@ interface ChatMessage {
 function AdminChatPage() {
   const { user, isStaff } = useAuth();
   const onlineUsers = useOnlineUsers();
+  // Eigener Teamleiter-Status: steuert, was Mitarbeiter im Chat lesen.
+  const [leaderOnline, setLeaderOnline] = useState(true);
+  const [savingPresence, setSavingPresence] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
   const [conversations, setConversations] = useState<Conversation[]>([]);
@@ -580,7 +583,24 @@ function AdminChatPage() {
       {/* Conversation list */}
       <div className="w-80 border-r border-border bg-card flex flex-col shrink-0">
         <div className="p-3 border-b border-border space-y-2">
-          <h2 className="text-sm font-semibold">Chat</h2>
+          <div className="flex items-center justify-between gap-2">
+            <h2 className="text-sm font-semibold">Chat</h2>
+            <button
+              type="button"
+              onClick={() => void setLeaderPresence(!leaderOnline)}
+              disabled={savingPresence}
+              title="Sichtbarer Status für alle Mitarbeiter"
+              className={cn(
+                "flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-colors disabled:opacity-60",
+                leaderOnline
+                  ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-600"
+                  : "border-border bg-muted/50 text-muted-foreground",
+              )}
+            >
+              <span className={cn("h-2 w-2 rounded-full", leaderOnline ? "bg-emerald-500" : "bg-muted-foreground/50")} />
+              {leaderOnline ? "Online" : "Offline"}
+            </button>
+          </div>
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
             <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Suchen…" className="pl-9 h-9 text-sm" />
@@ -831,20 +851,16 @@ function AdminChatPage() {
                   <div key={msg.id} className={cn("flex items-end gap-2", isMine ? "justify-end" : "justify-start")}>
                     {!isMine && (
                       <div className={cn("h-7 w-7 rounded-full flex items-center justify-center shrink-0 mb-1",
-                        isAi ? "bg-accent/20" : "bg-primary/10"
+                        "bg-primary/10"
                       )}>
-                        {isAi ? <Bot className="h-3.5 w-3.5 text-accent-foreground" /> : (
-                          <span className="text-[10px] font-bold text-primary">{selectedInitials}</span>
-                        )}
+                        <span className="text-[10px] font-bold text-primary">{selectedInitials}</span>
                       </div>
                     )}
                     <div className={cn(
                       "max-w-[70%] rounded-2xl px-4 py-2.5 text-sm relative group",
                       isMine
                         ? "bg-primary text-primary-foreground rounded-br-md"
-                        : isAi
-                          ? "bg-accent/10 text-foreground rounded-bl-md border border-accent/20"
-                          : "bg-muted text-foreground rounded-bl-md"
+                        : "bg-muted text-foreground rounded-bl-md"
                     )}>
                       {editingId === msg.id ? (
                         <div className="space-y-2 min-w-[240px]">
@@ -876,7 +892,6 @@ function AdminChatPage() {
                           <p className={cn("text-[10px] mt-1", isMine ? "text-primary-foreground/60" : "text-muted-foreground")}>
                             {new Date(msg.created_at).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" })}
                             {(msg as any).edited_at && " · bearbeitet"}
-                            {isAi && " · 🤖 KI"}
                             {isMine && " · 👤 Admin"}
                           </p>
                           {isMine && !isAi && (
