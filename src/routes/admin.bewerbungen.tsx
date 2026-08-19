@@ -79,10 +79,18 @@ function computePhase(a: any, sched: Date | null, prof: ProfileInfo): Phase {
     if (prof.onboarding === "abgeschlossen") return "onboarding_komplett";
     return "registriert";
   }
-  if (a.phase === "abgelehnt") return "abgelehnt";
-  if (a.phase === "angenommen") return "angenommen";
-  if (a.phase === "no_show") return "no_show";
-  if (a.phase === "cancelled") return "abgesagt";
+  // Echte Spalten der Bewerbung auswerten (es gibt kein Feld "phase"):
+  // status = Entscheidung, booking_status = Termin-Zustand,
+  // interview_recommendation = Empfehlung der Auswertung.
+  const status = String(a.status ?? "");
+  const bookingStatus = String(a.booking_status ?? "");
+  const rec = String(a.interview_recommendation ?? "");
+
+  if (status === "abgelehnt" || rec === "reject") return "abgelehnt";
+  if (status === "akzeptiert" || status === "angenommen" || rec === "invite") return "angenommen";
+  if (bookingStatus === "no_show") return "no_show";
+  if (bookingStatus === "cancelled") return "abgesagt";
+  if (a.interview_completed_at || bookingStatus === "completed") return "auswertung_fehler";
 
   if (sched) {
     const now = Date.now();
