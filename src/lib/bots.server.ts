@@ -98,7 +98,7 @@ export async function createBotRun(db: any, createdBy: string, input: CreateRunI
       handoff_reason: "Der Bot startet die Antragsstrecke. Er stoppt automatisch, sobald die Vorgangsnummer angezeigt wird oder die Legitimation (VideoIdent/TAN) beginnt.",
       input_data: { ...base, ...(input.input_data ?? {}) },
       credentials: { password: generateBotPassword(), generated_at: new Date().toISOString() },
-      ...(await allocateProxy(db)),
+      ...allocated,
       created_by: createdBy,
     })
     .select("id").single();
