@@ -27,7 +27,9 @@ import {
   syncCloudflareZones,
 } from "@/lib/cloudflare.functions";
 import { listAutomationLog } from "@/lib/automation-log.functions";
-import { Loader2, Plus, Copy, RefreshCw, Trash2, CheckCircle2, AlertCircle, Power, KeyRound, Cloud, Server, Activity } from "lucide-react";
+import { getBackupStatus } from "@/lib/backup-status.functions";
+import { Loader2, Plus, Copy, RefreshCw, Trash2, CheckCircle2, AlertCircle, Power, KeyRound, Cloud, Server, Activity, Database } from "lucide-react";
+
 
 export const Route = createFileRoute("/admin/infrastructure")({
   component: InfrastructurePage,
