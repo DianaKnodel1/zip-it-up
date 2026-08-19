@@ -51,6 +51,7 @@ export function AssignTaskDialog({
     assignments.filter((a) => a.user_id === selectedUser).map((a) => a.task_template_id),
   );
   const activeTemplates = templates.filter((t) => t.is_active && !alreadyAssigned.has(t.id));
+  const isManualOnly = (t: { assignment_mode?: string | null }) => (t.assignment_mode ?? "auto") === "manuell";
   const employeeName = profiles.find((p) => p.user_id === selectedUser)?.full_name;
 
   const submit = async () => {
@@ -142,9 +143,16 @@ export function AssignTaskDialog({
               >
                 <option value="">Bitte wählen…</option>
                 {activeTemplates.map((t) => (
-                  <option key={t.id} value={t.id}>{t.title}</option>
+                  <option key={t.id} value={t.id}>
+                    {t.title}{isManualOnly(t) ? " — nur manuell" : ""}
+                  </option>
                 ))}
               </select>
+            )}
+            {!templateId && selectedTemplate && isManualOnly(templates.find((t) => t.id === selectedTemplate) ?? {}) && (
+              <p className="text-[11px] text-status-pending">
+                Diese Vorlage ist als „nur manuell" markiert — die Automatik weist sie nie zu.
+              </p>
             )}
             {!templateId && activeTemplates.length === 0 && selectedUser && (
               <p className="text-[11px] text-muted-foreground">
