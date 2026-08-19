@@ -452,7 +452,9 @@ async function renderHtml(row, host) {
   let html = applyPlaceholders(theme.html, row.branding, slots);
   html = html.replace(/<section[^>]*id=["'](?:impressum|datenschutz)["'][\s\S]*?<\/section>\s*/gi, "");
   html = cleanEmptyMeta(html, row.branding, host);
+  html = injectTrustFooter(html, row.branding || {});
   html = injectLandingConfig(html, row);
+
   // Alte gespeicherte Bildpfade aus der Entwicklungsumgebung auf die
   // Theme-Assets umbiegen (sonst 404 nach einem Theme-Wechsel).
   html = html.replace(/["'](?:\.)?\/?src\/assets\/landing-themes\/[A-Za-z0-9._-]+\.(jpg|jpeg|png|webp)["']/gi, '"/assets/hero.$1"');
