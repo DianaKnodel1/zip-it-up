@@ -384,7 +384,16 @@ function AdminAppointmentsPage() {
                     <td className="px-4 py-3">
                       {b.assignment ? (
                         <div className="flex items-center gap-2 flex-wrap">
-                          {b.template && <span className="text-xs text-foreground">{b.template.title}</span>}
+                          {b.template && (
+                            <button
+                              onClick={() => { setChangeBookingId(b.id); setChangeTemplateId(""); }}
+                              className="text-xs text-foreground hover:text-primary hover:underline"
+                              title="Anderen Auftrag zuweisen"
+                            >
+                              {b.template.title}
+                            </button>
+                          )}
+
                           <Badge
                             variant="secondary"
                             className={`text-[10px] border ${b.group === "automatisch"
