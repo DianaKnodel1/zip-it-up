@@ -189,6 +189,43 @@ function AdminBotsPage() {
         </div>
       </div>
 
+      {(() => {
+        const rows = runsQ.data?.rows ?? [];
+        const queued = rows.filter((r) => r.status === "queued");
+        if (queued.length === 0) return null;
+        const oldest = queued
+          .map((r) => new Date(r.created_at ?? r.started_at ?? Date.now()).getTime())
+          .sort((a, b) => a - b)[0];
+        const stale = Date.now() - oldest > 5 * 60 * 1000;
+        return (
+          <div className={`rounded-xl border p-4 flex gap-3 ${stale
+            ? "border-destructive/30 bg-destructive/5"
+            : "border-status-info/30 bg-status-info/5"}`}>
+            <Bot className={`h-4 w-4 shrink-0 mt-0.5 ${stale ? "text-destructive" : "text-status-info"}`} />
+            <div className="text-xs text-muted-foreground space-y-1">
+              <p className="font-medium text-foreground">
+                {queued.length} Lauf/Läufe stehen „In Warteschlange"
+              </p>
+              <p>
+                So läuft es ab: Du startest einen Bot → der Lauf wird in die Warteschlange gelegt →
+                ein separates Bot-Programm auf dem Server holt ihn ab, öffnet einen Browser und füllt
+                die Registrierung aus → bei VideoIdent/TAN stellt es den Lauf auf „Wartet auf Admin".
+              </p>
+              {stale && (
+                <p className="text-destructive">
+                  Der Lauf hängt seit über 5 Minuten in der Warteschlange. Das heißt fast immer: Das
+                  Bot-Programm auf dem Server läuft gerade nicht. Auf dem Server prüfen mit
+                  <code className="mx-1 px-1 rounded bg-muted">systemctl status bot-runner</code>
+                  und ggf. starten mit
+                  <code className="mx-1 px-1 rounded bg-muted">systemctl restart bot-runner</code>.
+                </p>
+              )}
+            </div>
+          </div>
+        );
+      })()}
+
+
       {waiting.length > 0 && (
         <div className="rounded-xl border border-status-warning/40 bg-card p-4">
           <div className="flex items-center gap-2 mb-3">
