@@ -45,6 +45,9 @@ export function AssignmentBotPanel({ assignmentId, caseNumber, status, webId, on
 
   useEffect(() => { void load(); }, [load]);
   useEffect(() => { setNr(caseNumber); }, [caseNumber]);
+  useEffect(() => {
+    if (run?.vorgangsnummer) setNr(String(run.vorgangsnummer));
+  }, [run?.vorgangsnummer]);
 
   // Solange der Lauf aktiv ist, Status regelmäßig nachladen.
   useEffect(() => {
@@ -104,6 +107,12 @@ export function AssignmentBotPanel({ assignmentId, caseNumber, status, webId, on
             </div>
             {run.handoff_reason && (
               <p className="text-xs text-muted-foreground">Übergabe: {run.handoff_reason}</p>
+            )}
+            {run.vorgangsnummer && (
+              <div className="flex items-center justify-between gap-3 text-xs">
+                <span className="text-muted-foreground">Erkannte Vorgangsnummer</span>
+                <span className="font-mono font-medium">{run.vorgangsnummer}</span>
+              </div>
             )}
             {run.handoff_url && (
               <a href={run.handoff_url} target="_blank" rel="noreferrer" className="text-xs text-primary underline">

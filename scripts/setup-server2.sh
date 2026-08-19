@@ -120,6 +120,10 @@ sleep 3
 systemctl status portal.service --no-pager | head -n 15
 ok "Portal läuft als systemd-Service auf Port 3000"
 
+# Der Playwright-Runner verarbeitet die Bot-Queue als eigener systemd-Dienst.
+PROJECT_DIR="$PROJECT_DIR" bash "$PROJECT_DIR/scripts/setup-bot-runner.sh"
+ok "Bot-Runner läuft als systemd-Service"
+
 # ── 6) nginx Reverse-Proxy ─────────────────────────────────────────────────
 log "6/6  nginx Reverse-Proxy konfigurieren (alte Config wird gesichert)"
 

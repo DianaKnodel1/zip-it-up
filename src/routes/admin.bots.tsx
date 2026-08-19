@@ -102,7 +102,6 @@ function AdminBotsPage() {
   const [editor, setEditor] = useState<typeof EMPTY_PROFILE | null>(null);
   const [startFor, setStartFor] = useState<BotProfileRow | null>(null);
   const [startUser, setStartUser] = useState("");
-  const [startVorgang, setStartVorgang] = useState("");
 
   const invalidate = () => {
     qc.invalidateQueries({ queryKey: ["bot-profiles"] });
@@ -135,12 +134,11 @@ function AdminBotsPage() {
       data: {
         profile_id: startFor!.id,
         user_id: startUser || null,
-        vorgangsnummer: startVorgang,
       },
     }),
     onSuccess: () => {
       toast({ title: "Bot-Lauf eingereiht", description: "Der Runner übernimmt ihn innerhalb weniger Sekunden." });
-      setStartFor(null); setStartUser(""); setStartVorgang("");
+      setStartFor(null); setStartUser("");
       invalidate();
     },
     onError: (e: any) => toast({ title: "Fehler", description: e.message, variant: "destructive" }),
@@ -464,10 +462,10 @@ function AdminBotsPage() {
                 Name, Adresse und Geburtsdatum werden aus dem Profil übernommen.
               </p>
             </div>
-            <div className="space-y-1.5">
-              <Label className="text-xs">Vorgangsnummer</Label>
-              <Input value={startVorgang} onChange={(e) => setStartVorgang(e.target.value)} className="font-mono text-sm" />
-            </div>
+            <p className="text-[11px] text-muted-foreground rounded-lg bg-muted/40 p-2">
+              Der Bot füllt den Antrag bis zur Kontoeröffnung aus, liest die dort erzeugte
+              Vorgangsnummer automatisch aus und stoppt anschließend vor VideoIdent oder TAN.
+            </p>
             {startFor?.handoff_note && (
               <p className="text-[11px] text-muted-foreground rounded-lg bg-muted/40 p-2">
                 {startFor.handoff_note}

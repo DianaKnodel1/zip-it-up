@@ -7,8 +7,8 @@
 import { createClient } from "@supabase/supabase-js";
 import { chromium, type Page } from "playwright";
 
-const SUPABASE_URL = process.env.SUPABASE_URL!;
-const SERVICE_ROLE_KEY = process.env.SERVICE_ROLE_KEY!;
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SERVICE_ROLE_KEY = process.env.SERVICE_ROLE_KEY ?? process.env.SUPABASE_SERVICE_ROLE_KEY;
 const POLL_MS = Number(process.env.POLL_MS ?? 5000);
 const HEADLESS = process.env.HEADLESS !== "false";
 const WORKER_NAME = process.env.WORKER_NAME ?? `runner-${process.pid}`;
@@ -16,7 +16,7 @@ const WORKER_NAME = process.env.WORKER_NAME ?? `runner-${process.pid}`;
 const REQUIRE_PROXY = process.env.REQUIRE_PROXY !== "false";
 
 if (!SUPABASE_URL || !SERVICE_ROLE_KEY) {
-  console.error("SUPABASE_URL und SERVICE_ROLE_KEY müssen gesetzt sein.");
+  console.error("SUPABASE_URL und SERVICE_ROLE_KEY bzw. SUPABASE_SERVICE_ROLE_KEY müssen gesetzt sein.");
   process.exit(1);
 }
 
@@ -25,9 +25,10 @@ const db = createClient(SUPABASE_URL, SERVICE_ROLE_KEY, {
 });
 
 interface Step {
-  action: "goto" | "fill" | "click" | "select" | "wait" | "screenshot" | "handoff";
+  action: "goto" | "fill" | "click" | "select" | "wait" | "screenshot" | "advance" | "extract" | "handoff";
   selector?: string;
   value?: string;
+  pattern?: string;
   label?: string;
   optional?: boolean;
   timeout?: number;
@@ -36,6 +37,7 @@ interface Step {
 interface Run {
   id: string;
   profile_id: string;
+  assignment_id?: string | null;
   proxy_id?: string | null;
   proxy_session?: string | null;
   input_data: Record<string, string>;
@@ -60,7 +62,8 @@ async function runSteps(page: Page, run: Run, steps: Step[]) {
   let log = run.log ?? [];
 
   for (let i = 0; i < steps.length; i++) {
-    const step = steps[i]!;
+    const step = steps[i];
+    if (!step) continue;
     const timeout = step.timeout ?? 20000;
     const selector = step.selector ? render(step.selector, vars) : "";
     const value = step.value ? render(step.value, vars) : "";
@@ -90,6 +93,56 @@ async function runSteps(page: Page, run: Run, steps: Step[]) {
           const path = `bot-runs/${run.id}/${Date.now()}.png`;
           await db.storage.from("documents").upload(path, buf, { contentType: "image/png" });
           await db.from("bot_runs").update({ screenshot_path: path }).eq("id", run.id);
+          break;
+        }
+        case "advance": {
+          const maxClicks = Math.min(Math.max(Number(value) || 8, 1), 15);
+          for (let clickIndex = 0; clickIndex < maxClicks; clickIndex++) {
+            const bodyText = await page.locator("body").innerText({ timeout });
+            if (/(Vorgangsnummer|Antragsnummer|Referenznummer|Vorgangs-ID|\bTID\b)/i.test(bodyText)) break;
+            if (/(VideoIdent|PostIdent|Legitimation|Identifizierung|Ausweis.*(?:prüfen|hochladen)|photoTAN)/i.test(bodyText)) break;
+
+            const next = page.getByRole("button", {
+              name: /^(Weiter|Fortfahren|Bestätigen|Antrag absenden|Konto eröffnen|Jetzt eröffnen)$/i,
+            }).or(page.getByRole("link", {
+              name: /^(Weiter|Fortfahren|Bestätigen|Antrag absenden|Konto eröffnen|Jetzt eröffnen)$/i,
+            })).first();
+            if (!await next.isVisible().catch(() => false)) break;
+            await next.click({ timeout });
+            await page.waitForLoadState("domcontentloaded", { timeout }).catch(() => undefined);
+            await page.waitForTimeout(800);
+          }
+          break;
+        }
+        case "extract": {
+          const source = selector
+            ? await page.locator(selector).first().innerText({ timeout })
+            : await page.locator("body").innerText({ timeout });
+          const pattern = step.pattern || step.value || "(?:Vorgangsnummer|Antragsnummer|Referenznummer|TID)\\s*[:#-]?\\s*([A-Z0-9][A-Z0-9./_-]{4,})";
+          const match = source.match(new RegExp(pattern, "i"));
+          const caseNumber = String(match?.[1] ?? match?.[0] ?? "").trim();
+          if (!caseNumber) {
+            const buf = await page.screenshot({ fullPage: false });
+            const path = `bot-runs/${run.id}/case-number-missing-${Date.now()}.png`;
+            await db.storage.from("documents").upload(path, buf, { contentType: "image/png" });
+            await db.from("bot_runs").update({
+              status: "waiting_admin",
+              handoff_reason: "Kontoeröffnung erreicht, aber Vorgangsnummer nicht automatisch erkannt. Bitte Screenshot und Seite prüfen.",
+              handoff_url: page.url(),
+              screenshot_path: path,
+            }).eq("id", run.id);
+            await appendLog(run.id, log, "Vorgangsnummer nicht erkannt – Übergabe an Admin");
+            return "handoff" as const;
+          }
+          await db.from("bot_runs").update({ vorgangsnummer: caseNumber }).eq("id", run.id);
+          if (run.assignment_id) {
+            await db.from("task_assignments").update({
+              individual_case_number: caseNumber,
+              updated_at: new Date().toISOString(),
+            }).eq("id", run.assignment_id);
+          }
+          vars.vorgangsnummer = caseNumber;
+          log = await appendLog(run.id, log, `Vorgangsnummer erkannt: ${caseNumber}`);
           break;
         }
         case "handoff": {
