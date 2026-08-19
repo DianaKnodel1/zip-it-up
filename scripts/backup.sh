@@ -12,6 +12,8 @@
 # =============================================================================
 set -euo pipefail
 
+START_MS=$(date +%s%3N)
+
 cd "$(cd "$(dirname "$0")/.." && pwd)"
 
 # ── Konfiguration ───────────────────────────────────────────────────────────
@@ -39,17 +41,49 @@ STAMP="$(date +%Y%m%d-%H%M%S)"
 TMP_BASE="${TMPDIR:-/tmp}/portal-backup-${STAMP}"
 mkdir -p "$TMP_BASE"
 REPORT_FILE="${TMP_BASE}/report.json"
+BACKUP_STATUS="success"
+BACKUP_MESSAGE="OK"
 
 log()  { printf "\n\033[1;36m▸ %s\033[0m\n" "$*"; }
 ok()   { printf "\033[1;32m  ✓ %s\033[0m\n" "$*"; }
 warn() { printf "\033[1;33m  ! %s\033[0m\n" "$*"; }
 info() { printf "  · %s\n" "$*"; }
 
+# ── Fehlerbehandlung: Status bei Abbruch setzen ───────────────────────────
+trap 'BACKUP_STATUS="error"; BACKUP_MESSAGE="Backup abgebrochen / Fehler"; write_status' ERR EXIT
+
+write_status() {
+  END_MS=$(date +%s%3N)
+  DURATION=$((END_MS - START_MS))
+  # In Datenbank protokollieren, falls verfügbar
+  if docker ps --format '{{.Names}}' | grep -qx "${DB_CONTAINER}"; then
+    # shellcheck disable=SC2089
+    SQL="INSERT INTO public.backup_status (host, archive, size, mode, status, backup_host, duration_ms) VALUES
+      ('$(hostname)', '${ARCHIVE_NAME:-unbekannt}', '${SIZE:-0}', '${BACKUP_MODE}', '${BACKUP_STATUS}', '${BACKUP_HOST}', ${DURATION});"
+    docker exec "${DB_CONTAINER}" psql -U postgres -d postgres -c "$SQL" >/dev/null 2>&1 || warn "Datenbank-Status nicht schreibbar"
+  fi
+  # Update local report
+  if [ -f "$REPORT_FILE" ]; then
+    python3 - <<PY 2>/dev/null || true
+import json, os, sys
+path = os.environ.get('REPORT_FILE','')
+if path and os.path.exists(path):
+    with open(path) as f: d = json.load(f)
+    d['status'] = '${BACKUP_STATUS}'
+    d['message'] = '${BACKUP_MESSAGE}'
+    d['duration_ms'] = ${DURATION}
+    with open(path, 'w') as f: json.dump(d, f)
+PY
+  fi
+}
+
 # ── 1/5  Backup-Server vorbereiten ───────────────────────────────────────────
 log "1/5  Backup-Server ${BACKUP_HOST} vorbereiten"
 if ! $SSH "mkdir -p ${BACKUP_DIR}/daily ${BACKUP_DIR}/monthly ${BACKUP_DIR}/logs"; then
   echo "✗ SSH auf ${BACKUP_USER}@${BACKUP_HOST} nicht möglich." >&2
   echo "   → einmalig: ssh-copy-id ${BACKUP_USER}@${BACKUP_HOST}" >&2
+  BACKUP_STATUS="error"
+  BACKUP_MESSAGE="SSH-Verbindung zum Backup-Server fehlgeschlagen"
   exit 1
 fi
 ok "Backup-Server erreichbar"
@@ -83,7 +117,6 @@ mkdir -p "${TMP_BASE}/config"
 if [ -d "${SUPABASE_DIR}" ]; then
   info "Sichere ${SUPABASE_DIR}"
   mkdir -p "${TMP_BASE}/supabase"
-  # Wichtige Teile, nicht den ganzen Docker-Container-Layer-Cache
   for sub in volumes .env docker docker-compose.yml docker-compose.yaml; do
     [ -e "${SUPABASE_DIR}/${sub}" ] && cp -a "${SUPABASE_DIR}/${sub}" "${TMP_BASE}/supabase/${sub}" 2>/dev/null || true
   done
@@ -92,19 +125,16 @@ else
   warn "${SUPABASE_DIR} nicht gefunden — übersprungen"
 fi
 
-# Landing-Server Code und Assets (falls auf anderem Server, läuft dort eigenes Backup)
 if [ -d /opt/apps/landing ]; then
   info "Sichere Landing-Server /opt/apps/landing"
   cp -a /opt/apps/landing "${TMP_BASE}/landing" || warn "Landing-Server kopieren fehlgeschlagen"
 fi
 
-# Bot-Runner (ist im Repo enthalten, aber lokale .env/state nützlich)
 if [ -d /opt/apps/portal/bot-runner ]; then
   info "Sichere Bot-Runner Config"
   cp -a /opt/apps/portal/bot-runner "${TMP_BASE}/bot-runner" || warn "Bot-Runner kopieren fehlgeschlagen"
 fi
 
-# WebID-Sim
 if [ -d /opt/apps/webid-sim ]; then
   info "Sichere WebID-Sim Config"
   cp -a /opt/apps/webid-sim "${TMP_BASE}/webid-sim" || warn "WebID-Sim kopieren fehlgeschlagen"
@@ -115,72 +145,76 @@ log "4/5  Archiv bauen und Checksumme"
 ARCHIVE_NAME="${BACKUP_PREFIX}-${STAMP}-${BACKUP_MODE}.tar.gz"
 ARCHIVE_PATH="${TMP_BASE}/${ARCHIVE_NAME}"
 
-# tar excludes: Docker-Layer, node_modules, Logs, Cache
 find "${TMP_BASE}" -maxdepth 1 -mindepth 1 -not -name "${ARCHIVE_NAME}" \
   | tar -czf "${ARCHIVE_PATH}" -C "${TMP_BASE}" -T - \
     --exclude='node_modules' --exclude='.next' --exclude='.output' \
     --exclude='*.log' --exclude='logs' --exclude='.cache' --exclude='tmp' \
     2>/dev/null || true
 
-# Falls leer (z. B. nur Config ohne DB): leeres tar erlaubt, aber warnen
 if [ ! -f "${ARCHIVE_PATH}" ] || [ "$(stat -c%s "${ARCHIVE_PATH}" 2>/dev/null || echo 0)" -lt 100 ]; then
   warn "Archiv ist sehr klein oder leer — Konfiguration fehlerhaft?"
 fi
 
-# Checksumme
 sha256sum "${ARCHIVE_PATH}" > "${ARCHIVE_PATH}.sha256"
-ok "Archiv: $(du -h "${ARCHIVE_PATH}" | cut -f1)"
+SIZE=$(du -h "${ARCHIVE_PATH}" | cut -f1)
+ok "Archiv: ${SIZE}"
 
-# Verschlüsselung (optional, empfohlen)
 if [ -n "${AGE_PUBLIC_KEY:-}" ] && command -v age >/dev/null; then
   info "Verschlüssele Archiv mit age"
   age -r "${AGE_PUBLIC_KEY}" -o "${ARCHIVE_PATH}.age" "${ARCHIVE_PATH}"
   rm -f "${ARCHIVE_PATH}"
   ARCHIVE_PATH="${ARCHIVE_PATH}.age"
+  ARCHIVE_NAME="${ARCHIVE_NAME}.age"
   sha256sum "${ARCHIVE_PATH}" > "${ARCHIVE_PATH}.sha256"
-  ok "Verschlüsselt: $(du -h "${ARCHIVE_PATH}" | cut -f1)"
+  SIZE=$(du -h "${ARCHIVE_PATH}" | cut -f1)
+  ok "Verschlüsselt: ${SIZE}"
 fi
 
 # ── 5/5  Auf Backup-Server übertragen ──────────────────────────────────────
 log "5/5  Auf Backup-Server übertragen und aufräumen"
-$RSYNC "${ARCHIVE_PATH}" "${ARCHIVE_PATH}.sha256" \
-  "${BACKUP_USER}@${BACKUP_HOST}:${BACKUP_DIR}/daily/"
+if $RSYNC "${ARCHIVE_PATH}" "${ARCHIVE_PATH}.sha256" \
+  "${BACKUP_USER}@${BACKUP_HOST}:${BACKUP_DIR}/daily/"; then
+  ok "Übertragung abgeschlossen"
+else
+  BACKUP_STATUS="error"
+  BACKUP_MESSAGE="rsync auf Backup-Server fehlgeschlagen"
+  exit 1
+fi
 
-# Aufbewahrung auf dem Backup-Server: täglich 14 Tage, monatlich 3 Monate
+# Aufbewahrung auf dem Backup-Server
 $SSH "bash -s" <<EOF
 set -euo pipefail
 D="${BACKUP_DIR}/daily"
 M="${BACKUP_DIR}/monthly"
-# Tages-Backups löschen, die älter als ${BACKUP_RETENTION_DAYS} Tage sind
 find "\$D" -type f -name '${BACKUP_PREFIX}-*' -mtime +${BACKUP_RETENTION_DAYS} -delete 2>/dev/null || true
-# Monats-Backup am ersten Tag des Monats behalten
 if [ "$(date +%d)" = "01" ]; then
   latest=\$(ls -1t "\$D" | head -n1)
   [ -n "\$latest" ] && cp -a "\$D/\$latest" "\$M/" 2>/dev/null || true
 fi
-# Monats-Backups älter als 90 Tage löschen
 find "\$M" -type f -mtime +90 -delete 2>/dev/null || true
 EOF
 
-# Report schreiben (lokal + remote)
-SIZE=$(du -h "${ARCHIVE_PATH}" | cut -f1)
+# Report schreiben
 END=$(date -Iseconds)
 cat > "${REPORT_FILE}" <<EOF
 {
   "host": "$(hostname)",
   "timestamp": "${END}",
   "mode": "${BACKUP_MODE}",
-  "archive": "${ARCHIVE_NAME}${AGE_PUBLIC_KEY:+.age}",
+  "archive": "${ARCHIVE_NAME}",
   "size": "${SIZE}",
   "retention_days": ${BACKUP_RETENTION_DAYS},
-  "backup_host": "${BACKUP_HOST}"
+  "backup_host": "${BACKUP_HOST}",
+  "status": "${BACKUP_STATUS}",
+  "message": "${BACKUP_MESSAGE}"
 }
 EOF
 
 $RSYNC "${REPORT_FILE}" "${BACKUP_USER}@${BACKUP_HOST}:${BACKUP_DIR}/logs/report-${STAMP}.json"
 
-# Lokale Temp-Dateien aufräumen
 rm -rf "${TMP_BASE}"
 
-ok "Backup abgeschlossen: ${BACKUP_DIR}/daily/${ARCHIVE_NAME}${AGE_PUBLIC_KEY:+.age}"
+BACKUP_STATUS="success"
+BACKUP_MESSAGE="OK"
+ok "Backup abgeschlossen: ${BACKUP_DIR}/daily/${ARCHIVE_NAME}"
 info "Letzter Status: ${BACKUP_DIR}/logs/report-${STAMP}.json"
