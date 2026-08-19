@@ -1017,6 +1017,30 @@ function AdminChatPage() {
                   </button>
                 </div>
               )}
+              {(suggestionActive || generatingAi) && (
+                <div className="flex items-center gap-2 text-xs rounded-lg border border-blue-200 bg-blue-50/60 px-3 py-2 text-blue-700">
+                  <Sparkles className="h-3.5 w-3.5 shrink-0" />
+                  <span className="flex-1">
+                    {generatingAi ? "Vorschlag wird erstellt …" : "Vorschlag — bitte prüfen, ändern oder senden."}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => void generateSuggestion()}
+                    disabled={generatingAi}
+                    className="font-medium underline hover:no-underline disabled:opacity-50"
+                  >
+                    Neu
+                  </button>
+                  <button
+                    type="button"
+                    onClick={discardSuggestion}
+                    disabled={generatingAi}
+                    className="font-medium underline hover:no-underline disabled:opacity-50"
+                  >
+                    Verwerfen
+                  </button>
+                </div>
+              )}
               <div className="flex items-end gap-2">
                 <ChatAttachmentButton
                   userId={user!.id}
@@ -1026,7 +1050,7 @@ function AdminChatPage() {
                 <EmojiPicker onSelect={(e) => setNewMessage((m) => m + e)} />
                 <Textarea
                   value={newMessage}
-                  onChange={(e) => { setNewMessage(e.target.value); broadcastTyping(); }}
+                  onChange={(e) => { setNewMessage(e.target.value); setSuggestionActive(false); broadcastTyping(); }}
                   onKeyDown={handleKeyDown}
                   placeholder="Nachricht schreiben… (KI Stil-Support)"
                   rows={3}
@@ -1036,7 +1060,8 @@ function AdminChatPage() {
                   <Button
                     size="icon"
                     variant="outline"
-                    onClick={generateSuggestion}
+                    onClick={() => void generateSuggestion()}
+
                     disabled={generatingAi || !selectedUserId}
                     title="KI-Antwort in deinem Stil generieren"
                     className={cn(
