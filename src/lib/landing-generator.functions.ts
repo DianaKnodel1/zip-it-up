@@ -164,10 +164,15 @@ function applyPlaceholders(
     footer_email: (b.email as string) || "",
     footer_phone: (b.telefon as string) || "",
     sitz_stadt: (b.stadt as string) || "",
+    // Markenname in der Kopfzeile: kommt automatisch aus den Firmendaten,
+    // solange im Theme kein eigener Wert gepflegt wurde.
+    brand_name: (b.firmenname as string) || "",
+    logo_text: (b.firmenname as string) || "",
     legal_block: legalBlock,
     legal_inline: legalInlineParts,
     contact_block: contactBlock,
   };
+
   // Muster-/Demo-Werte aus Theme-Defaults verwerfen, damit keine Fantasie-Adressen
   // auf einer echten Landing landen — die echten Firmendaten greifen dann.
   const cleanSlots: Record<string, string> = {};
@@ -176,6 +181,13 @@ function applyPlaceholders(
     cleanSlots[key] = value;
   }
   const merged: Record<string, unknown> = { ...aliases, ...b, ...cleanSlots };
+  // Der Markenname in Kopf-/Fußzeile ist immer der echte Firmenname — sonst
+  // bleibt der Theme-Standard ("VERMITTLUNG", "BERATUNG", …) stehen.
+  if (b.firmenname) {
+    merged.brand_name = b.firmenname;
+    merged.logo_text = b.firmenname;
+  }
+
 
   let out = src;
   // Mehrere Passes: Slot-Werte können selbst {{branding}}-Tokens enthalten.

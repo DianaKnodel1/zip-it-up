@@ -90,10 +90,11 @@ export const getAiSuggestion = createServerFn({ method: "POST" })
         .select("question, answer")
         .eq("is_active", true)
         .order("sort_order", { ascending: true })
-        .limit(40);
+        .limit(15);
       faqBlock = ((faq ?? []) as any[])
-        .map((f) => `F: ${String(f.question).slice(0, 300)}\nA: ${String(f.answer).slice(0, 800)}`)
+        .map((f) => `F: ${String(f.question).slice(0, 200)}\nA: ${String(f.answer).slice(0, 500)}`)
         .join("\n---\n");
+
     } catch {
       faqBlock = "";
     }

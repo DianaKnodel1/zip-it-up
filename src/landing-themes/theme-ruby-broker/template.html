@@ -1,48 +1,161 @@
 <!doctype html>
 <html lang="de">
 <head>
-<meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>{{seo_title}}</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet" />
+<meta name="description" content="{{seo_description}}" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="style.css" />
 </head>
 <body class="theme-ruby">
-<header class="ruby-header"><div class="ruby-container">
-  <div class="ruby-logo">{{brand_name}}</div>
-  <a href="#bewerbung-form" class="ruby-cta-btn">{{hero_cta}}</a>
-</div></header>
+<header class="ruby-nav">
+  <div class="ruby-container ruby-nav-inner">
+    <a href="#top" class="ruby-brand">{{brand_name}}</a>
+    <nav class="ruby-menu">
+      <a href="#prozess">Ablauf</a>
+      <a href="#bewerber">Für Bewerber</a>
+      <a href="#unternehmen">Für Unternehmen</a>
+      <a href="#stimmen">Stimmen</a>
+      <a href="#faq">FAQ</a>
+      <a href="#kontakt">Kontakt</a>
+    </nav>
+    <a href="#bewerbung-form" class="ruby-nav-cta">{{hero_cta}}</a>
+  </div>
+</header>
 
-<section class="ruby-hero">
+<main id="top">
+  <section class="ruby-hero">
+    <div class="ruby-container ruby-hero-grid">
+      <div class="ruby-hero-content">
+        <span class="ruby-eyebrow">{{hero_badge}}</span>
+        <h1>{{hero_title}}</h1>
+        <p>{{hero_sub}}</p>
+        <div class="ruby-hero-actions">
+          <a href="#bewerbung-form" class="ruby-btn">{{hero_cta}}</a>
+          <a href="#prozess" class="ruby-btn-ghost">{{hero_cta_sec}}</a>
+        </div>
+        <div class="ruby-hero-facts">
+          <div><strong>{{fact1_v}}</strong><span>{{fact1_l}}</span></div>
+          <div><strong>{{fact2_v}}</strong><span>{{fact2_l}}</span></div>
+          <div><strong>{{fact3_v}}</strong><span>{{fact3_l}}</span></div>
+        </div>
+      </div>
+      <div class="ruby-hero-media">
+        <img src="{{hero_image}}" alt="Beratungsgespräch" loading="lazy" />
+      </div>
+    </div>
+  </section>
+
+  <section class="ruby-trust">
+    <div class="ruby-container">
+      <p class="ruby-trust-title">{{trust_title}}</p>
+      <div class="ruby-trust-grid">
+        <div class="ruby-trust-item"><span>✓</span> {{t1_t}}</div>
+        <div class="ruby-trust-item"><span>✓</span> {{t2_t}}</div>
+        <div class="ruby-trust-item"><span>✓</span> {{t3_t}}</div>
+        <div class="ruby-trust-item"><span>✓</span> {{t4_t}}</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="prozess" class="ruby-process">
+    <div class="ruby-container">
+      <h2 class="ruby-h2">{{process_title}}</h2>
+      <p class="ruby-lead">{{process_sub}}</p>
+      <div class="ruby-steps">
+        <article class="ruby-step"><span class="ruby-step-nr">01</span><h3>{{s1_t}}</h3><p>{{s1_d}}</p></article>
+        <article class="ruby-step"><span class="ruby-step-nr">02</span><h3>{{s2_t}}</h3><p>{{s2_d}}</p></article>
+        <article class="ruby-step"><span class="ruby-step-nr">03</span><h3>{{s3_t}}</h3><p>{{s3_d}}</p></article>
+        <article class="ruby-step"><span class="ruby-step-nr">04</span><h3>{{s4_t}}</h3><p>{{s4_d}}</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section id="bewerber" class="ruby-split">
+    <div class="ruby-container ruby-split-grid">
+      <div>
+        <h2 class="ruby-h2">{{applicant_title}}</h2>
+        <p class="ruby-lead">{{applicant_text}}</p>
+        <ul class="ruby-list">
+          <li>Persönliche Ansprechpartner statt Warteschleife</li>
+          <li>Kostenfrei für Bewerberinnen und Bewerber</li>
+          <li>Klare Rückmeldung in jedem Schritt</li>
+          <li>Diskrete Behandlung Ihrer Unterlagen</li>
+        </ul>
+        <a href="#bewerbung-form" class="ruby-btn">{{hero_cta}}</a>
+      </div>
+      <div class="ruby-split-media"><img src="{{about_image}}" alt="Team im Gespräch" loading="lazy" /></div>
+    </div>
+  </section>
+
+  <section id="unternehmen" class="ruby-split ruby-split-alt">
+    <div class="ruby-container ruby-split-grid ruby-reverse">
+      <div>
+        <h2 class="ruby-h2">{{company_title}}</h2>
+        <p class="ruby-lead">{{company_text}}</p>
+        <ul class="ruby-list">
+          <li>Vorqualifizierte Profile statt Bewerbungsflut</li>
+          <li>Schnelle Besetzung offener Positionen</li>
+          <li>Begleitung bis zum Vertragsabschluss</li>
+        </ul>
+        <a href="#bewerbung-form" class="ruby-btn-outline">Kontakt aufnehmen</a>
+      </div>
+      <div class="ruby-split-media"><img src="{{company_image}}" alt="Partnerunternehmen" loading="lazy" /></div>
+    </div>
+  </section>
+
+  <section id="stimmen" class="ruby-quotes">
+    <div class="ruby-container">
+      <h2 class="ruby-h2">{{quotes_title}}</h2>
+      <div class="ruby-quote-grid">
+        <blockquote><p>{{q1_t}}</p><cite>{{q1_a}}</cite></blockquote>
+        <blockquote><p>{{q2_t}}</p><cite>{{q2_a}}</cite></blockquote>
+        <blockquote><p>{{q3_t}}</p><cite>{{q3_a}}</cite></blockquote>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" class="ruby-faq">
+    <div class="ruby-container">
+      <h2 class="ruby-h2">{{faq_title}}</h2>
+      <div class="ruby-acc">
+        <details open><summary>{{faq1_q}}</summary><p>{{faq1_a}}</p></details>
+        <details><summary>{{faq2_q}}</summary><p>{{faq2_a}}</p></details>
+        <details><summary>{{faq3_q}}</summary><p>{{faq3_a}}</p></details>
+        <details><summary>{{faq4_q}}</summary><p>{{faq4_a}}</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="ruby-cta">
+    <div class="ruby-container">
+      <h2>{{final_title}}</h2>
+      <p>{{final_sub}}</p>
+      <a href="#bewerbung-form" class="ruby-btn ruby-btn-lg">{{final_cta}}</a>
+    </div>
+  </section>
+</main>
+
+<footer id="kontakt" class="ruby-footer">
   <div class="ruby-container">
-    <h1>{{hero_title}}</h1>
-    <p>{{hero_sub}}</p>
-    <div class="ruby-hero-img"><img src="{{hero_image}}" /></div>
+    <div class="ruby-footer-grid">
+      <div>
+        <span class="ruby-brand">{{brand_name}}</span>
+        <div class="ruby-legal">{{legal_block}}</div>
+      </div>
+      <div class="ruby-footer-contact">{{contact_block}}</div>
+      <div class="ruby-footer-links">
+        <a href="{{impressum_url}}">Impressum</a>
+        <a href="{{datenschutz_url}}">Datenschutz</a>
+        <a href="#bewerbung-form">Bewerben</a>
+      </div>
+    </div>
+    <p class="ruby-copy">&copy; 2026 {{firmenname}}</p>
   </div>
-</section>
-
-<section class="ruby-trust"><div class="ruby-container">
-  <div class="ruby-trust-row">
-    <div><span>✓</span> {{t1_t}}</div>
-    <div><span>✓</span> {{t2_t}}</div>
-    <div><span>✓</span> {{t3_t}}</div>
-  </div>
-</div></section>
-
-<section id="prozess" class="ruby-steps"><div class="ruby-container">
-  <h2>{{process_title}}</h2>
-  <div class="ruby-step-grid">
-    <div class="ruby-step"><h3>{{s1_t}}</h3><p>{{s1_d}}</p></div>
-    <div class="ruby-step"><h3>{{s2_t}}</h3><p>{{s2_d}}</p></div>
-    <div class="ruby-step"><h3>{{s3_t}}</h3><p>{{s3_d}}</p></div>
-  </div>
-</div></section>
-
-<footer class="ruby-footer"><div class="ruby-container">
-  <div class="ruby-footer-top">
-    <div><h4>{{firmenname}}</h4><p>{{contact_address}}</p></div>
-    <div class="ruby-footer-legal">{{legal_block}}</div>
-  </div>
-</div></footer>
+</footer>
 <script src="script.js"></script>
 </body>
 </html>

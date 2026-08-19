@@ -1,49 +1,161 @@
 <!doctype html>
 <html lang="de">
 <head>
-<meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>{{seo_title}}</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet" />
+<meta name="description" content="{{seo_description}}" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;800&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="style.css" />
 </head>
 <body class="theme-sapphire">
-<div class="sap-sidebar">
-  <a href="#" class="sap-logo">{{brand_name}}</a>
-  <nav>
-    <a href="#prozess">Analyse</a>
-    <a href="#about">Prinzipien</a>
-    <a href="#kontakt">Kontakt</a>
-  </nav>
-  <div class="sap-sidebar-footer">{{firmenname}}</div>
-</div>
-<main class="sap-main">
-  <section class="sap-hero">
-    <div class="sap-content">
-      <h1>{{hero_title}}</h1>
-      <p>{{hero_sub}}</p>
-      <div class="sap-actions">
-        <a href="#bewerbung-form" class="sap-btn">{{hero_cta}}</a>
+<header class="sapphire-nav">
+  <div class="sapphire-container sapphire-nav-inner">
+    <a href="#top" class="sapphire-brand">{{brand_name}}</a>
+    <nav class="sapphire-menu">
+      <a href="#prozess">Ablauf</a>
+      <a href="#bewerber">Für Bewerber</a>
+      <a href="#unternehmen">Für Unternehmen</a>
+      <a href="#stimmen">Stimmen</a>
+      <a href="#faq">FAQ</a>
+      <a href="#kontakt">Kontakt</a>
+    </nav>
+    <a href="#bewerbung-form" class="sapphire-nav-cta">{{hero_cta}}</a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="sapphire-hero">
+    <div class="sapphire-container sapphire-hero-grid">
+      <div class="sapphire-hero-content">
+        <span class="sapphire-eyebrow">{{hero_badge}}</span>
+        <h1>{{hero_title}}</h1>
+        <p>{{hero_sub}}</p>
+        <div class="sapphire-hero-actions">
+          <a href="#bewerbung-form" class="sapphire-btn">{{hero_cta}}</a>
+          <a href="#prozess" class="sapphire-btn-ghost">{{hero_cta_sec}}</a>
+        </div>
+        <div class="sapphire-hero-facts">
+          <div><strong>{{fact1_v}}</strong><span>{{fact1_l}}</span></div>
+          <div><strong>{{fact2_v}}</strong><span>{{fact2_l}}</span></div>
+          <div><strong>{{fact3_v}}</strong><span>{{fact3_l}}</span></div>
+        </div>
+      </div>
+      <div class="sapphire-hero-media">
+        <img src="{{hero_image}}" alt="Beratungsgespräch" loading="lazy" />
       </div>
     </div>
   </section>
-  <section id="prozess" class="sap-steps">
-    <h2>{{process_title}}</h2>
-    <div class="sap-step-list">
-      <div class="sap-step"><h4>{{s1_t}}</h4><p>{{s1_d}}</p></div>
-      <div class="sap-step"><h4>{{s2_t}}</h4><p>{{s2_d}}</p></div>
-      <div class="sap-step"><h4>{{s3_t}}</h4><p>{{s3_d}}</p></div>
+
+  <section class="sapphire-trust">
+    <div class="sapphire-container">
+      <p class="sapphire-trust-title">{{trust_title}}</p>
+      <div class="sapphire-trust-grid">
+        <div class="sapphire-trust-item"><span>✓</span> {{t1_t}}</div>
+        <div class="sapphire-trust-item"><span>✓</span> {{t2_t}}</div>
+        <div class="sapphire-trust-item"><span>✓</span> {{t3_t}}</div>
+        <div class="sapphire-trust-item"><span>✓</span> {{t4_t}}</div>
+      </div>
     </div>
   </section>
-  <footer id="kontakt" class="sap-footer">
-    <div class="sap-footer-content">
-      <div class="sap-info">
-        <h3>{{firmenname}}</h3>
-        <p>{{contact_address}}</p>
+
+  <section id="prozess" class="sapphire-process">
+    <div class="sapphire-container">
+      <h2 class="sapphire-h2">{{process_title}}</h2>
+      <p class="sapphire-lead">{{process_sub}}</p>
+      <div class="sapphire-steps">
+        <article class="sapphire-step"><span class="sapphire-step-nr">01</span><h3>{{s1_t}}</h3><p>{{s1_d}}</p></article>
+        <article class="sapphire-step"><span class="sapphire-step-nr">02</span><h3>{{s2_t}}</h3><p>{{s2_d}}</p></article>
+        <article class="sapphire-step"><span class="sapphire-step-nr">03</span><h3>{{s3_t}}</h3><p>{{s3_d}}</p></article>
+        <article class="sapphire-step"><span class="sapphire-step-nr">04</span><h3>{{s4_t}}</h3><p>{{s4_d}}</p></article>
       </div>
-      <div class="sap-legal">{{legal_block}}</div>
     </div>
-  </footer>
+  </section>
+
+  <section id="bewerber" class="sapphire-split">
+    <div class="sapphire-container sapphire-split-grid">
+      <div>
+        <h2 class="sapphire-h2">{{applicant_title}}</h2>
+        <p class="sapphire-lead">{{applicant_text}}</p>
+        <ul class="sapphire-list">
+          <li>Persönliche Ansprechpartner statt Warteschleife</li>
+          <li>Kostenfrei für Bewerberinnen und Bewerber</li>
+          <li>Klare Rückmeldung in jedem Schritt</li>
+          <li>Diskrete Behandlung Ihrer Unterlagen</li>
+        </ul>
+        <a href="#bewerbung-form" class="sapphire-btn">{{hero_cta}}</a>
+      </div>
+      <div class="sapphire-split-media"><img src="{{about_image}}" alt="Team im Gespräch" loading="lazy" /></div>
+    </div>
+  </section>
+
+  <section id="unternehmen" class="sapphire-split sapphire-split-alt">
+    <div class="sapphire-container sapphire-split-grid sapphire-reverse">
+      <div>
+        <h2 class="sapphire-h2">{{company_title}}</h2>
+        <p class="sapphire-lead">{{company_text}}</p>
+        <ul class="sapphire-list">
+          <li>Vorqualifizierte Profile statt Bewerbungsflut</li>
+          <li>Schnelle Besetzung offener Positionen</li>
+          <li>Begleitung bis zum Vertragsabschluss</li>
+        </ul>
+        <a href="#bewerbung-form" class="sapphire-btn-outline">Kontakt aufnehmen</a>
+      </div>
+      <div class="sapphire-split-media"><img src="{{company_image}}" alt="Partnerunternehmen" loading="lazy" /></div>
+    </div>
+  </section>
+
+  <section id="stimmen" class="sapphire-quotes">
+    <div class="sapphire-container">
+      <h2 class="sapphire-h2">{{quotes_title}}</h2>
+      <div class="sapphire-quote-grid">
+        <blockquote><p>{{q1_t}}</p><cite>{{q1_a}}</cite></blockquote>
+        <blockquote><p>{{q2_t}}</p><cite>{{q2_a}}</cite></blockquote>
+        <blockquote><p>{{q3_t}}</p><cite>{{q3_a}}</cite></blockquote>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" class="sapphire-faq">
+    <div class="sapphire-container">
+      <h2 class="sapphire-h2">{{faq_title}}</h2>
+      <div class="sapphire-acc">
+        <details open><summary>{{faq1_q}}</summary><p>{{faq1_a}}</p></details>
+        <details><summary>{{faq2_q}}</summary><p>{{faq2_a}}</p></details>
+        <details><summary>{{faq3_q}}</summary><p>{{faq3_a}}</p></details>
+        <details><summary>{{faq4_q}}</summary><p>{{faq4_a}}</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="sapphire-cta">
+    <div class="sapphire-container">
+      <h2>{{final_title}}</h2>
+      <p>{{final_sub}}</p>
+      <a href="#bewerbung-form" class="sapphire-btn sapphire-btn-lg">{{final_cta}}</a>
+    </div>
+  </section>
 </main>
+
+<footer id="kontakt" class="sapphire-footer">
+  <div class="sapphire-container">
+    <div class="sapphire-footer-grid">
+      <div>
+        <span class="sapphire-brand">{{brand_name}}</span>
+        <div class="sapphire-legal">{{legal_block}}</div>
+      </div>
+      <div class="sapphire-footer-contact">{{contact_block}}</div>
+      <div class="sapphire-footer-links">
+        <a href="{{impressum_url}}">Impressum</a>
+        <a href="{{datenschutz_url}}">Datenschutz</a>
+        <a href="#bewerbung-form">Bewerben</a>
+      </div>
+    </div>
+    <p class="sapphire-copy">&copy; 2026 {{firmenname}}</p>
+  </div>
+</footer>
 <script src="script.js"></script>
 </body>
 </html>

@@ -1,56 +1,161 @@
 <!doctype html>
 <html lang="de">
 <head>
-<meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>{{seo_title}}</title><meta name="description" content="{{seo_description}}" />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>{{seo_title}}</title>
+<meta name="description" content="{{seo_description}}" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;800&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="style.css" />
 </head>
 <body class="theme-emerald">
-<header class="em-nav"><div class="em-container">
-    <a href="#" class="em-brand">{{brand_name}}</a>
-    <nav class="em-menu">
-      <a href="#prozess">Prozess</a>
-      <a href="#ueber-uns">Über uns</a>
+<header class="emerald-nav">
+  <div class="emerald-container emerald-nav-inner">
+    <a href="#top" class="emerald-brand">{{brand_name}}</a>
+    <nav class="emerald-menu">
+      <a href="#prozess">Ablauf</a>
+      <a href="#bewerber">Für Bewerber</a>
+      <a href="#unternehmen">Für Unternehmen</a>
+      <a href="#stimmen">Stimmen</a>
+      <a href="#faq">FAQ</a>
       <a href="#kontakt">Kontakt</a>
-      <a href="#bewerbung-form" class="em-nav-cta">{{hero_cta}}</a>
     </nav>
-</div></header>
+    <a href="#bewerbung-form" class="emerald-nav-cta">{{hero_cta}}</a>
+  </div>
+</header>
 
-<main>
-  <section class="em-hero"><div class="em-container em-grid">
-    <div class="em-hero-content">
-      <h1>{{hero_title}}</h1><p>{{hero_sub}}</p>
-      <div class="em-actions">
-        <a href="#bewerbung-form" class="em-btn-primary">{{hero_cta}}</a>
-        <a href="#prozess" class="em-btn-secondary">{{hero_cta_sec}}</a>
+<main id="top">
+  <section class="emerald-hero">
+    <div class="emerald-container emerald-hero-grid">
+      <div class="emerald-hero-content">
+        <span class="emerald-eyebrow">{{hero_badge}}</span>
+        <h1>{{hero_title}}</h1>
+        <p>{{hero_sub}}</p>
+        <div class="emerald-hero-actions">
+          <a href="#bewerbung-form" class="emerald-btn">{{hero_cta}}</a>
+          <a href="#prozess" class="emerald-btn-ghost">{{hero_cta_sec}}</a>
+        </div>
+        <div class="emerald-hero-facts">
+          <div><strong>{{fact1_v}}</strong><span>{{fact1_l}}</span></div>
+          <div><strong>{{fact2_v}}</strong><span>{{fact2_l}}</span></div>
+          <div><strong>{{fact3_v}}</strong><span>{{fact3_l}}</span></div>
+        </div>
+      </div>
+      <div class="emerald-hero-media">
+        <img src="{{hero_image}}" alt="Beratungsgespräch" loading="lazy" />
       </div>
     </div>
-    <div class="em-hero-media"><img src="{{hero_image}}" alt="Emerald Career" /></div>
-  </div></section>
+  </section>
 
-  <section class="em-trust"><div class="em-container">
-    <div class="em-trust-grid">
-      <div class="em-trust-item"><h3>{{t1_t}}</h3></div>
-      <div class="em-trust-item"><h3>{{t2_t}}</h3></div>
-      <div class="em-trust-item"><h3>{{t3_t}}</h3></div>
+  <section class="emerald-trust">
+    <div class="emerald-container">
+      <p class="emerald-trust-title">{{trust_title}}</p>
+      <div class="emerald-trust-grid">
+        <div class="emerald-trust-item"><span>✓</span> {{t1_t}}</div>
+        <div class="emerald-trust-item"><span>✓</span> {{t2_t}}</div>
+        <div class="emerald-trust-item"><span>✓</span> {{t3_t}}</div>
+        <div class="emerald-trust-item"><span>✓</span> {{t4_t}}</div>
+      </div>
     </div>
-  </div></section>
+  </section>
 
-  <section id="prozess" class="em-process"><div class="em-container">
-    <h2>{{process_title}}</h2>
-    <div class="em-steps">
-      <div class="em-step"><span>01</span><h3>{{s1_t}}</h3><p>{{s1_d}}</p></div>
-      <div class="em-step"><span>02</span><h3>{{s2_t}}</h3><p>{{s2_d}}</p></div>
-      <div class="em-step"><span>03</span><h3>{{s3_t}}</h3><p>{{s3_d}}</p></div>
+  <section id="prozess" class="emerald-process">
+    <div class="emerald-container">
+      <h2 class="emerald-h2">{{process_title}}</h2>
+      <p class="emerald-lead">{{process_sub}}</p>
+      <div class="emerald-steps">
+        <article class="emerald-step"><span class="emerald-step-nr">01</span><h3>{{s1_t}}</h3><p>{{s1_d}}</p></article>
+        <article class="emerald-step"><span class="emerald-step-nr">02</span><h3>{{s2_t}}</h3><p>{{s2_d}}</p></article>
+        <article class="emerald-step"><span class="emerald-step-nr">03</span><h3>{{s3_t}}</h3><p>{{s3_d}}</p></article>
+        <article class="emerald-step"><span class="emerald-step-nr">04</span><h3>{{s4_t}}</h3><p>{{s4_d}}</p></article>
+      </div>
     </div>
-  </div></section>
+  </section>
+
+  <section id="bewerber" class="emerald-split">
+    <div class="emerald-container emerald-split-grid">
+      <div>
+        <h2 class="emerald-h2">{{applicant_title}}</h2>
+        <p class="emerald-lead">{{applicant_text}}</p>
+        <ul class="emerald-list">
+          <li>Persönliche Ansprechpartner statt Warteschleife</li>
+          <li>Kostenfrei für Bewerberinnen und Bewerber</li>
+          <li>Klare Rückmeldung in jedem Schritt</li>
+          <li>Diskrete Behandlung Ihrer Unterlagen</li>
+        </ul>
+        <a href="#bewerbung-form" class="emerald-btn">{{hero_cta}}</a>
+      </div>
+      <div class="emerald-split-media"><img src="{{about_image}}" alt="Team im Gespräch" loading="lazy" /></div>
+    </div>
+  </section>
+
+  <section id="unternehmen" class="emerald-split emerald-split-alt">
+    <div class="emerald-container emerald-split-grid emerald-reverse">
+      <div>
+        <h2 class="emerald-h2">{{company_title}}</h2>
+        <p class="emerald-lead">{{company_text}}</p>
+        <ul class="emerald-list">
+          <li>Vorqualifizierte Profile statt Bewerbungsflut</li>
+          <li>Schnelle Besetzung offener Positionen</li>
+          <li>Begleitung bis zum Vertragsabschluss</li>
+        </ul>
+        <a href="#bewerbung-form" class="emerald-btn-outline">Kontakt aufnehmen</a>
+      </div>
+      <div class="emerald-split-media"><img src="{{company_image}}" alt="Partnerunternehmen" loading="lazy" /></div>
+    </div>
+  </section>
+
+  <section id="stimmen" class="emerald-quotes">
+    <div class="emerald-container">
+      <h2 class="emerald-h2">{{quotes_title}}</h2>
+      <div class="emerald-quote-grid">
+        <blockquote><p>{{q1_t}}</p><cite>{{q1_a}}</cite></blockquote>
+        <blockquote><p>{{q2_t}}</p><cite>{{q2_a}}</cite></blockquote>
+        <blockquote><p>{{q3_t}}</p><cite>{{q3_a}}</cite></blockquote>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" class="emerald-faq">
+    <div class="emerald-container">
+      <h2 class="emerald-h2">{{faq_title}}</h2>
+      <div class="emerald-acc">
+        <details open><summary>{{faq1_q}}</summary><p>{{faq1_a}}</p></details>
+        <details><summary>{{faq2_q}}</summary><p>{{faq2_a}}</p></details>
+        <details><summary>{{faq3_q}}</summary><p>{{faq3_a}}</p></details>
+        <details><summary>{{faq4_q}}</summary><p>{{faq4_a}}</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="emerald-cta">
+    <div class="emerald-container">
+      <h2>{{final_title}}</h2>
+      <p>{{final_sub}}</p>
+      <a href="#bewerbung-form" class="emerald-btn emerald-btn-lg">{{final_cta}}</a>
+    </div>
+  </section>
 </main>
 
-<footer id="kontakt" class="em-footer"><div class="em-container">
-  <h3>{{firmenname}}</h3><p>{{contact_address}}</p><p>{{contact_phone}}</p><p>{{contact_email}}</p>
-  <div class="em-legal">{{legal_block}}</div>
-</div></footer>
+<footer id="kontakt" class="emerald-footer">
+  <div class="emerald-container">
+    <div class="emerald-footer-grid">
+      <div>
+        <span class="emerald-brand">{{brand_name}}</span>
+        <div class="emerald-legal">{{legal_block}}</div>
+      </div>
+      <div class="emerald-footer-contact">{{contact_block}}</div>
+      <div class="emerald-footer-links">
+        <a href="{{impressum_url}}">Impressum</a>
+        <a href="{{datenschutz_url}}">Datenschutz</a>
+        <a href="#bewerbung-form">Bewerben</a>
+      </div>
+    </div>
+    <p class="emerald-copy">&copy; 2026 {{firmenname}}</p>
+  </div>
+</footer>
 <script src="script.js"></script>
 </body>
 </html>
