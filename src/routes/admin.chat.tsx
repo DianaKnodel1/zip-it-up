@@ -367,7 +367,7 @@ function AdminChatPage() {
     setMessages((prev) => prev.filter((m) => m.id !== msg.id));
   };
 
-  const generateSuggestion = async () => {
+  const generateSuggestion = async (opts?: { silent?: boolean }) => {
     if (!selectedUserId || generatingAi) return;
     setGeneratingAi(true);
     try {
@@ -375,7 +375,7 @@ function AdminChatPage() {
       const conv = conversations.find(c => c.user_id === selectedUserId);
       const teamLeaderName = user?.user_metadata?.full_name || conv?.tenantName || "Teamleiter";
 
-      const context = messages.slice(-10).map(m => ({
+      const context = messages.slice(-8).map(m => ({
         role: adminIdsRef.current.has(m.sender_id) ? "assistant" : "user" as "assistant" | "user",
         content: m.message
       }));
@@ -391,15 +391,39 @@ function AdminChatPage() {
       if (res.suggestion) {
         lastSuggestionRef.current = res.suggestion;
         setNewMessage(res.suggestion);
-      } else {
+        setSuggestionActive(true);
+      } else if (!opts?.silent) {
         toast({ title: "KI", description: (res as any).error ?? "Kein Vorschlag erhalten.", variant: "destructive" });
       }
     } catch (e: any) {
-      toast({ title: "KI Fehler", description: e.message || "Vorschlag konnte nicht generiert werden.", variant: "destructive" });
+      if (!opts?.silent) {
+        toast({ title: "KI Fehler", description: e.message || "Vorschlag konnte nicht generiert werden.", variant: "destructive" });
+      }
     } finally {
       setGeneratingAi(false);
     }
   };
+
+  const discardSuggestion = () => {
+    lastSuggestionRef.current = "";
+    setSuggestionActive(false);
+    setNewMessage("");
+  };
+
+  // Automatischer Vorschlag: sobald eine Unterhaltung geöffnet wird und die
+  // letzte Nachricht vom Mitarbeiter stammt, steht der Entwurf sofort bereit.
+  // Gesendet wird nichts – der Text muss immer freigegeben werden.
+  useEffect(() => {
+    if (!selectedUserId || generatingAi || sending) return;
+    if (newMessage.trim() || pendingAttachment) return;
+    const last = messages[messages.length - 1];
+    if (!last || last.sender_id !== selectedUserId) return;
+    if (autoSuggestedRef.current.get(selectedUserId) === last.id) return;
+    autoSuggestedRef.current.set(selectedUserId, last.id);
+    void generateSuggestion({ silent: true });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedUserId, messages]);
+
 
   const sendMessage = async () => {
     if ((!newMessage.trim() && !pendingAttachment) || !selectedUserId || !user) return;
