@@ -260,8 +260,10 @@ function AdminBewerbungenPage() {
         status: p.status ?? null,
         contractSigned: !!p.contract_signed_at,
       } : null;
-      const sched = bookingByApp.get(a.id) ?? (a.scheduled_at ? new Date(a.scheduled_at) : null);
-      const phase = computePhase(a, sched, prof);
+      const bk = bookingByApp.get(a.id) ?? null;
+      const sched = bk?.date ?? (a.scheduled_at ? new Date(a.scheduled_at) : null);
+      const phase = computePhase(a, sched, prof, bk?.status ?? null);
+
       return {
         id: a.id,
         name: a.full_name || `${a.first_name ?? ""} ${a.last_name ?? ""}`.trim() || email || "—",
