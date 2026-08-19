@@ -58,7 +58,7 @@ export default function FloatingChat() {
   const { user } = useAuth();
   const location = useLocation();
   const { toast } = useToast();
-  const { leader, teamLeaderId, initials: leaderInitials } = useTeamLeader();
+  const { leader, teamLeaderId, initials: leaderInitials, statusText } = useTeamLeader();
   const { tenant } = useTenant();
   
   const [open, setOpen] = useState(false);
@@ -200,7 +200,7 @@ export default function FloatingChat() {
                 <BadgeCheck className="h-4 w-4 text-primary shrink-0" />
               </div>
               <p className="text-[11px] text-muted-foreground">
-                {leader.is_online ? "Jetzt online" : "Zuletzt online gesehen"}
+                {statusText}
               </p>
             </div>
             <button onClick={() => setOpen(false)} className="h-8 w-8 rounded-full hover:bg-muted flex items-center justify-center transition-colors">
