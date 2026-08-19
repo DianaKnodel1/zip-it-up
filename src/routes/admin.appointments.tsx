@@ -61,6 +61,35 @@ function AdminAppointmentsPage() {
   const [individualAssignmentId, setIndividualAssignmentId] = useState<string | null>(null);
   const [individualUserId, setIndividualUserId] = useState<string | null>(null);
 
+  // Auftrag nachträglich ändern
+  const [changeBookingId, setChangeBookingId] = useState<string | null>(null);
+  const [changeTemplateId, setChangeTemplateId] = useState("");
+  const [changing, setChanging] = useState(false);
+
+  const STATUS_LABEL: Record<string, string> = {
+    zugewiesen: "zugewiesen",
+    in_bearbeitung: "in Bearbeitung",
+    eingereicht: "eingereicht",
+    abgeschlossen: "abgeschlossen",
+    erledigt: "erledigt",
+  };
+
+  /** Alle Vorlagen, die dieser Mitarbeiter bereits hat (inkl. Status). */
+  const assignedByUser = (userId: string | null | undefined) => {
+    const m = new Map<string, string>();
+    if (!userId) return m;
+    for (const a of assignments as any[]) {
+      if (a.user_id === userId) m.set(a.task_template_id, String(a.status ?? "zugewiesen"));
+    }
+    return m;
+  };
+
+  const duplicateMessage = (status?: string) =>
+    `Dieser Mitarbeiter hat den Auftrag bereits — Status: ${STATUS_LABEL[status ?? ""] ?? status ?? "zugewiesen"}.`;
+
+  const isDuplicateError = (err: any) =>
+    err?.code === "23505" || String(err?.message ?? "").includes("task_assignments_user_template_uniq");
+
   const updateBookingStatus = async (bookingId: string, status: string) => {
     const { error } = await supabase.from("bookings").update({ status: status as any }).eq("id", bookingId);
     if (error) { toast({ title: "Fehler", description: error.message, variant: "destructive" }); return; }
@@ -80,6 +109,12 @@ function AdminAppointmentsPage() {
     const booking = (allBookings as any[]).find((b) => b.id === assignBookingId);
     if (!booking) return;
 
+    const taken = assignedByUser(booking.user_id);
+    if (taken.has(selectedAssignmentId)) {
+      toast({ title: "Bereits zugewiesen", description: duplicateMessage(taken.get(selectedAssignmentId)), variant: "destructive" });
+      return;
+    }
+
     const releaseAt = booking.booking_date && booking.booking_time
       ? new Date(`${booking.booking_date}T${booking.booking_time}`).toISOString()
       : null;
@@ -95,7 +130,13 @@ function AdminAppointmentsPage() {
       .select("id")
       .single();
     if (createErr || !newAssignment) {
-      toast({ title: "Fehler", description: createErr?.message ?? "Auftrag konnte nicht erstellt werden.", variant: "destructive" });
+      toast({
+        title: isDuplicateError(createErr) ? "Bereits zugewiesen" : "Fehler",
+        description: isDuplicateError(createErr)
+          ? duplicateMessage(taken.get(selectedAssignmentId))
+          : createErr?.message ?? "Auftrag konnte nicht erstellt werden.",
+        variant: "destructive",
+      });
       return;
     }
 
@@ -107,6 +148,49 @@ function AdminAppointmentsPage() {
     setIndividualUserId(booking.user_id);
     loadData();
   };
+
+  /** Vorlage einer bestehenden Zuweisung austauschen. */
+  const changeAssignedTemplate = async () => {
+    const booking = (allBookings as any[]).find((b) => b.id === changeBookingId);
+    if (!booking || !booking.assignment_id || !changeTemplateId) return;
+    const taken = assignedByUser(booking.user_id);
+    if (taken.has(changeTemplateId)) {
+      toast({ title: "Bereits zugewiesen", description: duplicateMessage(taken.get(changeTemplateId)), variant: "destructive" });
+      return;
+    }
+    setChanging(true);
+    const { error } = await supabase
+      .from("task_assignments")
+      .update({ task_template_id: changeTemplateId, assignment_group: "manuell" } as any)
+      .eq("id", booking.assignment_id);
+    setChanging(false);
+    if (error) {
+      toast({
+        title: isDuplicateError(error) ? "Bereits zugewiesen" : "Fehler",
+        description: isDuplicateError(error) ? duplicateMessage(taken.get(changeTemplateId)) : error.message,
+        variant: "destructive",
+      });
+      return;
+    }
+    toast({ title: "Auftrag geändert" });
+    setChangeBookingId(null); setChangeTemplateId("");
+    loadData();
+  };
+
+  /** Zuweisung vom Termin lösen (Auftrag bleibt bestehen? – nein, er wird entfernt). */
+  const removeAssignment = async () => {
+    const booking = (allBookings as any[]).find((b) => b.id === changeBookingId);
+    if (!booking || !booking.assignment_id) return;
+    setChanging(true);
+    await supabase.from("bookings").update({ assignment_id: null }).eq("id", booking.id);
+    const { error } = await supabase.from("task_assignments").delete().eq("id", booking.assignment_id);
+    setChanging(false);
+    if (error) { toast({ title: "Fehler", description: error.message, variant: "destructive" }); return; }
+    toast({ title: "Zuweisung entfernt", description: "Der Termin ist wieder offen." });
+    setChangeBookingId(null); setChangeTemplateId("");
+    loadData();
+  };
+
 
   const createBooking = async () => {
     if (!createUserId || !createDate || !createTime) {
