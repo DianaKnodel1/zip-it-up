@@ -2758,6 +2758,7 @@ export type Database = {
       }
       task_templates: {
         Row: {
+          assignment_mode: string | null
           compensation: number
           created_at: string
           created_by: string
@@ -2772,6 +2773,7 @@ export type Database = {
           version: number
         }
         Insert: {
+          assignment_mode?: string | null
           compensation?: number
           created_at?: string
           created_by: string
@@ -2786,6 +2788,7 @@ export type Database = {
           version?: number
         }
         Update: {
+          assignment_mode?: string | null
           compensation?: number
           created_at?: string
           created_by?: string
