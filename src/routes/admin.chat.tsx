@@ -542,6 +542,56 @@ function AdminChatPage() {
   };
 
 
+  // Eigenen Online-Status laden (Profil des Teamleiters).
+  useEffect(() => {
+    if (!user) return;
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase
+        .from("profiles")
+        .select("leader_online")
+        .eq("user_id", user.id)
+        .maybeSingle();
+      if (!cancelled && data) setLeaderOnline((data as any).leader_online ?? true);
+    })();
+    return () => { cancelled = true; };
+  }, [user]);
+
+  /** Schreibt den Status auf das eigene Profil und den Mandanten. */
+  const setLeaderPresence = async (next: boolean) => {
+    if (!user) return;
+    setSavingPresence(true);
+    const previous = leaderOnline;
+    setLeaderOnline(next);
+    try {
+      const { data: me } = await supabase
+        .from("profiles")
+        .select("tenant_id")
+        .eq("user_id", user.id)
+        .maybeSingle();
+      const { error } = await supabase
+        .from("profiles")
+        .update({ leader_online: next } as any)
+        .eq("user_id", user.id);
+      if (error) throw error;
+      const tenantId = (me as any)?.tenant_id;
+      if (tenantId) {
+        await supabase.from("tenants").update({ team_leader_online: next } as any).eq("id", tenantId);
+      }
+      toast({
+        title: next ? "Du bist online" : "Du bist offline",
+        description: next
+          ? "Mitarbeiter sehen: Antwort in der Regel innerhalb weniger Minuten."
+          : "Mitarbeiter sehen: Antwort innerhalb der nächsten Stunden.",
+      });
+    } catch (e: any) {
+      setLeaderOnline(previous);
+      toast({ title: "Status nicht gespeichert", description: e?.message ?? "Unbekannter Fehler", variant: "destructive" });
+    } finally {
+      setSavingPresence(false);
+    }
+  };
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); }
   };
