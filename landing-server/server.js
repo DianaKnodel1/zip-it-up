@@ -390,20 +390,35 @@ function cleanEmptyMeta(html, branding, domain) {
     out = out.replace(/\s*<meta[^>]*property=["']og:image["'][^>]*content=["']["'][^>]*>\s*/gi, "\n");
     out = out.replace(/\s*<meta[^>]*name=["']twitter:image["'][^>]*content=["']["'][^>]*>\s*/gi, "\n");
   }
-  // Footer-Blöcke: {{contact_block}} und {{legal_block}} sicherstellen
+  // Footer-Blöcke: {{contact_block}} und {{legal_block}} sicherstellen.
+  // Wichtig: legal_block enthält KEINE Impressum/Datenschutz-Links mehr —
+  // die Themes verlinken bereits selbst, sonst stehen die Links doppelt.
   const b = branding || {};
-  const contactLines = [
-    b.firmenname,
-    b.strasse,
-    [b.plz, b.stadt].filter(Boolean).join(" "),
-    b.email ? `E-Mail: ${b.email}` : "",
-    b.telefon ? `Tel: ${b.telefon}` : ""
-  ].filter(Boolean);
-  const contactBlock = contactLines.join("<br/>");
-  const legalBlock = `<a href="/impressum.html">Impressum</a><br/><a href="/datenschutz.html">Datenschutz</a>`;
-  
+  const escH = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const plzStadt = [b.plz, b.stadt].filter(Boolean).join(" ");
+  const contactBlock = [
+    b.firmenname ? `<strong>${escH(b.firmenname)}</strong>` : "",
+    b.strasse ? escH(b.strasse) : "",
+    plzStadt ? escH(plzStadt) : "",
+    b.telefon ? `Telefon: <a href="tel:${escH(b.telefon)}" style="color:inherit;">${escH(b.telefon)}</a>` : "",
+    b.email ? `E-Mail: <a href="mailto:${escH(b.email)}" style="color:inherit;">${escH(b.email)}</a>` : ""
+  ].filter(Boolean).join("<br/>");
+  const regLine = [
+    b.registergericht ? `Registergericht ${escH(b.registergericht)}` : "",
+    b.hrb ? `HRB ${escH(b.hrb)}` : ""
+  ].filter(Boolean).join(", ");
+  const legalBlock = [
+    b.firmenname ? `<strong>${escH(b.firmenname)}</strong>` : "",
+    b.strasse ? escH(b.strasse) : "",
+    plzStadt ? escH(plzStadt) : "",
+    b.geschaeftsfuehrer ? `Geschäftsführung: ${escH(b.geschaeftsfuehrer)}` : "",
+    regLine,
+    b.ust_id ? `USt-IdNr.: ${escH(b.ust_id)}` : (b.steuernummer ? `Steuernummer: ${escH(b.steuernummer)}` : "")
+  ].filter(Boolean).join("<br/>");
+
   out = out.replace(/\{\{contact_block\}\}/g, contactBlock);
-  out = out.replace(/\{\{legal_block\}\}/g, legalBlock);
+  out = out.replace(/\{\{legal_block\}\}/g, `<div class="lv-legal-block">${legalBlock}</div>`);
+
   
   out = out.replace(/\{\{contact_address\}\}/g, [b.firmenname, b.strasse, [b.plz, b.stadt].filter(Boolean).join(" ")].filter(Boolean).join("<br/>"));
   out = out.replace(/\{\{contact_phone\}\}/g, b.telefon || "");
