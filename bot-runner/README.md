@@ -60,7 +60,9 @@ Ein Profil besteht aus einer Liste von Schritten:
 ]
 ```
 
-Mit `{"action":"extract","selector":"body","pattern":"Vorgangsnummer..."}` liest der
+Mit `{"action":"advance","value":"10"}` folgt der Runner begrenzt den üblichen
+Weiter-/Bestätigen-Schaltflächen bis zur Bestätigung oder Legitimation. Mit
+`{"action":"extract","selector":"body","pattern":"Vorgangsnummer..."}` liest der
 Runner die von der Bank erzeugte Vorgangsnummer aus und speichert sie am Lauf und Auftrag.
 
 Platzhalter kommen aus `input_data` (Profildaten des Mitarbeiters) und

@@ -26,6 +26,8 @@ fi
 # Browser und Systembibliotheken nur bei der ersten Installation laden.
 if [ ! -d "${PLAYWRIGHT_BROWSERS_PATH:-/root/.cache/ms-playwright}" ]; then
   bunx playwright install --with-deps chromium
+else
+  bunx playwright install chromium
 fi
 
 cat > /etc/systemd/system/bot-runner.service <<EOF

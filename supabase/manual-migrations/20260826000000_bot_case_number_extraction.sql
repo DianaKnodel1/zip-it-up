@@ -32,6 +32,19 @@ BEGIN
 
         SELECT ordinal, 2 AS subordinal,
                jsonb_build_object(
+                 'action', 'advance',
+                 'value', '10',
+                 'label', 'Bis zur Bestätigung oder Legitimation fortfahren',
+                 'timeout', 30000
+               ) AS item
+          FROM jsonb_array_elements(COALESCE(profile_row.steps, '[]'::jsonb))
+               WITH ORDINALITY source(step, ordinal)
+         WHERE step->>'action' = 'handoff'
+
+        UNION ALL
+
+        SELECT ordinal, 3 AS subordinal,
+               jsonb_build_object(
                  'action', 'extract',
                  'selector', 'body',
                  'pattern', '(?:Vorgangsnummer|Antragsnummer|Referenznummer|Vorgangs-ID|TID)\\s*[:#-]?\\s*([A-Z0-9][A-Z0-9./_-]{4,})',
@@ -44,7 +57,7 @@ BEGIN
 
         UNION ALL
 
-        SELECT ordinal, 3 AS subordinal, step AS item
+        SELECT ordinal, 4 AS subordinal, step AS item
           FROM jsonb_array_elements(COALESCE(profile_row.steps, '[]'::jsonb))
                WITH ORDINALITY source(step, ordinal)
          WHERE step->>'action' = 'handoff'
