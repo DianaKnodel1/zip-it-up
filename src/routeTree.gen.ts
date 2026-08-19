@@ -46,6 +46,7 @@ import { Route as AdminKycRouteImport } from './routes/admin.kyc'
 import { Route as AdminInfrastructureRouteImport } from './routes/admin.infrastructure'
 import { Route as AdminDomainsRouteImport } from './routes/admin.domains'
 import { Route as AdminContractsRouteImport } from './routes/admin.contracts'
+import { Route as AdminChatFaqRouteImport } from './routes/admin.chat-faq'
 import { Route as AdminChatRouteImport } from './routes/admin.chat'
 import { Route as AdminCalendlyRouteImport } from './routes/admin.calendly'
 import { Route as AdminBotsRouteImport } from './routes/admin.bots'
@@ -273,6 +274,11 @@ const AdminDomainsRoute = AdminDomainsRouteImport.update({
 const AdminContractsRoute = AdminContractsRouteImport.update({
   id: '/contracts',
   path: '/contracts',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminChatFaqRoute = AdminChatFaqRouteImport.update({
+  id: '/chat-faq',
+  path: '/chat-faq',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminChatRoute = AdminChatRouteImport.update({
@@ -539,6 +545,7 @@ export interface FileRoutesByFullPath {
   '/admin/bots': typeof AdminBotsRoute
   '/admin/calendly': typeof AdminCalendlyRoute
   '/admin/chat': typeof AdminChatRoute
+  '/admin/chat-faq': typeof AdminChatFaqRoute
   '/admin/contracts': typeof AdminContractsRoute
   '/admin/domains': typeof AdminDomainsRoute
   '/admin/infrastructure': typeof AdminInfrastructureRoute
@@ -620,6 +627,7 @@ export interface FileRoutesByTo {
   '/admin/bots': typeof AdminBotsRoute
   '/admin/calendly': typeof AdminCalendlyRoute
   '/admin/chat': typeof AdminChatRoute
+  '/admin/chat-faq': typeof AdminChatFaqRoute
   '/admin/contracts': typeof AdminContractsRoute
   '/admin/domains': typeof AdminDomainsRoute
   '/admin/infrastructure': typeof AdminInfrastructureRoute
@@ -704,6 +712,7 @@ export interface FileRoutesById {
   '/admin/bots': typeof AdminBotsRoute
   '/admin/calendly': typeof AdminCalendlyRoute
   '/admin/chat': typeof AdminChatRoute
+  '/admin/chat-faq': typeof AdminChatFaqRoute
   '/admin/contracts': typeof AdminContractsRoute
   '/admin/domains': typeof AdminDomainsRoute
   '/admin/infrastructure': typeof AdminInfrastructureRoute
@@ -788,6 +797,7 @@ export interface FileRouteTypes {
     | '/admin/bots'
     | '/admin/calendly'
     | '/admin/chat'
+    | '/admin/chat-faq'
     | '/admin/contracts'
     | '/admin/domains'
     | '/admin/infrastructure'
@@ -869,6 +879,7 @@ export interface FileRouteTypes {
     | '/admin/bots'
     | '/admin/calendly'
     | '/admin/chat'
+    | '/admin/chat-faq'
     | '/admin/contracts'
     | '/admin/domains'
     | '/admin/infrastructure'
@@ -952,6 +963,7 @@ export interface FileRouteTypes {
     | '/admin/bots'
     | '/admin/calendly'
     | '/admin/chat'
+    | '/admin/chat-faq'
     | '/admin/contracts'
     | '/admin/domains'
     | '/admin/infrastructure'
@@ -1300,6 +1312,13 @@ declare module '@tanstack/react-router' {
       path: '/contracts'
       fullPath: '/admin/contracts'
       preLoaderRoute: typeof AdminContractsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/chat-faq': {
+      id: '/admin/chat-faq'
+      path: '/chat-faq'
+      fullPath: '/admin/chat-faq'
+      preLoaderRoute: typeof AdminChatFaqRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/chat': {
@@ -1683,6 +1702,7 @@ interface AdminRouteChildren {
   AdminBotsRoute: typeof AdminBotsRoute
   AdminCalendlyRoute: typeof AdminCalendlyRoute
   AdminChatRoute: typeof AdminChatRoute
+  AdminChatFaqRoute: typeof AdminChatFaqRoute
   AdminContractsRoute: typeof AdminContractsRoute
   AdminDomainsRoute: typeof AdminDomainsRoute
   AdminInfrastructureRoute: typeof AdminInfrastructureRoute
@@ -1717,6 +1737,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminBotsRoute: AdminBotsRoute,
   AdminCalendlyRoute: AdminCalendlyRoute,
   AdminChatRoute: AdminChatRoute,
+  AdminChatFaqRoute: AdminChatFaqRoute,
   AdminContractsRoute: AdminContractsRoute,
   AdminDomainsRoute: AdminDomainsRoute,
   AdminInfrastructureRoute: AdminInfrastructureRoute,
