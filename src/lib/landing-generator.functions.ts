@@ -242,12 +242,35 @@ window.LANDING_CONTACT_PHONE = "${escape(b.telefon ?? "")}";
   return block + html;
 }
 
+// Entfernt Impressum-/Datenschutz-Links aus dem theme-eigenen Footer, bevor der
+// zentrale Trust-Footer angehängt wird — sonst stehen die Rechtslinks doppelt.
+function stripThemeLegalLinks(html: string): string {
+  return html.replace(/<footer[\s\S]*?<\/footer>/gi, (footer) => {
+    let out = footer.replace(
+      /<(li|p|div|span)([^>]*)>\s*<a[^>]*>\s*(?:Impressum|Datenschutz(?:erkl[äa]rung)?)\s*<\/a>\s*<\/\1>/gi,
+      "",
+    );
+    out = out.replace(/<a[^>]*>\s*(?:Impressum|Datenschutz(?:erkl[äa]rung)?)\s*<\/a>/gi, "");
+    // Überschrift "Anbieterkennzeichnung" ohne Inhalt zurücklassen? dann weg.
+    out = out.replace(
+      /<(h\d|div|p|span)([^>]*)>\s*Anbieterkennzeichnung\s*<\/\1>(?=\s*(?:<\/(?:div|nav|ul|section)>|\s*$))/gi,
+      "",
+    );
+    // leere Container aufräumen
+    for (let i = 0; i < 2; i++) {
+      out = out.replace(/<(ul|nav|div)([^>]*)>\s*<\/\1>/gi, "");
+    }
+    return out;
+  });
+}
+
 // Injiziert einen professionellen Trust-Footer (Impressum, Kontakt, Rechtliches)
 // VOR </body> in jedes Theme — überschreibt nichts, ergänzt nur. Wird
 // unterdrückt, wenn das Template bereits {{legal_block}} enthält (dort hat
 // das Theme die Anbieterkennzeichnung schon eingebaut).
 function injectTrustFooter(html: string, b: z.infer<typeof BrandingSchema>): string {
   if (/lv-legal-block/.test(html)) return html; // schon vorhanden
+  html = stripThemeLegalLinks(html);
   const esc = (s: unknown) => String(s ?? "").replace(/[&<>"']/g, (c) => (
     { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]!
   ));
@@ -269,30 +292,39 @@ function injectTrustFooter(html: string, b: z.infer<typeof BrandingSchema>): str
   if (b.email) contactItems.push(`<a href="mailto:${esc(b.email)}" style="color:inherit;text-decoration:none;">${esc(b.email)}</a>`);
   const addrHtml = [b.strasse, plzStadt].filter(Boolean).map(esc).join("<br/>");
   const year = new Date().getFullYear();
+  const linkStyle = "color:#e2e8f0;text-decoration:none;";
+  const headStyle = "font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#94a3b8;margin-bottom:16px;";
+  const claim = b.flow_type === "fast"
+    ? "Schnell, digital und persönlich begleitet — von der Bewerbung bis zum Start."
+    : "Ihre Personalvermittlung — wir bringen Sie mit passenden Partnerunternehmen zusammen.";
   const block = `
-<section class="lv-trust-footer lv-legal-block" style="background:#0f172a;color:#e2e8f0;padding:56px 24px 32px;margin-top:64px;font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;">
-  <div style="max-width:1180px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:40px;">
+<section class="lv-trust-footer lv-legal-block" style="background:#0f172a;color:#e2e8f0;padding:64px 24px 32px;margin-top:64px;font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;">
+  <div style="max-width:1180px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:40px;">
     <div>
-      <div style="font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#94a3b8;margin-bottom:16px;">Kontakt</div>
-      <div style="font-size:16px;font-weight:700;margin-bottom:8px;color:#f8fafc;">${esc(b.firmenname)}</div>
+      <div style="font-size:20px;font-weight:800;color:#f8fafc;margin-bottom:12px;">${esc(b.firmenname)}</div>
+      <div style="font-size:14.5px;line-height:1.75;color:#cbd5e1;max-width:280px;">${esc(claim)}</div>
+    </div>
+    <div>
+      <div style="${headStyle}">Kontakt</div>
       ${addrHtml ? `<div style="font-size:14px;line-height:1.7;color:#cbd5e1;margin-bottom:12px;">${addrHtml}</div>` : ""}
       ${contactItems.length ? `<div style="font-size:15px;line-height:1.9;color:#f8fafc;">${contactItems.join("<br/>")}</div>` : ""}
     </div>
     <div>
-      <div style="font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#94a3b8;margin-bottom:16px;">Anbieterkennzeichnung</div>
-      <div style="font-size:14.5px;line-height:1.8;color:#e2e8f0;">${legalItems.join("<br/>")}</div>
+      <div style="${headStyle}">Nützliche Links</div>
+      <ul style="list-style:none;padding:0;margin:0;font-size:14.5px;line-height:2;">
+        <li><a href="#top" style="${linkStyle}">Startseite</a></li>
+        <li><a href="#bewerbung-form" style="${linkStyle}">Jetzt bewerben</a></li>
+        <li><a href="impressum.html" style="${linkStyle}">Impressum</a></li>
+        <li><a href="datenschutz.html" style="${linkStyle}">Datenschutzerklärung</a></li>
+      </ul>
     </div>
     <div>
-      <div style="font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#94a3b8;margin-bottom:16px;">Rechtliches</div>
-      <ul style="list-style:none;padding:0;margin:0;font-size:14.5px;line-height:2;">
-        <li><a href="impressum.html" style="color:#e2e8f0;text-decoration:none;">Impressum</a></li>
-        <li><a href="datenschutz.html" style="color:#e2e8f0;text-decoration:none;">Datenschutzerklärung</a></li>
-      </ul>
+      <div style="${headStyle}">Anbieterkennzeichnung</div>
+      <div style="font-size:14.5px;line-height:1.8;color:#e2e8f0;">${legalItems.join("<br/>")}</div>
       <div style="margin-top:18px;font-size:13px;line-height:1.7;color:#94a3b8;">
         Die Übertragung Ihrer Bewerbungsdaten erfolgt TLS-verschlüsselt. Die Verarbeitung richtet sich nach unserer Datenschutzerklärung.
       </div>
     </div>
-
   </div>
   <div style="max-width:1180px;margin:32px auto 0;padding-top:20px;border-top:1px solid rgba(226,232,240,.1);font-size:12.5px;color:#94a3b8;text-align:center;">
     © ${year} ${esc(b.firmenname)}. Alle Rechte vorbehalten.
@@ -301,6 +333,7 @@ function injectTrustFooter(html: string, b: z.infer<typeof BrandingSchema>): str
   if (/<\/body>/i.test(html)) return html.replace(/<\/body>/i, block + "\n</body>");
   return html + block;
 }
+
 
 // Fügt einen HTML-Block vor dem ersten "sinnvollen" Anker ein: bewerbung-form-
 // Section (falls Theme eine hat) → sonst <footer> → sonst lov-apply-modal →
