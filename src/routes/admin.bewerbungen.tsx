@@ -83,24 +83,37 @@ function computePhase(a: any, sched: Date | null, prof: ProfileInfo, bookingStat
   // status = Entscheidung, booking_status = Termin-Zustand,
   // interview_recommendation = Empfehlung der Auswertung.
   const status = String(a.status ?? "");
-  // No-Show/Absage stehen je nach Weg entweder an der Bewerbung (Calendly-Event)
-  // oder an der Buchung (DB-Autocomplete setzt bookings.status = 'no_show').
+  // No-Show/Absage kommen aus drei Quellen: Bewerbung (Calendly-Event),
+  // bookings.status und interview_appointments.status (DB-Automatik).
   const bookingStatus = String(a.booking_status ?? "");
   const bookingRow = String(bookingStatusRaw ?? "");
   const isNoShow = bookingStatus === "no_show" || bookingRow === "no_show";
   const isCancelled = bookingStatus === "cancelled" || bookingRow === "cancelled" || bookingRow === "storniert";
   const rec = String(a.interview_recommendation ?? "");
+  const interviewTouched = !!(a.interview_started_at || a.interview_completed_at)
+    || bookingStatus === "completed" || bookingRow === "completed";
 
   // Wer nicht erschienen ist, hat das Interview nie geführt – also kann es dazu
   // weder eine Empfehlung noch eine Zusage geben. "Nicht erschienen" und
   // "Abgesagt" gewinnen daher immer, auch gegen status/interview_recommendation.
   if (isNoShow) return "no_show";
   if (isCancelled) return "abgesagt";
+
+  // Sicherung, falls die DB-Automatik (Cron) nicht läuft: Termin liegt mehr als
+  // 45 Minuten zurück, es wurde nie ein Interview begonnen und es gibt keine
+  // Entscheidung → der Bewerber ist schlicht nicht erschienen.
+  const decided = status === "abgelehnt" || status === "akzeptiert" || status === "angenommen"
+    || rec === "reject" || rec === "invite";
+  if (sched && !interviewTouched && !decided
+      && Date.now() > sched.getTime() + 45 * 60 * 1000) {
+    return "no_show";
+  }
+
   if (status === "abgelehnt") return "abgelehnt";
   if (rec === "reject") return "abgelehnt";
   if (status === "akzeptiert" || status === "angenommen" || rec === "invite") return "angenommen";
 
-  if (a.interview_completed_at || bookingStatus === "completed") return "auswertung_fehler";
+  if (interviewTouched) return "auswertung_fehler";
 
   if (sched) {
     const now = Date.now();
