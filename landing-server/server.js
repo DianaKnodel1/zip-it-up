@@ -295,7 +295,9 @@ function applyPlaceholders(src, branding, slots) {
   const addrParts = [b.strasse, [b.plz, b.stadt].filter(Boolean).join(" ")].filter(Boolean).join(", ");
   const aliases = {
     logo_text: b.firmenname || "",
+    brand_name: b.firmenname || "",
     firmenname: b.firmenname || "",
+
     seo_title: b.seo_title || "",
     seo_description: b.seo_description || "",
     landing_domain: b.landing_domain || "",
