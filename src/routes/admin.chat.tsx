@@ -446,6 +446,8 @@ function AdminChatPage() {
       void logCorrectionFn({ data: { targetUserId: selectedUserId, suggestion, finalText: newMessage.trim() } }).catch(() => {});
     }
     setNewMessage("");
+    setSuggestionActive(false);
+
     setPendingAttachment(null);
     setSending(false);
   };
