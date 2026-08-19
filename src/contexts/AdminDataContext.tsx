@@ -47,6 +47,8 @@ export interface SubmissionRow {
 export interface SubmissionAnswerRow { id: string; question_id: string; answer: string; }
 
 export interface BookingRow { id: string; user_id: string; time_slot_id: string | null; assignment_id: string | null; status: string; created_at: string; booking_date: string | null; booking_time: string | null; application_id?: string | null; app_id?: string | null; scheduled_at?: string | null; admin_override?: boolean | null; }
+/** Interview-Termine. Die DB-Automatik setzt hier 'no_show'/'completed'. */
+export interface InterviewAppointmentRow { id: string; application_id: string | null; starts_at: string | null; ends_at: string | null; status: string | null; }
 export interface TransactionRow { id: string; user_id: string; assignment_id: string; amount: number; status: string; created_at: string; }
 export interface ChatConversationRow { id: string; user_id: string; status: string; escalated_at: string | null; created_at: string; updated_at: string; }
 
