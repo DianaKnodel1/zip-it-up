@@ -91,13 +91,15 @@ function computePhase(a: any, sched: Date | null, prof: ProfileInfo, bookingStat
   const isCancelled = bookingStatus === "cancelled" || bookingRow === "cancelled" || bookingRow === "storniert";
   const rec = String(a.interview_recommendation ?? "");
 
-  // Termin-Zustand hat Vorrang vor der Empfehlung – nur eine echte Ablehnung
-  // durch dich überschreibt ihn.
-  if (status === "abgelehnt") return "abgelehnt";
+  // Wer nicht erschienen ist, hat das Interview nie geführt – also kann es dazu
+  // weder eine Empfehlung noch eine Zusage geben. "Nicht erschienen" und
+  // "Abgesagt" gewinnen daher immer, auch gegen status/interview_recommendation.
   if (isNoShow) return "no_show";
   if (isCancelled) return "abgesagt";
+  if (status === "abgelehnt") return "abgelehnt";
   if (rec === "reject") return "abgelehnt";
   if (status === "akzeptiert" || status === "angenommen" || rec === "invite") return "angenommen";
+
   if (a.interview_completed_at || bookingStatus === "completed") return "auswertung_fehler";
 
   if (sched) {
