@@ -458,12 +458,19 @@ function AdminBotsPage() {
                 {startFor.handoff_note}
               </p>
             )}
+            {noProxy && (
+              <p className="text-[11px] text-destructive rounded-lg bg-destructive/5 border border-destructive/30 p-2">
+                Kein aktiver Proxy hinterlegt. Jeder Bot-Lauf braucht eine eigene IP – lege zuerst
+                unter „Proxys" mindestens einen aktiven Proxy an.
+              </p>
+            )}
           </div>
           <DialogFooter>
             <Button variant="ghost" onClick={() => setStartFor(null)}>Abbrechen</Button>
-            <Button onClick={() => startM.mutate()} disabled={startM.isPending}>
+            <Button onClick={() => startM.mutate()} disabled={startM.isPending || noProxy}>
               {startM.isPending ? "Wird eingereiht…" : "Bot starten"}
             </Button>
+
           </DialogFooter>
         </DialogContent>
       </Dialog>
