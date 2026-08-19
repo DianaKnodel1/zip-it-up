@@ -1,0 +1,16 @@
+[Unit]
+Description=Portal full backup orchestrator
+Wants=backup-orchestrator.timer
+
+[Service]
+Type=oneshot
+User=root
+WorkingDirectory=/opt/apps/portal
+ExecStart=/opt/apps/portal/scripts/backup-orchestrator.sh full
+EnvironmentFile=/opt/apps/portal/scripts/backup-orchestrator.env
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=portal-backup-orchestrator
+
+[Install]
+WantedBy=multi-user.target
