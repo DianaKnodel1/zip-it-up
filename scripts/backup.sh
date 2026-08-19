@@ -57,25 +57,12 @@ write_status() {
   DURATION=$((END_MS - START_MS))
   # In Datenbank protokollieren, falls verfügbar
   if docker ps --format '{{.Names}}' | grep -qx "${DB_CONTAINER}"; then
-    # shellcheck disable=SC2089
     SQL="INSERT INTO public.backup_status (host, archive, size, mode, status, backup_host, duration_ms) VALUES
       ('$(hostname)', '${ARCHIVE_NAME:-unbekannt}', '${SIZE:-0}', '${BACKUP_MODE}', '${BACKUP_STATUS}', '${BACKUP_HOST}', ${DURATION});"
     docker exec "${DB_CONTAINER}" psql -U postgres -d postgres -c "$SQL" >/dev/null 2>&1 || warn "Datenbank-Status nicht schreibbar"
   fi
-  # Update local report
-  if [ -f "$REPORT_FILE" ]; then
-    python3 - <<PY 2>/dev/null || true
-import json, os, sys
-path = os.environ.get('REPORT_FILE','')
-if path and os.path.exists(path):
-    with open(path) as f: d = json.load(f)
-    d['status'] = '${BACKUP_STATUS}'
-    d['message'] = '${BACKUP_MESSAGE}'
-    d['duration_ms'] = ${DURATION}
-    with open(path, 'w') as f: json.dump(d, f)
-PY
-  fi
 }
+
 
 # ── 1/5  Backup-Server vorbereiten ───────────────────────────────────────────
 log "1/5  Backup-Server ${BACKUP_HOST} vorbereiten"
