@@ -24,8 +24,12 @@ Variante 2 erweitert werden kann.
 ## Was wir bauen
 
 ### 1. Backup-Server (der Extra-Server, den du kaufen willst)
-Kleinste Variante genügt (2 vCPU / 4 GB / 80-160 GB Platte). Er nimmt nur
-Sicherungen entgegen, betreibt keine Dienste — dadurch ist er kaum angreifbar.
+Kleinste Linux-VPS reicht aus: **Ubuntu 22.04 LTS oder 24.04 LTS**, 2 vCPU, 4 GB RAM,
+80–160 GB SSD. Zum Beispiel Hetzner Cloud CX21 (2 vCPU/4 GB/80 GB) oder vergleichbar
+bei deinem Hosting-Anbieter. Der Server nimmt nur Sicherungen entgegen, betreibt
+keine Dienste — dadurch ist er kaum angreifbar. Wichtig: 24/7 erreichbar mit
+fester IP und SSH-Key-Zugang (kein Passwort).
+
 
 ### 2. Nächtliches Backup-Skript auf dem Backend-Server
 `scripts/backup.sh` sichert alles Wichtige in ein Archiv pro Lauf:
