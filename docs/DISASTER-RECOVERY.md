@@ -57,7 +57,48 @@ ls -lt /var/backups/portal/daily/ | head -5
 
 Das neueste Archiv ist die Wiederherstellungsgrundlage.
 
+### 2.1 Backup-Server aufsetzen (empfohlene Variante: Orchestrator)
+
+Kaufe einen kleinen VPS (Ubuntu 22.04/24.04, 2 vCPU, 4 GB RAM, ausreichend SSD).
+
+```bash
+# Auf dem Backup-Server als root
+bash scripts/setup-backup-server.sh
+
+# Von allen Produktions-Servern erlauben, dass sich der Backup-Server anmeldet:
+# Auf Portal, Backend, Landing, Bot, WebID jeweils ausführen:
+ssh-copy-id -i /root/.ssh/id_rsa.pub root@<BACKUP-SERVER-IP>
+```
+
+Dann auf dem Backup-Server:
+
+```bash
+cd /opt/apps/portal
+cp scripts/backup-orchestrator.env.example scripts/backup-orchestrator.env
+# scripts/backup-orchestrator.env bearbeiten: DB_HOST, SERVER_*_HOST, BACKUP_DIR
+bash scripts/install-backup-orchestrator.sh
+bash scripts/backup-orchestrator.sh full
+```
+
+Wenn das ein Archiv in `/var/backups/portal/daily/` erzeugt, läuft alles.
+
+### 2.2 Alternative: Einzel-Server-Backup
+
+Wenn du keine zentrale Orchestrator-Lösung willst, kannst du auf jedem
+Produktions-Server das lokale Backup installieren:
+
+```bash
+# Auf dem Backend-Server (wo die DB läuft)
+cd /opt/apps/portal
+cp scripts/backup.env.example scripts/backup.env
+# scripts/backup.env mit BACKUP_HOST, BACKUP_USER, BACKUP_DIR füllen
+bash scripts/install-backup-timer.sh
+```
+
+Der Nachteil ist keine zentrale Ansicht über alle Server in einem Archiv.
+
 ## 3. Archiv auf den neuen Zielserver kopieren
+
 
 Für den Backend-Server (der wichtigste Teil):
 
