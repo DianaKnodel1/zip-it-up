@@ -27,7 +27,9 @@ import {
   syncCloudflareZones,
 } from "@/lib/cloudflare.functions";
 import { listAutomationLog } from "@/lib/automation-log.functions";
-import { Loader2, Plus, Copy, RefreshCw, Trash2, CheckCircle2, AlertCircle, Power, KeyRound, Cloud, Server, Activity } from "lucide-react";
+import { getBackupStatus } from "@/lib/backup-status.functions";
+import { Loader2, Plus, Copy, RefreshCw, Trash2, CheckCircle2, AlertCircle, Power, KeyRound, Cloud, Server, Activity, Database } from "lucide-react";
+
 
 export const Route = createFileRoute("/admin/infrastructure")({
   component: InfrastructurePage,
@@ -44,12 +46,15 @@ function InfrastructurePage() {
         <TabsList>
           <TabsTrigger value="servers"><Server className="w-4 h-4 mr-2" />Server</TabsTrigger>
           <TabsTrigger value="cloudflare"><Cloud className="w-4 h-4 mr-2" />Cloudflare</TabsTrigger>
+          <TabsTrigger value="backup"><Database className="w-4 h-4 mr-2" />Backup</TabsTrigger>
           <TabsTrigger value="operations"><Activity className="w-4 h-4 mr-2" />Operations</TabsTrigger>
         </TabsList>
         <TabsContent value="servers"><ServersTab /></TabsContent>
         <TabsContent value="cloudflare"><CloudflareTab /></TabsContent>
+        <TabsContent value="backup"><BackupTab /></TabsContent>
         <TabsContent value="operations"><OperationsTab /></TabsContent>
       </Tabs>
+
     </div>
   );
 }
@@ -531,8 +536,105 @@ function CloudflareTab() {
 }
 
 // ════════════════════════════════════════════════════════════════════════════
+// TAB: Backup
+// ════════════════════════════════════════════════════════════════════════════
+function BackupTab() {
+  const { toast } = useToast();
+  const getStatus = useServerFn(getBackupStatus);
+  const [rows, setRows] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const reload = async () => {
+    setLoading(true);
+    try { const r = await getStatus(); setRows(r.rows); }
+    catch (e: any) { toast({ title: "Fehler", description: e.message, variant: "destructive" }); }
+    finally { setLoading(false); }
+  };
+  useEffect(() => { reload(); }, []);
+
+  const latest = rows[0];
+  const healthy = latest && latest.status === "success";
+  const stale = latest && (Date.now() - new Date(latest.created_at).getTime()) > 9 * 60 * 60 * 1000; // > 9h
+
+  return (
+    <div className="space-y-4">
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between">
+          <div>
+            <CardTitle>Backup-Status</CardTitle>
+            <CardDescription>Letzte Sicherungen und Zustand</CardDescription>
+          </div>
+          <Button variant="outline" size="sm" onClick={reload}><RefreshCw className="w-4 h-4 mr-2" />Aktualisieren</Button>
+        </CardHeader>
+        <CardContent>
+          {loading ? <Loader2 className="w-6 h-6 animate-spin text-muted-foreground mx-auto my-6" /> : (
+            <div className="space-y-4">
+              {latest ? (
+                <div className="flex items-center gap-3">
+                  <Badge variant={healthy && !stale ? "default" : stale ? "secondary" : "destructive"} className="gap-1">
+                    {healthy && !stale ? <CheckCircle2 className="w-3 h-3" /> : stale ? <AlertCircle className="w-3 h-3" /> : <AlertCircle className="w-3 h-3" />}
+                    {healthy && !stale ? "Backup OK" : stale ? "Letztes Backup älter als 9h" : latest.status === "error" ? "Backup-Fehler" : "Unbekannt"}
+                  </Badge>
+                  <span className="text-sm text-muted-foreground">Letztes: {formatAgo(latest.created_at)} · {latest.size} · {latest.mode} · {latest.backup_host}</span>
+                </div>
+              ) : (
+                <div className="text-sm text-muted-foreground">Noch kein Backup-Status vorhanden. Bitte scripts/backup.sh mindestens einmal laufen lassen.</div>
+              )}
+
+              {rows.length > 0 && (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Wann</TableHead>
+                      <TableHead>Modus</TableHead>
+                      <TableHead>Größe</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Backup-Host</TableHead>
+                      <TableHead>Dauer</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {rows.map((r) => (
+                      <TableRow key={r.id}>
+                        <TableCell className="text-xs text-muted-foreground whitespace-nowrap">{formatAgo(r.created_at)}</TableCell>
+                        <TableCell className="text-xs font-medium capitalize">{r.mode}</TableCell>
+                        <TableCell className="text-xs">{r.size}</TableCell>
+                        <TableCell><Badge variant={r.status === "success" ? "default" : "destructive"}>{r.status}</Badge></TableCell>
+                        <TableCell className="text-xs text-muted-foreground">{r.backup_host}</TableCell>
+                        <TableCell className="text-xs text-muted-foreground">{r.duration_ms ? `${Math.round(r.duration_ms / 1000)}s` : "—"}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              )}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Setup-Anleitung</CardTitle>
+          <CardDescription>Empfohlen: dedizierter Backup-Server mit Orchestrator</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-3 text-sm text-muted-foreground">
+          <p>1. Backup-VPS bestellen (Ubuntu 22.04/24.04, 2 vCPU, 4 GB, ausreichend SSD).</p>
+          <p>2. Auf dem Backup-Server: <code className="text-foreground">bash scripts/setup-backup-server.sh</code></p>
+          <p>3. Von jedem Produktions-Server: <code className="text-foreground">ssh-copy-id -i /root/.ssh/id_rsa.pub root@&lt;BACKUP_IP&gt;</code></p>
+          <p>4. Auf dem Backup-Server <code className="text-foreground">scripts/backup-orchestrator.env</code> aus der Example anlegen und füllen, dann <code className="text-foreground">bash scripts/install-backup-orchestrator.sh</code></p>
+          <p>5. Testlauf: <code className="text-foreground">bash scripts/backup-orchestrator.sh full</code></p>
+          <p className="pt-2">Wiederherstellung im Katastrophenfall: <code className="text-foreground">docs/DISASTER-RECOVERY.md</code></p>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+
+// ════════════════════════════════════════════════════════════════════════════
 // TAB: Operations (Audit-Log)
 // ════════════════════════════════════════════════════════════════════════════
+
 function OperationsTab() {
   const { toast } = useToast();
   const list = useServerFn(listAutomationLog);
