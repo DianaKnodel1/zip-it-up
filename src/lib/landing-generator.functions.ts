@@ -181,6 +181,13 @@ function applyPlaceholders(
     cleanSlots[key] = value;
   }
   const merged: Record<string, unknown> = { ...aliases, ...b, ...cleanSlots };
+  // Der Markenname in Kopf-/Fußzeile ist immer der echte Firmenname — sonst
+  // bleibt der Theme-Standard ("VERMITTLUNG", "BERATUNG", …) stehen.
+  if (b.firmenname) {
+    merged.brand_name = b.firmenname;
+    merged.logo_text = b.firmenname;
+  }
+
 
   let out = src;
   // Mehrere Passes: Slot-Werte können selbst {{branding}}-Tokens enthalten.
