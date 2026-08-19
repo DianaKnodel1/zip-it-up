@@ -102,6 +102,8 @@ function AdminBotsPage() {
   const [editor, setEditor] = useState<typeof EMPTY_PROFILE | null>(null);
   const [startFor, setStartFor] = useState<BotProfileRow | null>(null);
   const [startUser, setStartUser] = useState("");
+  const [startEmail, setStartEmail] = useState("");
+  const [startPhone, setStartPhone] = useState("");
 
   const invalidate = () => {
     qc.invalidateQueries({ queryKey: ["bot-profiles"] });
