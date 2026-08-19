@@ -93,6 +93,11 @@ function AdminBotsPage() {
     queryFn: () => loadRuns(),
     refetchInterval: 8000,
   });
+  const loadProxies = useServerFn(listBotProxies);
+  const proxiesQ = useQuery({ queryKey: ["bot-proxies"], queryFn: () => loadProxies() });
+  const activeProxies = (proxiesQ.data?.rows ?? []).filter((p: any) => p.is_active).length;
+  const noProxy = proxiesQ.isSuccess && activeProxies === 0;
+
 
   const [editor, setEditor] = useState<typeof EMPTY_PROFILE | null>(null);
   const [startFor, setStartFor] = useState<BotProfileRow | null>(null);
