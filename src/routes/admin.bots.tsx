@@ -4,7 +4,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import {
   listBotProfiles, saveBotProfile, deleteBotProfile,
-  listBotRuns, enqueueBotRun, claimBotRun, setBotRunStatus,
+  listBotRuns, enqueueBotRun, claimBotRun, setBotRunStatus, listBotProxies,
   type BotStep, type BotProfileRow,
 } from "@/lib/bots.functions";
 import { useAdminData } from "@/contexts/AdminDataContext";
