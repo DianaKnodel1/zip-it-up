@@ -119,7 +119,6 @@ export default function FloatingChat() {
         setHumanMessages((prev) => (prev.some((m) => m.id === msg.id) ? prev : [...prev, msg]));
 
         if (open) {
-          {
           if (isFromLeader) {
             supabase.from("chat_messages").update({ read: true } as any).eq("id", msg.id).then();
           }
