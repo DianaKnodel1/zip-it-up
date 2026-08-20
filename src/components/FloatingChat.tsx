@@ -9,8 +9,9 @@ import { useToast } from "@/hooks/use-toast";
 import { useTeamLeader } from "@/hooks/use-team-leader";
 import { useChatNotifications } from "@/hooks/use-chat-notifications";
 import { useTenant } from "@/contexts/TenantContext";
-import { MessageCircle, Send, BadgeCheck, Minus } from "lucide-react";
+import { MessageCircle, Send, BadgeCheck, Minus, RefreshCw } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ChatAttachmentButton, AttachmentPreview, type ChatAttachment } from "@/components/ChatAttachmentButton";
 
 interface ChatMessage {
   id: string;
@@ -20,6 +21,16 @@ interface ChatMessage {
   read: boolean;
   created_at: string;
   is_ai?: boolean;
+  attachment_url?: string | null;
+  attachment_name?: string | null;
+  attachment_type?: string | null;
+}
+
+// Interne Admin-/KI-Notizen werden im Mitarbeiter-Chat ausgeblendet (clientseitig,
+// damit keine normale Nachricht durch serverseitige Filter verloren geht).
+function isInternalAdminNote(msg: ChatMessage) {
+  const m = msg.message ?? "";
+  return m.includes("[ESCALATE]") || m.includes("🤖 KI-Eskalation") || m.includes("🤖 KI Eskalation");
 }
 
 function formatTime(dateStr: string) {
@@ -69,6 +80,8 @@ export default function FloatingChat() {
   const [unread, setUnread] = useState(0);
   const [hasNewMessage, setHasNewMessage] = useState(false);
   const [leaderTyping, setLeaderTyping] = useState(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [pendingAttachment, setPendingAttachment] = useState<ChatAttachment | null>(null);
   
   const bottomRef = useRef<HTMLDivElement>(null);
   const isOnChatPage = location.pathname.includes("/chat");
@@ -100,10 +113,12 @@ export default function FloatingChat() {
         const isFromMe = msg.sender_id === user.id && msg.receiver_id === teamLeaderId;
         
         if (!isFromLeader && !isFromMe) return;
-        if (msg.message.includes("[ESCALATE]") || msg.message.includes("🤖 KI Eskalation")) return;
+        if (isInternalAdminNote(msg)) return;
+
+        // Immer in den Verlauf aufnehmen (auch wenn zu), damit nichts verloren geht.
+        setHumanMessages((prev) => (prev.some((m) => m.id === msg.id) ? prev : [...prev, msg]));
 
         if (open) {
-          setHumanMessages((prev) => [...prev, msg]);
           if (isFromLeader) {
             supabase.from("chat_messages").update({ read: true } as any).eq("id", msg.id).then();
           }
@@ -123,22 +138,38 @@ export default function FloatingChat() {
     return () => { supabase.removeChannel(channel); };
   }, [user, teamLeaderId, open, leader.name, triggerNotification]);
 
+  const loadHistory = async () => {
+    if (!user || !teamLeaderId) return;
+    setLoadError(null);
+    const { data, error } = await supabase
+      .from("chat_messages")
+      .select("*")
+      .or(`and(sender_id.eq.${user.id},receiver_id.eq.${teamLeaderId}),and(sender_id.eq.${teamLeaderId},receiver_id.eq.${user.id})`)
+      .order("created_at", { ascending: true })
+      .limit(200);
+
+    if (error) {
+      console.error("Chat-Verlauf konnte nicht geladen werden:", error);
+      setLoadError(error.message);
+      return;
+    }
+
+    const rows = ((data ?? []) as ChatMessage[]).filter((m) => !isInternalAdminNote(m));
+    // Verlauf zusammenführen statt ersetzen – nichts geht verloren.
+    setHumanMessages((prev) => {
+      const map = new Map<string, ChatMessage>();
+      for (const m of [...prev, ...rows]) map.set(m.id, m);
+      return Array.from(map.values()).sort(
+        (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
+      );
+    });
+    setUnread(0);
+    setHasNewMessage(false);
+  };
+
   useEffect(() => {
     if (!open || !user || !teamLeaderId) return;
-    const load = async () => {
-      const { data } = await supabase
-        .from("chat_messages")
-        .select("*")
-        .or(`and(sender_id.eq.${user.id},receiver_id.eq.${teamLeaderId}),and(sender_id.eq.${teamLeaderId},receiver_id.eq.${user.id})`)
-        .not("message", "ilike", "%[ESCALATE]%")
-        .not("message", "ilike", "%🤖 KI-Eskalation%")
-        .order("created_at", { ascending: true })
-        .limit(100);
-      setHumanMessages((data ?? []) as ChatMessage[]);
-      setUnread(0);
-      setHasNewMessage(false);
-    };
-    load();
+    loadHistory();
   }, [open, user, teamLeaderId]);
 
   useEffect(() => {
@@ -146,18 +177,24 @@ export default function FloatingChat() {
   }, [humanMessages, leaderTyping]);
 
   const sendMessage = async () => {
-    if (!newMessage.trim() || !user || !teamLeaderId) return;
+    if ((!newMessage.trim() && !pendingAttachment) || !user || !teamLeaderId) return;
     const text = newMessage.trim();
+    const attachment = pendingAttachment;
     setNewMessage("");
+    setPendingAttachment(null);
     setSending(true);
     try {
-      await supabase.from("chat_messages").insert({
+      const { error } = await supabase.from("chat_messages").insert({
         sender_id: user.id,
         receiver_id: teamLeaderId,
-        message: text,
+        message: text || (attachment ? `📎 ${attachment.name}` : ""),
+        attachment_url: attachment?.url ?? null,
+        attachment_name: attachment?.name ?? null,
+        attachment_type: attachment?.type ?? null,
       } as any);
-    } catch (e) {
-      toast({ title: "Fehler", description: "Nachricht konnte nicht gesendet werden.", variant: "destructive" });
+      if (error) throw error;
+    } catch (e: any) {
+      toast({ title: "Fehler", description: e?.message ?? "Nachricht konnte nicht gesendet werden.", variant: "destructive" });
     } finally {
       setSending(false);
     }
@@ -209,6 +246,14 @@ export default function FloatingChat() {
           </div>
 
           <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            {loadError && (
+              <div className="rounded-xl border border-destructive/30 bg-destructive/5 p-3 text-[12px] text-destructive flex items-center justify-between gap-2">
+                <span>Verlauf konnte nicht geladen werden.</span>
+                <Button size="sm" variant="outline" className="h-7 gap-1 text-[11px]" onClick={loadHistory}>
+                  <RefreshCw className="h-3 w-3" /> Erneut versuchen
+                </Button>
+              </div>
+            )}
             {humanMessages.map((msg) => {
               const isMine = msg.sender_id === user?.id;
               return (
@@ -218,6 +263,13 @@ export default function FloatingChat() {
                     isMine ? "bg-primary text-primary-foreground rounded-2xl rounded-br-sm shadow-sm" : "bg-muted border border-border text-foreground rounded-2xl rounded-bl-sm"
                   )}>
                     <p className="whitespace-pre-wrap">{msg.message}</p>
+                    {msg.attachment_url && msg.attachment_type && (
+                      <AttachmentPreview
+                        url={msg.attachment_url}
+                        name={msg.attachment_name ?? "Anhang"}
+                        type={msg.attachment_type}
+                      />
+                    )}
                     <p className={cn("text-[9px] mt-1 opacity-50")}>{formatTime(msg.created_at)}</p>
                   </div>
                 </div>
@@ -231,17 +283,37 @@ export default function FloatingChat() {
             <div ref={bottomRef} />
           </div>
 
-          <div className="border-t border-border px-4 py-3 flex items-center gap-2 shrink-0 bg-card">
-            <Input
-              value={newMessage}
-              onChange={(e) => { setNewMessage(e.target.value); broadcastTyping(); }}
-              onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); } }}
-              placeholder="Nachricht an Teamleiter…"
-              className="flex-1 h-10 rounded-xl text-sm border-border/60 focus-visible:ring-primary/20"
-            />
-            <Button size="icon" onClick={sendMessage} disabled={!newMessage.trim() || sending} className="h-10 w-10 rounded-xl">
-              <Send className="h-4 w-4" />
-            </Button>
+          <div className="border-t border-border px-4 py-3 shrink-0 bg-card space-y-2">
+            {pendingAttachment && (
+              <div className="flex items-center justify-between gap-2 rounded-lg border border-border/60 bg-muted/40 px-3 py-1.5 text-[11px]">
+                <span className="truncate">📎 {pendingAttachment.name}</span>
+                <button
+                  className="text-muted-foreground hover:text-foreground"
+                  onClick={() => setPendingAttachment(null)}
+                >
+                  Entfernen
+                </button>
+              </div>
+            )}
+            <div className="flex items-center gap-2">
+              {user && (
+                <ChatAttachmentButton
+                  userId={user.id}
+                  onUploaded={(a) => setPendingAttachment(a)}
+                  disabled={sending}
+                />
+              )}
+              <Input
+                value={newMessage}
+                onChange={(e) => { setNewMessage(e.target.value); broadcastTyping(); }}
+                onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); } }}
+                placeholder="Nachricht an Teamleiter…"
+                className="flex-1 h-10 rounded-xl text-sm border-border/60 focus-visible:ring-primary/20"
+              />
+              <Button size="icon" onClick={sendMessage} disabled={(!newMessage.trim() && !pendingAttachment) || sending} className="h-10 w-10 rounded-xl">
+                <Send className="h-4 w-4" />
+              </Button>
+            </div>
           </div>
         </div>
       )}
