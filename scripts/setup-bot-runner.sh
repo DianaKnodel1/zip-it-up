@@ -19,15 +19,19 @@ fi
 cd "$RUNNER_DIR"
 
 echo "==> [1/3] Abhängigkeiten installieren (kann 1-3 Minuten dauern) ..."
-if ! command -v npm >/dev/null 2>&1; then
-  echo "npm fehlt – installiere Node.js/npm ..."
+# Node.js 18 ist auf Ubuntu 22.04 Standard, Playwright braucht >= 20.
+# Wir installieren Node.js 22 von Nodesource.
+if ! node -v | grep -qE "v(2[0-9])" >/dev/null 2>&1; then
+  echo "Node.js Version veraltet oder fehlt – installiere Node.js 22 ..."
   apt-get update
-  apt-get install -y nodejs npm
+  apt-get install -y ca-certificates curl gnupg
+  mkdir -p /etc/apt/keyrings
+  curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
+  echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_22.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
+  apt-get update
+  apt-get install nodejs -y
 fi
 
-# Bun 1.4 kann auf frischen Servern ohne Lockdatei bei der Paketauflösung
-# ohne Ausgabe hängen bleiben. npm installiert dieselben reinen JS-Pakete
-# zuverlässig; ausgeführt wird der Runner anschließend weiterhin mit Bun.
 if ! timeout 600 npm install --omit=dev --no-audit --no-fund --loglevel=notice; then
   echo "Abhängigkeitsinstallation nach 10 Minuten abgebrochen oder fehlgeschlagen." >&2
   echo "Bitte Netzwerk/DNS prüfen: curl -I https://registry.npmjs.org/playwright" >&2
