@@ -130,11 +130,8 @@ function AdminChatPage() {
       supabase
         .from("chat_messages")
         .select("sender_id, receiver_id, message, read, created_at")
-        .not("message", "ilike", "%[ESCALATE]%")
-        .not("message", "ilike", "%🤖 KI Eskalation%")
-        .not("message", "ilike", "%🤖 KI-Eskalation%")
         .order("created_at", { ascending: false })
-        .limit(100),
+        .limit(5000),
       supabase.from("tenants").select("id, name"),
       supabase.from("user_roles").select("user_id, role"),
     ]);
