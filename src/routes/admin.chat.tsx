@@ -932,7 +932,8 @@ function AdminChatPage() {
             {/* Messages */}
             <div className="flex-1 overflow-y-auto px-5 py-4 space-y-3">
               {messages.map((msg) => {
-                const isMine = msg.sender_id === user!.id;
+                // „Meine Nachricht" = von einem Admin-/Teamleiter-Konto gesendet
+                const isMine = msg.sender_id === user!.id || adminIdsRef.current.has(msg.sender_id);
                 const isAi = msg.is_ai;
                 return (
                   <div key={msg.id} className={cn("flex items-end gap-2", isMine ? "justify-end" : "justify-start")}>
