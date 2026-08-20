@@ -173,7 +173,7 @@ async function runSteps(page: Page, run: Run, steps: Step[]) {
 
 async function processOne(): Promise<boolean> {
   // Debug-Log für Polling (nur lokal/journal)
-  // console.log(`[${new Date().toISOString()}] Polling queue...`);
+  console.log(`[${new Date().toISOString()}] Polling queue...`);
   
   const { data: claimed, error } = await db.rpc("bot_claim_next_run", { _worker: WORKER_NAME });
   if (error) { 
