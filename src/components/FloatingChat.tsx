@@ -134,22 +134,38 @@ export default function FloatingChat() {
     return () => { supabase.removeChannel(channel); };
   }, [user, teamLeaderId, open, leader.name, triggerNotification]);
 
+  const loadHistory = async () => {
+    if (!user || !teamLeaderId) return;
+    setLoadError(null);
+    const { data, error } = await supabase
+      .from("chat_messages")
+      .select("*")
+      .or(`and(sender_id.eq.${user.id},receiver_id.eq.${teamLeaderId}),and(sender_id.eq.${teamLeaderId},receiver_id.eq.${user.id})`)
+      .order("created_at", { ascending: true })
+      .limit(200);
+
+    if (error) {
+      console.error("Chat-Verlauf konnte nicht geladen werden:", error);
+      setLoadError(error.message);
+      return;
+    }
+
+    const rows = ((data ?? []) as ChatMessage[]).filter((m) => !isInternalAdminNote(m));
+    // Verlauf zusammenführen statt ersetzen – nichts geht verloren.
+    setHumanMessages((prev) => {
+      const map = new Map<string, ChatMessage>();
+      for (const m of [...prev, ...rows]) map.set(m.id, m);
+      return Array.from(map.values()).sort(
+        (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
+      );
+    });
+    setUnread(0);
+    setHasNewMessage(false);
+  };
+
   useEffect(() => {
     if (!open || !user || !teamLeaderId) return;
-    const load = async () => {
-      const { data } = await supabase
-        .from("chat_messages")
-        .select("*")
-        .or(`and(sender_id.eq.${user.id},receiver_id.eq.${teamLeaderId}),and(sender_id.eq.${teamLeaderId},receiver_id.eq.${user.id})`)
-        .not("message", "ilike", "%[ESCALATE]%")
-        .not("message", "ilike", "%🤖 KI-Eskalation%")
-        .order("created_at", { ascending: true })
-        .limit(100);
-      setHumanMessages((data ?? []) as ChatMessage[]);
-      setUnread(0);
-      setHasNewMessage(false);
-    };
-    load();
+    loadHistory();
   }, [open, user, teamLeaderId]);
 
   useEffect(() => {
@@ -157,18 +173,24 @@ export default function FloatingChat() {
   }, [humanMessages, leaderTyping]);
 
   const sendMessage = async () => {
-    if (!newMessage.trim() || !user || !teamLeaderId) return;
+    if ((!newMessage.trim() && !pendingAttachment) || !user || !teamLeaderId) return;
     const text = newMessage.trim();
+    const attachment = pendingAttachment;
     setNewMessage("");
+    setPendingAttachment(null);
     setSending(true);
     try {
-      await supabase.from("chat_messages").insert({
+      const { error } = await supabase.from("chat_messages").insert({
         sender_id: user.id,
         receiver_id: teamLeaderId,
-        message: text,
+        message: text || (attachment ? `📎 ${attachment.name}` : ""),
+        attachment_url: attachment?.url ?? null,
+        attachment_name: attachment?.name ?? null,
+        attachment_type: attachment?.type ?? null,
       } as any);
-    } catch (e) {
-      toast({ title: "Fehler", description: "Nachricht konnte nicht gesendet werden.", variant: "destructive" });
+      if (error) throw error;
+    } catch (e: any) {
+      toast({ title: "Fehler", description: e?.message ?? "Nachricht konnte nicht gesendet werden.", variant: "destructive" });
     } finally {
       setSending(false);
     }
