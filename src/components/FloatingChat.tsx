@@ -80,6 +80,8 @@ export default function FloatingChat() {
   const [unread, setUnread] = useState(0);
   const [hasNewMessage, setHasNewMessage] = useState(false);
   const [leaderTyping, setLeaderTyping] = useState(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [pendingAttachment, setPendingAttachment] = useState<ChatAttachment | null>(null);
   
   const bottomRef = useRef<HTMLDivElement>(null);
   const isOnChatPage = location.pathname.includes("/chat");
