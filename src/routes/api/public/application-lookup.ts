@@ -141,61 +141,16 @@ export const Route = createFileRoute("/api/public/application-lookup")({
         }
         const base = (parsed.data.portal_url || new URL(request.url).origin).replace(/\/+$/, "");
 
-        // Ohne Termin haengt der naechste Schritt an der Buchungsart der
-        // Landing: 'calendly' hat keinen internen Kalender — dort wuerde die
-        // Terminauswahl "Buchung derzeit nicht moeglich" zeigen.
-        if (!booked) {
-          const bookingLanding = originLanding ?? targetLanding;
-          const bookingMode = String((bookingLanding as any)?.booking_mode ?? "calendly");
-          if (bookingMode === "calendly") {
-            const calBase = String((bookingLanding as any)?.calendly_url ?? "").trim();
-            if (!calBase) {
-              return json({
-                found: true,
-                booked: false,
-                reason: "calendly_missing",
-                message:
-                  "Ihre Bewerbung liegt uns vor, die Terminbuchung ist aber gerade nicht verfügbar. Bitte antworten Sie kurz auf Ihre Bewerbungs-E-Mail — wir melden uns umgehend mit einem Termin.",
-              });
-            }
-            const parts = String(app.full_name ?? "").trim().split(/\s+/).filter(Boolean);
-            const firstName = parts[0] ?? "";
-            const lastName = parts.slice(1).join(" ");
-            const sep = calBase.includes("?") ? "&" : "?";
-            const qs = new URLSearchParams({
-              name: app.full_name ?? "",
-              email: app.email ?? email,
-              first_name: firstName,
-              last_name: lastName,
-              utm_content: app.id,
-              utm_source: app.source_slug ?? "",
-            });
-            if (app.phone) qs.set("a1", String(app.phone));
-            return json({
-              found: true,
-              booked: false,
-              interview_ready: true,
-              landing_slug: landingSlug,
-              redirect_url: `${calBase}${sep}${qs.toString()}`,
-              message: "Ihre Bewerbung wurde gefunden. Sie werden jetzt zur Terminbuchung weitergeleitet.",
-            });
-          }
-        }
-
-        // Ohne gebuchten Termin führt die E-Mail-Eingabe direkt zur
-        // Terminauswahl, sonst ins Bewerbungsgespräch.
-        const redirectUrl = booked
-          ? `${base}/bewerbung?token=${encodeURIComponent(magicToken)}`
-          : `${base}/termin/buchen/${encodeURIComponent(magicToken)}`;
+        // Das Bewerbungsgespräch kann sofort gestartet werden — es gibt keine
+        // Terminbuchung / Umbuchung mehr im Bewerber-Flow.
+        const redirectUrl = `${base}/bewerbung?token=${encodeURIComponent(magicToken)}`;
         return json({
           found: true,
           booked,
           interview_ready: true,
           landing_slug: landingSlug,
           redirect_url: redirectUrl,
-          message: booked
-            ? "Dein Termin ist bestätigt. Du wirst jetzt zum Bewerbungsgespräch weitergeleitet."
-            : "Deine Bewerbung wurde gefunden. Du wirst jetzt zur Terminauswahl weitergeleitet.",
+          message: "Deine Bewerbung wurde gefunden. Du wirst jetzt zum Bewerbungsgespräch weitergeleitet.",
         });
       },
     },
