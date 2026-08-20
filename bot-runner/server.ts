@@ -1,17 +1,13 @@
-console.log("VOR importen...");
-import { createClient } from "@supabase/supabase-js";
-import { chromium } from "playwright";
-console.log("NACH importen...");
-
-
 // Bot-Runner: holt Läufe aus der Queue und arbeitet die Schritte im Browser ab.
-// Läuft als eigener Dienst (Bun + Playwright), NICHT im Worker/Portal.
+// Läuft als eigener Dienst (Node.js + Playwright), NICHT im Worker/Portal.
 //
-//   bun install && bunx playwright install chromium
-//   SUPABASE_URL=… SERVICE_ROLE_KEY=… bun run server.ts
+//   npm install && npx playwright install chromium
+//   SUPABASE_URL=… SERVICE_ROLE_KEY=… npm start
 
 import { createClient } from "@supabase/supabase-js";
 import { chromium, type Page } from "playwright";
+
+console.log(`[${new Date().toISOString()}] Runner-Modul geladen`);
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SERVICE_ROLE_KEY = process.env.SERVICE_ROLE_KEY ?? process.env.SUPABASE_SERVICE_ROLE_KEY;
