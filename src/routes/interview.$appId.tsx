@@ -339,6 +339,7 @@ function InterviewPage() {
             Verstanden, Gespräch starten
           </Button>
         </div>
+        <WhatsAppSupportButton />
       </div>
     );
   }

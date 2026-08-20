@@ -8,6 +8,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Loader2, AlertCircle, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import WhatsAppSupportButton from "@/components/WhatsAppSupportButton";
 
 export const Route = createFileRoute("/bewerbung/")({
   head: () => ({
@@ -241,6 +242,7 @@ function BewerbungLandingPage() {
           </>
         )}
       </div>
+      <WhatsAppSupportButton />
     </div>
   );
 }
