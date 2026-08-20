@@ -246,6 +246,14 @@ export default function FloatingChat() {
           </div>
 
           <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            {loadError && (
+              <div className="rounded-xl border border-destructive/30 bg-destructive/5 p-3 text-[12px] text-destructive flex items-center justify-between gap-2">
+                <span>Verlauf konnte nicht geladen werden.</span>
+                <Button size="sm" variant="outline" className="h-7 gap-1 text-[11px]" onClick={loadHistory}>
+                  <RefreshCw className="h-3 w-3" /> Erneut versuchen
+                </Button>
+              </div>
+            )}
             {humanMessages.map((msg) => {
               const isMine = msg.sender_id === user?.id;
               return (
