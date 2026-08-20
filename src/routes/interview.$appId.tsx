@@ -37,14 +37,8 @@ async function postInterview(body: unknown) {
   }
   let data: any = {};
   try { data = raw ? JSON.parse(raw) : {}; } catch { throw new Error("Antwort konnte nicht gelesen werden."); }
-  // "Noch zu früh" ist kein Fehler — Frontend rendert Wartescreen mit Countdown.
-  if (res.status === 425 || data?.not_yet || data?.not_booked)
-    return {
-      __notYet: true as const,
-      scheduled_at: data?.scheduled_at ?? null,
-      not_booked: data?.not_booked === true || (!data?.scheduled_at && res.status === 425),
-      message: data?.error ?? null,
-    };
+  // Termin-Gates gibt es nicht mehr — das Gespräch ist jederzeit startbar.
+
   if (!res.ok) throw new Error(data?.error ?? `Fehler ${res.status}`);
   return data;
 }
@@ -78,9 +72,6 @@ function InterviewPage() {
   const [error, setError] = useState<string | null>(null);
   const [consent, setConsent] = useState(false);
   const [startedAt, setStartedAt] = useState<number | null>(null);
-  const [scheduledAt, setScheduledAt] = useState<number | null>(null);
-  // Kein aktiver Termin (nie gebucht oder storniert) — eigener Screen statt Countdown ins Leere.
-  const [notBooked, setNotBooked] = useState(false);
   const [branding, setBranding] = useState<{ firmenname?: string; primary_color?: string; logo_url?: string | null; recruiter_name?: string; recruiter_avatar_url?: string | null } | null>(null);
   // Vom Server aufgelöstes Branding (Fast-Track-Firma). Hat Vorrang vor der
   // direkten Datenbank-Abfrage, die bei unveröffentlichten Seiten leer bleibt.
@@ -146,15 +137,6 @@ function InterviewPage() {
         const data = await postInterview({ applicationId: appId, action: "init" });
         if (cancelled) return;
         applyServerBranding(data);
-        if ((data as any).__notYet) {
-          const sched = (data as any).scheduled_at ? new Date((data as any).scheduled_at).getTime() : null;
-          setScheduledAt(sched);
-          setNotBooked(!sched && (data as any).not_booked === true);
-          setInitializing(false);
-          return;
-        }
-        setScheduledAt(null);
-        setNotBooked(false);
         const history = data.history ?? [];
         // Begrüßung nicht abrupt einblenden: kurz "tippen" lassen.
         if (history.length > 0 && history[history.length - 1]?.role === "assistant") {
@@ -183,31 +165,8 @@ function InterviewPage() {
     return () => { cancelled = true; };
   }, [appId, consent]);
 
-  // Auto-Retry sobald der Termin (minus 5 Min Vorlauf) erreicht ist.
-  useEffect(() => {
-    if (!scheduledAt) return;
-    const readyAt = scheduledAt - 5 * 60 * 1000;
-    const check = async () => {
-      if (Date.now() < readyAt) return;
-      try {
-        const data = await postInterview({ applicationId: appId, action: "init" });
-        if ((data as any).__notYet) return;
-        applyServerBranding(data);
-        setScheduledAt(null);
-        setMessages(data.history ?? []);
-        if (data.ended) setEnded(true);
-        if (data.application_status) setAppStatus(data.application_status);
-        {
-          const im = (data as any)?.invite_mail;
-          if (im?.registration_link) setRegistrationLink(im.registration_link);
-        }
-        setStartedAt(data.interview_started_at ? new Date(data.interview_started_at).getTime() : Date.now());
-      } catch { /* still waiting */ }
-    };
-    const id = setInterval(check, 5000);
-    check();
-    return () => clearInterval(id);
-  }, [scheduledAt, appId]);
+  // Kein Warten mehr auf den Termin: das Gespräch startet sofort.
+
 
   // Kein hartes Zeitlimit mehr im Frontend.
   // Das Gespräch endet ausschließlich durch:
@@ -506,83 +465,5 @@ function InterviewPage() {
   );
 }
 
-function WaitingScreen({
-  scheduledAt,
-  company,
-  primary,
-  logoUrl,
-  recruiterName,
-}: {
-  scheduledAt: number;
-  company: string;
-  primary: string;
-  logoUrl: string | null;
-  recruiterName: string;
-}) {
-  const [now, setNow] = useState(Date.now());
-  useEffect(() => {
-    const id = setInterval(() => setNow(Date.now()), 1000);
-    return () => clearInterval(id);
-  }, []);
-
-  const diffMs = Math.max(0, scheduledAt - now);
-  const totalMin = Math.floor(diffMs / 60000);
-  const days = Math.floor(totalMin / (60 * 24));
-  const hours = Math.floor((totalMin % (60 * 24)) / 60);
-  const minutes = totalMin % 60;
-  const seconds = Math.floor((diffMs % 60000) / 1000);
-
-  const dateStr = new Date(scheduledAt).toLocaleDateString("de-DE", {
-    weekday: "long", day: "2-digit", month: "long", year: "numeric", timeZone: "Europe/Berlin",
-  });
-  const timeStr = new Date(scheduledAt).toLocaleTimeString("de-DE", {
-    hour: "2-digit", minute: "2-digit", timeZone: "Europe/Berlin",
-  });
-
-  let humanCountdown: string;
-  if (days > 0) humanCountdown = `in ${days} ${days === 1 ? "Tag" : "Tagen"} und ${hours} Std.`;
-  else if (hours > 0) humanCountdown = `in ${hours} Std. ${minutes} Min.`;
-  else if (minutes > 0) humanCountdown = `in ${minutes} Min. ${seconds.toString().padStart(2, "0")} Sek.`;
-  else humanCountdown = `in ${seconds} Sekunden`;
-
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-950 p-4">
-      <div className="max-w-lg w-full bg-white dark:bg-slate-900 rounded-2xl border border-border p-8 space-y-5 shadow-lg text-center">
-        {logoUrl && <img src={logoUrl} alt={company} className="h-10 object-contain mx-auto" />}
-        <div className="text-5xl leading-none">⏰</div>
-        <div>
-          <h1 className="text-2xl font-bold leading-tight mb-1">Sie sind etwas zu früh</h1>
-          <p className="text-sm text-muted-foreground">
-            Ihr Bewerbungsgespräch mit {recruiterName} ist gebucht für:
-          </p>
-        </div>
-
-        <div className="rounded-xl border-2 p-4" style={{ borderColor: primary }}>
-          <p className="text-sm text-muted-foreground">{dateStr}</p>
-          <p className="text-3xl font-bold mt-1" style={{ color: primary }}>{timeStr} Uhr</p>
-        </div>
-
-        <div className="rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-border p-4">
-          <p className="text-xs uppercase tracking-wide text-muted-foreground mb-1">Ihr Gespräch beginnt</p>
-          <p className="text-lg font-semibold">{humanCountdown}</p>
-        </div>
-
-        <div className="text-left text-sm text-muted-foreground space-y-2 bg-blue-50 dark:bg-blue-950/30 rounded-lg p-4 border border-blue-100 dark:border-blue-900">
-          <p className="font-semibold text-foreground">So bereiten Sie sich optimal vor:</p>
-          <ul className="space-y-1.5 list-none">
-            <li>✅ Sorgen Sie für eine ruhige Umgebung</li>
-            <li>✅ Halten Sie eine stabile Internetverbindung bereit</li>
-            <li>✅ Denken Sie kurz über Ihre Motivation und Verfügbarkeit nach</li>
-          </ul>
-        </div>
-
-        <p className="text-xs text-muted-foreground">
-          Diese Seite lädt sich automatisch neu — sobald es losgeht, startet Ihr Gespräch direkt.
-          Sie können das Fenster gerne geöffnet lassen.
-        </p>
-      </div>
-    </div>
-  );
-}
 
 
