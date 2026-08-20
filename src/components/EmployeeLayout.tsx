@@ -34,6 +34,7 @@ import {
 } from "lucide-react";
 import { NotificationBell } from "@/components/NotificationBell";
 import FloatingChat from "@/components/FloatingChat";
+import WhatsAppSupportButton from "@/components/WhatsAppSupportButton";
 import { MissingPayrollDataBanner } from "@/components/MissingPayrollDataBanner";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useEffect, useState } from "react";
@@ -363,6 +364,7 @@ export default function EmployeeLayout() {
             <Outlet />
           </main>
           <FloatingChat />
+          <WhatsAppSupportButton />
           {/* Mobile Bottom-Navigation */}
           <nav
             className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-card border-t border-border shadow-[0_-4px_12px_-4px_rgba(0,0,0,0.1)]"
