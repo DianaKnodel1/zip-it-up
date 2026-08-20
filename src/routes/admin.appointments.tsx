@@ -318,7 +318,7 @@ function AdminAppointmentsPage() {
     <div className="p-5 space-y-4">
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <div>
-          <h1 className="text-lg font-heading font-bold text-foreground">{"'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            root@server1:/opt/apps/portal# cd /opt/apps/portal/bot-runner\r\n# Lade die Umgebungsvariablen aus deiner Datei und starte Bun direkt\r\nexport $(cat /opt/apps/portal/.env.server | xargs)\r\n/usr/local/bin/bun run server.ts\r\n^C\r\nroot@server1:/opt/apps/portal/bot-runner# cd /opt/apps/portal/bot-runner\r\n# Lade die Umgebungsvariablen aus deiner Datei und starte Bun direkt\r\nexport $(cat /opt/apps/portal/.env.server | xargs)\r\n/usr/local/bin/bun run server.ts\r\n^C\r\nroot@server1:/opt/apps/portal/bot-runner#\r\n\n\n\npassiert nix"}</h1>
+          <h1 className="text-lg font-heading font-bold text-foreground">{"'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            was da los"}</h1>
           <p className="text-xs text-muted-foreground">
             {enrichedBookings.length} Auftrags-/Mitarbeiter-Buchungen
           </p>
