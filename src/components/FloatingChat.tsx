@@ -9,8 +9,9 @@ import { useToast } from "@/hooks/use-toast";
 import { useTeamLeader } from "@/hooks/use-team-leader";
 import { useChatNotifications } from "@/hooks/use-chat-notifications";
 import { useTenant } from "@/contexts/TenantContext";
-import { MessageCircle, Send, BadgeCheck, Minus } from "lucide-react";
+import { MessageCircle, Send, BadgeCheck, Minus, RefreshCw } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ChatAttachmentButton, AttachmentPreview, type ChatAttachment } from "@/components/ChatAttachmentButton";
 
 interface ChatMessage {
   id: string;
@@ -20,6 +21,16 @@ interface ChatMessage {
   read: boolean;
   created_at: string;
   is_ai?: boolean;
+  attachment_url?: string | null;
+  attachment_name?: string | null;
+  attachment_type?: string | null;
+}
+
+// Interne Admin-/KI-Notizen werden im Mitarbeiter-Chat ausgeblendet (clientseitig,
+// damit keine normale Nachricht durch serverseitige Filter verloren geht).
+function isInternalAdminNote(msg: ChatMessage) {
+  const m = msg.message ?? "";
+  return m.includes("[ESCALATE]") || m.includes("🤖 KI-Eskalation") || m.includes("🤖 KI Eskalation");
 }
 
 function formatTime(dateStr: string) {
