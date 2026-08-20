@@ -1,3 +1,4 @@
+console.log("Runner Script geladen...");
 // Bot-Runner: holt Läufe aus der Queue und arbeitet die Schritte im Browser ab.
 // Läuft als eigener Dienst (Bun + Playwright), NICHT im Worker/Portal.
 //

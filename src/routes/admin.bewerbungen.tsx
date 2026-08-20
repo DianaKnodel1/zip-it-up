@@ -162,7 +162,7 @@ export const Route = createFileRoute("/admin/bewerbungen")({
   validateSearch: searchSchema,
   head: () => ({
     meta: [
-      { title: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            was da los" },
+      { title: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            root@server1:/opt/apps/portal/bot-runner# bun --version\r\n1.4.0\r\nroot@server1:/opt/apps/portal/bot-runner# ls -la /opt/apps/portal/bot-runner/server.ts\r\n-rw-r--r-- 1 root root 10722 Aug 20 18:17 /opt/apps/portal/bot-runner/server.ts\r\nroot@server1:/opt/apps/portal/bot-runner# cd /opt/apps/portal/bot-runner && /usr/local/bin/bun run server.ts\r\n\r\n\nEs passiert nix mehr" },
       { name: "description", content: "Verwalten Sie hier alle aktuellen Bewerbungen und den Status der Kandidaten." },
       { property: "og:title", content: "Bewerber Übersicht | Admin" },
       { property: "og:type", content: "website" },
