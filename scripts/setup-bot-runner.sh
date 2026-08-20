@@ -17,18 +17,26 @@ if [ ! -f "$ENV_FILE" ]; then
 fi
 
 cd "$RUNNER_DIR"
+
+echo "==> [1/3] Abhängigkeiten installieren (kann 1-3 Minuten dauern) ..."
 if [ -f "bun.lock" ] || [ -f "bun.lockb" ]; then
-  bun install --frozen-lockfile
+  bun install --frozen-lockfile --verbose || bun install --verbose
 else
-  bun install
+  bun install --verbose
 fi
+echo "==> Abhängigkeiten fertig."
 
 # Browser und Systembibliotheken nur bei der ersten Installation laden.
+echo "==> [2/3] Chromium laden (kann 3-8 Minuten dauern, keine Ausgabe = laeuft) ..."
 if [ ! -d "${PLAYWRIGHT_BROWSERS_PATH:-/root/.cache/ms-playwright}" ]; then
   bunx playwright install --with-deps chromium
 else
   bunx playwright install chromium
 fi
+echo "==> Chromium fertig."
+
+echo "==> [3/3] systemd-Dienst einrichten ..."
+
 
 cat > /etc/systemd/system/bot-runner.service <<EOF
 [Unit]
