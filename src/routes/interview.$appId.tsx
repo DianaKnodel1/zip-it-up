@@ -328,6 +328,7 @@ function InterviewPage() {
           <div className="text-sm text-muted-foreground space-y-2">
             <p><strong>Das Gespräch findet digital statt</strong> – Ihre Antworten gehen anschließend direkt an Ihre Ansprechpartnerin bzw. Ihren Ansprechpartner.</p>
             <p>Das Gespräch dauert in der Regel <strong>15 bis 30 Minuten</strong> (max. 45 Min.) und besteht aus einigen Fragen zu Ihrer Person, Motivation und Verfügbarkeit — nehmen Sie sich die Zeit, die Sie brauchen.</p>
+            <p>Bei technischen Problemen teilen Sie uns dies bitte mit.</p>
           </div>
           <Button
             size="lg"
@@ -342,43 +343,7 @@ function InterviewPage() {
     );
   }
 
-  // Kein aktiver Termin: Sackgasse vermeiden, direkt zur Selbstbedienung führen.
-  if (notBooked) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-950 p-4">
-        <div className="max-w-lg w-full bg-white dark:bg-slate-900 rounded-2xl border border-border p-8 space-y-5 shadow-lg text-center">
-          {branding?.logo_url && <img src={branding.logo_url} alt={company} className="h-10 object-contain mx-auto" />}
-          <div className="text-5xl leading-none">📅</div>
-          <h1 className="text-2xl font-bold leading-tight">Für Sie ist aktuell kein Termin gebucht</h1>
-          <p className="text-sm text-muted-foreground">
-            Entweder wurde Ihr Termin storniert oder es wurde noch keiner ausgewählt. Sie können sich in
-            wenigen Sekunden einen neuen Termin sichern — Ihre Bewerbung bleibt dabei erhalten.
-          </p>
-          <Button size="lg" className="w-full" style={{ background: primary }} asChild>
-            <a href="/bewerbung">Neuen Termin auswählen</a>
-          </Button>
-          <p className="text-xs text-muted-foreground">
-            Sie geben dort nur Ihre E-Mail-Adresse ein und wählen einen passenden Zeitpunkt für Ihr Interview.
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  // Warte-Screen: Termin liegt in der Zukunft (>5 Min Vorlauf noch nicht erreicht).
-  if (scheduledAt && Date.now() < scheduledAt - 5 * 60 * 1000) {
-    return (
-      <WaitingScreen
-        scheduledAt={scheduledAt}
-        company={company}
-        primary={primary}
-        logoUrl={branding?.logo_url || null}
-        recruiterName={recruiterDisplayName}
-      />
-    );
-  }
-
-
+  // Kein Termin-Gate mehr: Das Gespräch kann jederzeit sofort gestartet werden.
 
   const avatarUrl = serverBranding?.recruiter_avatar_url || branding?.recruiter_avatar_url || null;
   const recruiterName = recruiterDisplayName;

@@ -398,7 +398,7 @@ export const Route = createFileRoute("/api/public/interview-chat")({
           return json({ error: "Interview bereits abgeschlossen", status: app.interview_status }, 409);
         }
 
-        const isTest = !!(app as any).is_test;
+        void (app as any).is_test;
 
         // Termin-Gating entfernt: Das Bewerbungsgespräch kann jederzeit sofort
         // gestartet werden (kein gebuchter Termin, keine Wartezeit, kein Umbuchen).
