@@ -434,11 +434,10 @@ function AdminChatPage() {
   const sendMessage = async () => {
     if ((!newMessage.trim() && !pendingAttachment) || !selectedUserId || !user) return;
     setSending(true);
-    // Mitarbeiter sehen nur Nachrichten ihres Teamleiters → im Zweifel in dessen Namen senden
-    const leaderId = leaderMapRef.current.get(selectedUserId) ?? null;
-    const senderId = leaderId && leaderId !== user.id && isStaff ? leaderId : user.id;
+    // Immer mit dem echten Admin-Konto senden – der Teamleiter-Anzeigename
+    // kommt aus den Mandanten-Einstellungen, nicht aus einer fremden sender_id.
     await supabase.from("chat_messages").insert({
-      sender_id: senderId,
+      sender_id: user.id,
       receiver_id: selectedUserId,
       message: newMessage.trim() || (pendingAttachment ? `📎 ${pendingAttachment.name}` : ""),
       attachment_url: pendingAttachment?.url ?? null,
