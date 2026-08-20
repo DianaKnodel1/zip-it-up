@@ -110,10 +110,6 @@ export const Route = createFileRoute("/api/public/application-lookup")({
 
         // Landing-Info robust auflösen: alte Datensätze haben oft nur source_slug,
         // neue Vermittlungen zusätzlich source_landing_id/target_landing_id.
-        const originLanding =
-          (await loadLandingById(app.source_landing_id))
-          || (await loadLandingBySlug(app.source_slug))
-          || (await loadLandingById(app.target_landing_id));
         const targetLanding = await followFasttrack(
           (await loadLandingById(app.target_landing_id))
           || (await loadLandingById(app.source_landing_id))
