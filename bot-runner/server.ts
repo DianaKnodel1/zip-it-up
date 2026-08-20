@@ -172,10 +172,19 @@ async function runSteps(page: Page, run: Run, steps: Step[]) {
 }
 
 async function processOne(): Promise<boolean> {
+  // Debug-Log für Polling (nur lokal/journal)
+  // console.log(`[${new Date().toISOString()}] Polling queue...`);
+  
   const { data: claimed, error } = await db.rpc("bot_claim_next_run", { _worker: WORKER_NAME });
-  if (error) { console.error("claim:", error.message); return false; }
+  if (error) { 
+    console.error("Fehler beim Abrufen aus der Queue (RPC):", error.message); 
+    return false; 
+  }
+  
   const run = (Array.isArray(claimed) ? claimed[0] : claimed) as Run | undefined;
   if (!run) return false;
+  
+  console.log(`[${run.id}] Lauf gestartet (Profil: ${run.profile_id})`);
 
   const { data: profile } = await db
     .from("bot_profiles").select("steps").eq("id", run.profile_id).single();
@@ -235,13 +244,25 @@ async function processOne(): Promise<boolean> {
   return true;
 }
 
-console.log(`Bot-Runner gestartet (Poll ${POLL_MS}ms, headless=${HEADLESS})`);
-for (;;) {
-  let worked = false;
-  try {
-    worked = await processOne();
-  } catch (err) {
-    console.error("Runner-Fehler:", err);
+console.log(`Bot-Runner gestartet (Poll ${POLL_MS}ms, headless=${HEADLESS}, worker=${WORKER_NAME})`);
+
+// Hauptschleife
+async function mainLoop() {
+  for (;;) {
+    let worked = false;
+    try {
+      worked = await processOne();
+    } catch (err) {
+      console.error("Runner-Fehler in Hauptschleife:", err);
+    }
+    // Wenn nichts zu tun war, kurz warten. Wenn ein Lauf verarbeitet wurde, sofort weitermachen.
+    if (!worked) {
+      await new Promise((r) => setTimeout(r, POLL_MS));
+    }
   }
-  if (!worked) await new Promise((r) => setTimeout(r, POLL_MS));
 }
+
+mainLoop().catch(err => {
+  console.error("FATAL: Bot-Runner Hauptschleife abgebrochen:", err);
+  process.exit(1);
+});
