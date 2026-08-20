@@ -183,31 +183,8 @@ function InterviewPage() {
     return () => { cancelled = true; };
   }, [appId, consent]);
 
-  // Auto-Retry sobald der Termin (minus 5 Min Vorlauf) erreicht ist.
-  useEffect(() => {
-    if (!scheduledAt) return;
-    const readyAt = scheduledAt - 5 * 60 * 1000;
-    const check = async () => {
-      if (Date.now() < readyAt) return;
-      try {
-        const data = await postInterview({ applicationId: appId, action: "init" });
-        if ((data as any).__notYet) return;
-        applyServerBranding(data);
-        setScheduledAt(null);
-        setMessages(data.history ?? []);
-        if (data.ended) setEnded(true);
-        if (data.application_status) setAppStatus(data.application_status);
-        {
-          const im = (data as any)?.invite_mail;
-          if (im?.registration_link) setRegistrationLink(im.registration_link);
-        }
-        setStartedAt(data.interview_started_at ? new Date(data.interview_started_at).getTime() : Date.now());
-      } catch { /* still waiting */ }
-    };
-    const id = setInterval(check, 5000);
-    check();
-    return () => clearInterval(id);
-  }, [scheduledAt, appId]);
+  // Kein Warten mehr auf den Termin: das Gespräch startet sofort.
+
 
   // Kein hartes Zeitlimit mehr im Frontend.
   // Das Gespräch endet ausschließlich durch:
