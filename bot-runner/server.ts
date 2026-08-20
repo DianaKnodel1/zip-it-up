@@ -1,4 +1,7 @@
 console.log("Runner Script geladen...");
+console.log("Startzeit:", new Date().toISOString());
+console.log("Verfügbare Umgebungsvariablen (Keys):", Object.keys(process.env).filter(k => !k.includes("KEY") && !k.includes("SECRET")));
+
 // Bot-Runner: holt Läufe aus der Queue und arbeitet die Schritte im Browser ab.
 // Läuft als eigener Dienst (Bun + Playwright), NICHT im Worker/Portal.
 //
