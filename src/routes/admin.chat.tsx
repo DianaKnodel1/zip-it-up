@@ -167,6 +167,7 @@ function AdminChatPage() {
     const agg = new Map<string, Agg>();
     // msgs are ordered DESC → first entry per partner is the newest
     for (const m of (msgsRes.data ?? []) as any[]) {
+      if (isInternalAdminNote(m.message)) continue;
       // Gegenüber = die Seite, die kein Admin-/Staff-Konto ist
       const partnerId = adminIds.has(m.sender_id) ? m.receiver_id : m.sender_id;
       if (!partnerId || adminIds.has(partnerId)) continue;
