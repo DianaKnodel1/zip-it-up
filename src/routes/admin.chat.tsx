@@ -72,7 +72,7 @@ interface ChatMessage {
 }
 
 function AdminChatPage() {
-  const { user, isStaff } = useAuth();
+  const { user } = useAuth();
   const onlineUsers = useOnlineUsers();
   // Eigener Teamleiter-Status: steuert, was Mitarbeiter im Chat lesen.
   const [leaderOnline, setLeaderOnline] = useState(true);
