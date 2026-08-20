@@ -19,10 +19,19 @@ fi
 cd "$RUNNER_DIR"
 
 echo "==> [1/3] Abhängigkeiten installieren (kann 1-3 Minuten dauern) ..."
-if [ -f "bun.lock" ] || [ -f "bun.lockb" ]; then
-  bun install --frozen-lockfile --verbose || bun install --verbose
-else
-  bun install --verbose
+if ! command -v npm >/dev/null 2>&1; then
+  echo "npm fehlt – installiere Node.js/npm ..."
+  apt-get update
+  apt-get install -y nodejs npm
+fi
+
+# Bun 1.4 kann auf frischen Servern ohne Lockdatei bei der Paketauflösung
+# ohne Ausgabe hängen bleiben. npm installiert dieselben reinen JS-Pakete
+# zuverlässig; ausgeführt wird der Runner anschließend weiterhin mit Bun.
+if ! timeout 600 npm install --omit=dev --no-audit --no-fund --loglevel=notice; then
+  echo "Abhängigkeitsinstallation nach 10 Minuten abgebrochen oder fehlgeschlagen." >&2
+  echo "Bitte Netzwerk/DNS prüfen: curl -I https://registry.npmjs.org/playwright" >&2
+  exit 1
 fi
 echo "==> Abhängigkeiten fertig."
 
