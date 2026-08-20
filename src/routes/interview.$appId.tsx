@@ -146,15 +146,6 @@ function InterviewPage() {
         const data = await postInterview({ applicationId: appId, action: "init" });
         if (cancelled) return;
         applyServerBranding(data);
-        if ((data as any).__notYet) {
-          const sched = (data as any).scheduled_at ? new Date((data as any).scheduled_at).getTime() : null;
-          setScheduledAt(sched);
-          setNotBooked(!sched && (data as any).not_booked === true);
-          setInitializing(false);
-          return;
-        }
-        setScheduledAt(null);
-        setNotBooked(false);
         const history = data.history ?? [];
         // Begrüßung nicht abrupt einblenden: kurz "tippen" lassen.
         if (history.length > 0 && history[history.length - 1]?.role === "assistant") {
