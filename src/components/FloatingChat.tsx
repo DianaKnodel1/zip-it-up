@@ -113,10 +113,13 @@ export default function FloatingChat() {
         const isFromMe = msg.sender_id === user.id && msg.receiver_id === teamLeaderId;
         
         if (!isFromLeader && !isFromMe) return;
-        if (msg.message.includes("[ESCALATE]") || msg.message.includes("🤖 KI Eskalation")) return;
+        if (isInternalAdminNote(msg)) return;
+
+        // Immer in den Verlauf aufnehmen (auch wenn zu), damit nichts verloren geht.
+        setHumanMessages((prev) => (prev.some((m) => m.id === msg.id) ? prev : [...prev, msg]));
 
         if (open) {
-          setHumanMessages((prev) => [...prev, msg]);
+          {
           if (isFromLeader) {
             supabase.from("chat_messages").update({ read: true } as any).eq("id", msg.id).then();
           }
