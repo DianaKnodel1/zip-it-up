@@ -82,54 +82,58 @@ export default function FloatingChat() {
   const [leaderTyping, setLeaderTyping] = useState(false);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [pendingAttachment, setPendingAttachment] = useState<ChatAttachment | null>(null);
-  
+  // Fallback-Empfänger: letzter Absender, der mir geschrieben hat (falls kein
+  // team_leader_id im Profil hinterlegt ist).
+  const [fallbackPartnerId, setFallbackPartnerId] = useState<string | null>(null);
+
   const bottomRef = useRef<HTMLDivElement>(null);
   const isOnChatPage = location.pathname.includes("/chat");
+  const recipientId = teamLeaderId ?? fallbackPartnerId;
 
   const { trigger: triggerNotification } = useChatNotifications({ unread, enabled: true });
 
   useEffect(() => {
-    if (!user || !teamLeaderId || isOnChatPage) return;
+    if (!user || isOnChatPage) return;
     const check = async () => {
       const { count } = await supabase
         .from("chat_messages")
         .select("*", { count: "exact", head: true })
         .eq("receiver_id", user.id)
-        .eq("sender_id", teamLeaderId)
         .eq("read", false);
       setUnread(count || 0);
       setLoaded(true);
     };
     check();
-  }, [user, teamLeaderId, isOnChatPage]);
+  }, [user, isOnChatPage]);
 
   useEffect(() => {
-    if (!user || !teamLeaderId) return;
+    if (!user) return;
     const channel = supabase
       .channel("floating-chat-main")
       .on("postgres_changes", { event: "INSERT", schema: "public", table: "chat_messages" }, (payload) => {
         const msg = payload.new as ChatMessage;
-        const isFromLeader = msg.sender_id === teamLeaderId && msg.receiver_id === user.id;
-        const isFromMe = msg.sender_id === user.id && msg.receiver_id === teamLeaderId;
-        
-        if (!isFromLeader && !isFromMe) return;
+        const isFromMe = msg.sender_id === user.id;
+        const isForMe = msg.receiver_id === user.id;
+
+        if (!isFromMe && !isForMe) return;
         if (isInternalAdminNote(msg)) return;
 
         // Immer in den Verlauf aufnehmen (auch wenn zu), damit nichts verloren geht.
         setHumanMessages((prev) => (prev.some((m) => m.id === msg.id) ? prev : [...prev, msg]));
+        if (isForMe && !teamLeaderId) setFallbackPartnerId(msg.sender_id);
 
         if (open) {
-          if (isFromLeader) {
+          if (isForMe) {
             supabase.from("chat_messages").update({ read: true } as any).eq("id", msg.id).then();
           }
-        } else if (isFromLeader) {
+        } else if (isForMe) {
           setUnread((u) => u + 1);
           setHasNewMessage(true);
           triggerNotification({ senderName: leader.name || "Teamleiter", body: msg.message });
         }
       })
       .on("broadcast", { event: "typing" }, (payload) => {
-        if (payload.payload.userId === teamLeaderId) {
+        if (payload.payload.userId !== user.id) {
           setLeaderTyping(true);
           setTimeout(() => setLeaderTyping(false), 3000);
         }
@@ -139,12 +143,14 @@ export default function FloatingChat() {
   }, [user, teamLeaderId, open, leader.name, triggerNotification]);
 
   const loadHistory = async () => {
-    if (!user || !teamLeaderId) return;
+    if (!user) return;
     setLoadError(null);
+    // Kompletter Verlauf des Mitarbeiters – unabhängig davon, welche
+    // Teamleiter-ID im Profil steht (ein Admin-Konto, viele Anzeigenamen).
     const { data, error } = await supabase
       .from("chat_messages")
       .select("*")
-      .or(`and(sender_id.eq.${user.id},receiver_id.eq.${teamLeaderId}),and(sender_id.eq.${teamLeaderId},receiver_id.eq.${user.id})`)
+      .or(`sender_id.eq.${user.id},receiver_id.eq.${user.id}`)
       .order("created_at", { ascending: true })
       .limit(200);
 
@@ -155,6 +161,8 @@ export default function FloatingChat() {
     }
 
     const rows = ((data ?? []) as ChatMessage[]).filter((m) => !isInternalAdminNote(m));
+    const lastIncoming = [...rows].reverse().find((m) => m.receiver_id === user.id);
+    if (lastIncoming) setFallbackPartnerId(lastIncoming.sender_id);
     // Verlauf zusammenführen statt ersetzen – nichts geht verloren.
     setHumanMessages((prev) => {
       const map = new Map<string, ChatMessage>();
@@ -163,14 +171,19 @@ export default function FloatingChat() {
         (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
       );
     });
+    void supabase
+      .from("chat_messages")
+      .update({ read: true } as any)
+      .eq("receiver_id", user.id)
+      .eq("read", false);
     setUnread(0);
     setHasNewMessage(false);
   };
 
   useEffect(() => {
-    if (!open || !user || !teamLeaderId) return;
+    if (!open || !user) return;
     loadHistory();
-  }, [open, user, teamLeaderId]);
+  }, [open, user]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
