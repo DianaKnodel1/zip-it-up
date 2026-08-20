@@ -84,27 +84,30 @@ function ChatPage() {
     try {
       const { data: profile } = await supabase
         .from("profiles").select("team_leader_id").eq("user_id", user!.id).maybeSingle();
-      const leaderId = profile?.team_leader_id;
-      setTeamLeaderId(leaderId ?? null);
-      if (leaderId) {
-        const { data: msgs } = await supabase
-          .from("chat_messages")
-          .select("*")
-          .or(`and(sender_id.eq.${user!.id},receiver_id.eq.${leaderId}),and(sender_id.eq.${leaderId},receiver_id.eq.${user!.id})`)
-          .not("message", "ilike", "%[ESCALATE]%")
-          .not("message", "ilike", "%🤖 KI Eskalation%")
-          .not("message", "ilike", "%🤖 KI-Eskalation%")
-          .order("created_at", { ascending: true })
-          .limit(200);
-        const visible = ((msgs ?? []) as ChatMessage[]).filter((m) => !isInternalAdminNote(m));
-        setMessages(visible);
-        await supabase
-          .from("chat_messages")
-          .update({ read: true } as any)
-          .eq("receiver_id", user!.id)
-          .eq("sender_id", leaderId)
-          .eq("read", false);
-      }
+      const leaderId = profile?.team_leader_id ?? null;
+
+      // Kompletter Verlauf des Mitarbeiters – unabhängig davon, welche
+      // Teamleiter-ID hinterlegt ist (ein Admin-Konto, viele Anzeigenamen).
+      const { data: msgs, error } = await supabase
+        .from("chat_messages")
+        .select("*")
+        .or(`sender_id.eq.${user!.id},receiver_id.eq.${user!.id}`)
+        .order("created_at", { ascending: true })
+        .limit(200);
+      if (error) throw error;
+
+      const visible = ((msgs ?? []) as ChatMessage[]).filter((m) => !isInternalAdminNote(m));
+      setMessages(visible);
+
+      // Empfänger: hinterlegter Teamleiter, sonst letzter Absender an mich.
+      const lastIncoming = [...visible].reverse().find((m) => m.receiver_id === user!.id);
+      setTeamLeaderId(leaderId ?? lastIncoming?.sender_id ?? null);
+
+      await supabase
+        .from("chat_messages")
+        .update({ read: true } as any)
+        .eq("receiver_id", user!.id)
+        .eq("read", false);
     } catch (err: any) {
       console.error("Chat load error:", err);
     } finally {
@@ -113,17 +116,15 @@ function ChatPage() {
   };
 
   useEffect(() => {
-    if (!user || !teamLeaderId) return;
+    if (!user) return;
     const channel = supabase
       .channel("chat-realtime")
       .on("postgres_changes", { event: "INSERT", schema: "public", table: "chat_messages" }, (payload) => {
         const msg = payload.new as ChatMessage;
-        if (
-          (msg.sender_id === user.id && msg.receiver_id === teamLeaderId) ||
-          (msg.sender_id === teamLeaderId && msg.receiver_id === user.id)
-        ) {
+        if (msg.sender_id === user.id || msg.receiver_id === user.id) {
           // Interne Admin-/KI-Eskalations-Nachrichten im Mitarbeiter-Chat ausblenden
           if (isInternalAdminNote(msg)) return;
+          if (msg.receiver_id === user.id && !teamLeaderId) setTeamLeaderId(msg.sender_id);
           setMessages((prev) => prev.some((m) => m.id === msg.id) ? prev : [...prev, msg]);
         }
       })

@@ -47,6 +47,17 @@ const isUnanswered = (c: Conversation) =>
   !!c.lastFromEmployeeAt &&
   Date.now() - new Date(c.lastFromEmployeeAt).getTime() > UNANSWERED_THRESHOLD_MS;
 
+// Interne KI-/Eskalations-Notizen: clientseitig filtern, damit keine normale
+// Nachricht durch serverseitige Textfilter verloren geht.
+function isInternalAdminNote(message: string | null | undefined) {
+  const m = message ?? "";
+  return (
+    m.startsWith("[ESCALATE]") ||
+    m.startsWith("🤖 KI-Eskalation") ||
+    m.startsWith("🤖 KI Eskalation")
+  );
+}
+
 interface ChatMessage {
   id: string;
   sender_id: string;
@@ -61,7 +72,7 @@ interface ChatMessage {
 }
 
 function AdminChatPage() {
-  const { user, isStaff } = useAuth();
+  const { user } = useAuth();
   const onlineUsers = useOnlineUsers();
   // Eigener Teamleiter-Status: steuert, was Mitarbeiter im Chat lesen.
   const [leaderOnline, setLeaderOnline] = useState(true);
@@ -130,11 +141,8 @@ function AdminChatPage() {
       supabase
         .from("chat_messages")
         .select("sender_id, receiver_id, message, read, created_at")
-        .not("message", "ilike", "%[ESCALATE]%")
-        .not("message", "ilike", "%🤖 KI Eskalation%")
-        .not("message", "ilike", "%🤖 KI-Eskalation%")
         .order("created_at", { ascending: false })
-        .limit(100),
+        .limit(5000),
       supabase.from("tenants").select("id, name"),
       supabase.from("user_roles").select("user_id, role"),
     ]);
@@ -159,6 +167,7 @@ function AdminChatPage() {
     const agg = new Map<string, Agg>();
     // msgs are ordered DESC → first entry per partner is the newest
     for (const m of (msgsRes.data ?? []) as any[]) {
+      if (isInternalAdminNote(m.message)) continue;
       // Gegenüber = die Seite, die kein Admin-/Staff-Konto ist
       const partnerId = adminIds.has(m.sender_id) ? m.receiver_id : m.sender_id;
       if (!partnerId || adminIds.has(partnerId)) continue;
@@ -241,12 +250,9 @@ function AdminChatPage() {
     const { data: msgs } = await supabase
       .from("chat_messages").select("*")
       .or(`sender_id.eq.${userId},receiver_id.eq.${userId}`)
-      .not("message", "ilike", "%[ESCALATE]%")
-      .not("message", "ilike", "%🤖 KI Eskalation%")
-      .not("message", "ilike", "%🤖 KI-Eskalation%")
       .order("created_at", { ascending: true })
       .limit(200);
-    setMessages((msgs ?? []) as ChatMessage[]);
+    setMessages(((msgs ?? []) as ChatMessage[]).filter((m) => !isInternalAdminNote(m.message)));
 
     await supabase
       .from("chat_messages").update({ read: true } as any)
@@ -428,11 +434,10 @@ function AdminChatPage() {
   const sendMessage = async () => {
     if ((!newMessage.trim() && !pendingAttachment) || !selectedUserId || !user) return;
     setSending(true);
-    // Mitarbeiter sehen nur Nachrichten ihres Teamleiters → im Zweifel in dessen Namen senden
-    const leaderId = leaderMapRef.current.get(selectedUserId) ?? null;
-    const senderId = leaderId && leaderId !== user.id && isStaff ? leaderId : user.id;
+    // Immer mit dem echten Admin-Konto senden – der Teamleiter-Anzeigename
+    // kommt aus den Mandanten-Einstellungen, nicht aus einer fremden sender_id.
     await supabase.from("chat_messages").insert({
-      sender_id: senderId,
+      sender_id: user.id,
       receiver_id: selectedUserId,
       message: newMessage.trim() || (pendingAttachment ? `📎 ${pendingAttachment.name}` : ""),
       attachment_url: pendingAttachment?.url ?? null,
@@ -927,7 +932,8 @@ function AdminChatPage() {
             {/* Messages */}
             <div className="flex-1 overflow-y-auto px-5 py-4 space-y-3">
               {messages.map((msg) => {
-                const isMine = msg.sender_id === user!.id;
+                // „Meine Nachricht" = von einem Admin-/Teamleiter-Konto gesendet
+                const isMine = msg.sender_id === user!.id || adminIdsRef.current.has(msg.sender_id);
                 const isAi = msg.is_ai;
                 return (
                   <div key={msg.id} className={cn("flex items-end gap-2", isMine ? "justify-end" : "justify-start")}>
