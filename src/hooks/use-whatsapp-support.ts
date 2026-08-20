@@ -27,12 +27,14 @@ async function load(): Promise<WhatsAppSupport> {
   if (inflight) return inflight;
   inflight = (async () => {
     try {
-      const { data } = await (supabase.rpc as any)("get_public_whatsapp_support");
+      const { data, error } = await (supabase.rpc as any)("get_public_whatsapp_support");
+      if (error) console.warn("[whatsapp-support] konnte nicht geladen werden:", error.message);
       const row = Array.isArray(data) ? data[0] : data;
       const enabled = !!row?.whatsapp_enabled;
       const href = enabled ? buildWhatsAppHref(row?.whatsapp_number) : null;
       cache = { enabled: enabled && !!href, href };
-    } catch {
+    } catch (e: any) {
+      console.warn("[whatsapp-support] Fehler:", e?.message ?? e);
       cache = EMPTY;
     } finally {
       inflight = null;
