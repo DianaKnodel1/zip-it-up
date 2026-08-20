@@ -244,7 +244,7 @@ async function processOne(): Promise<boolean> {
   return true;
 }
 
-console.log(`Bot-Runner gestartet (Poll ${POLL_MS}ms, headless=${HEADLESS}, worker=${WORKER_NAME})`);
+console.log(`[${new Date().toISOString()}] Bot-Runner gestartet (Poll ${POLL_MS}ms, headless=${HEADLESS}, worker=${WORKER_NAME})`);
 
 // Hauptschleife
 async function mainLoop() {
