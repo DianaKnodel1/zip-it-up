@@ -78,9 +78,6 @@ function InterviewPage() {
   const [error, setError] = useState<string | null>(null);
   const [consent, setConsent] = useState(false);
   const [startedAt, setStartedAt] = useState<number | null>(null);
-  const [scheduledAt, setScheduledAt] = useState<number | null>(null);
-  // Kein aktiver Termin (nie gebucht oder storniert) — eigener Screen statt Countdown ins Leere.
-  const [notBooked, setNotBooked] = useState(false);
   const [branding, setBranding] = useState<{ firmenname?: string; primary_color?: string; logo_url?: string | null; recruiter_name?: string; recruiter_avatar_url?: string | null } | null>(null);
   // Vom Server aufgelöstes Branding (Fast-Track-Firma). Hat Vorrang vor der
   // direkten Datenbank-Abfrage, die bei unveröffentlichten Seiten leer bleibt.
