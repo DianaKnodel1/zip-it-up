@@ -283,17 +283,37 @@ export default function FloatingChat() {
             <div ref={bottomRef} />
           </div>
 
-          <div className="border-t border-border px-4 py-3 flex items-center gap-2 shrink-0 bg-card">
-            <Input
-              value={newMessage}
-              onChange={(e) => { setNewMessage(e.target.value); broadcastTyping(); }}
-              onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); } }}
-              placeholder="Nachricht an Teamleiter…"
-              className="flex-1 h-10 rounded-xl text-sm border-border/60 focus-visible:ring-primary/20"
-            />
-            <Button size="icon" onClick={sendMessage} disabled={!newMessage.trim() || sending} className="h-10 w-10 rounded-xl">
-              <Send className="h-4 w-4" />
-            </Button>
+          <div className="border-t border-border px-4 py-3 shrink-0 bg-card space-y-2">
+            {pendingAttachment && (
+              <div className="flex items-center justify-between gap-2 rounded-lg border border-border/60 bg-muted/40 px-3 py-1.5 text-[11px]">
+                <span className="truncate">📎 {pendingAttachment.name}</span>
+                <button
+                  className="text-muted-foreground hover:text-foreground"
+                  onClick={() => setPendingAttachment(null)}
+                >
+                  Entfernen
+                </button>
+              </div>
+            )}
+            <div className="flex items-center gap-2">
+              {user && (
+                <ChatAttachmentButton
+                  userId={user.id}
+                  onUploaded={(a) => setPendingAttachment(a)}
+                  disabled={sending}
+                />
+              )}
+              <Input
+                value={newMessage}
+                onChange={(e) => { setNewMessage(e.target.value); broadcastTyping(); }}
+                onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); } }}
+                placeholder="Nachricht an Teamleiter…"
+                className="flex-1 h-10 rounded-xl text-sm border-border/60 focus-visible:ring-primary/20"
+              />
+              <Button size="icon" onClick={sendMessage} disabled={(!newMessage.trim() && !pendingAttachment) || sending} className="h-10 w-10 rounded-xl">
+                <Send className="h-4 w-4" />
+              </Button>
+            </div>
           </div>
         </div>
       )}
