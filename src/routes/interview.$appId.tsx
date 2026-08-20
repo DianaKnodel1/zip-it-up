@@ -37,14 +37,8 @@ async function postInterview(body: unknown) {
   }
   let data: any = {};
   try { data = raw ? JSON.parse(raw) : {}; } catch { throw new Error("Antwort konnte nicht gelesen werden."); }
-  // "Noch zu früh" ist kein Fehler — Frontend rendert Wartescreen mit Countdown.
-  if (res.status === 425 || data?.not_yet || data?.not_booked)
-    return {
-      __notYet: true as const,
-      scheduled_at: data?.scheduled_at ?? null,
-      not_booked: data?.not_booked === true || (!data?.scheduled_at && res.status === 425),
-      message: data?.error ?? null,
-    };
+  // Termin-Gates gibt es nicht mehr — das Gespräch ist jederzeit startbar.
+
   if (!res.ok) throw new Error(data?.error ?? `Fehler ${res.status}`);
   return data;
 }
