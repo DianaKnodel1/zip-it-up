@@ -263,6 +263,13 @@ export default function FloatingChat() {
                     isMine ? "bg-primary text-primary-foreground rounded-2xl rounded-br-sm shadow-sm" : "bg-muted border border-border text-foreground rounded-2xl rounded-bl-sm"
                   )}>
                     <p className="whitespace-pre-wrap">{msg.message}</p>
+                    {msg.attachment_url && msg.attachment_type && (
+                      <AttachmentPreview
+                        url={msg.attachment_url}
+                        name={msg.attachment_name ?? "Anhang"}
+                        type={msg.attachment_type}
+                      />
+                    )}
                     <p className={cn("text-[9px] mt-1 opacity-50")}>{formatTime(msg.created_at)}</p>
                   </div>
                 </div>
