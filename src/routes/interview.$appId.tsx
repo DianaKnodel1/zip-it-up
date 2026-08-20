@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Loader2, Send, CheckCircle2 } from "lucide-react";
 import { ZusageCard } from "@/components/interview/ZusageCard";
+import WhatsAppSupportButton from "@/components/WhatsAppSupportButton";
 
 type Msg = { role: "user" | "assistant"; text: string; ts: string };
 
