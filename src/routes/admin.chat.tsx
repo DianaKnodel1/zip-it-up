@@ -47,6 +47,17 @@ const isUnanswered = (c: Conversation) =>
   !!c.lastFromEmployeeAt &&
   Date.now() - new Date(c.lastFromEmployeeAt).getTime() > UNANSWERED_THRESHOLD_MS;
 
+// Interne KI-/Eskalations-Notizen: clientseitig filtern, damit keine normale
+// Nachricht durch serverseitige Textfilter verloren geht.
+function isInternalAdminNote(message: string | null | undefined) {
+  const m = message ?? "";
+  return (
+    m.startsWith("[ESCALATE]") ||
+    m.startsWith("🤖 KI-Eskalation") ||
+    m.startsWith("🤖 KI Eskalation")
+  );
+}
+
 interface ChatMessage {
   id: string;
   sender_id: string;
