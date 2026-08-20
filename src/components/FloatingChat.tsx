@@ -190,7 +190,7 @@ export default function FloatingChat() {
   }, [humanMessages, leaderTyping]);
 
   const sendMessage = async () => {
-    if ((!newMessage.trim() && !pendingAttachment) || !user || !teamLeaderId) return;
+    if ((!newMessage.trim() && !pendingAttachment) || !user || !recipientId) return;
     const text = newMessage.trim();
     const attachment = pendingAttachment;
     setNewMessage("");
@@ -199,7 +199,7 @@ export default function FloatingChat() {
     try {
       const { error } = await supabase.from("chat_messages").insert({
         sender_id: user.id,
-        receiver_id: teamLeaderId,
+        receiver_id: recipientId,
         message: text || (attachment ? `📎 ${attachment.name}` : ""),
         attachment_url: attachment?.url ?? null,
         attachment_name: attachment?.name ?? null,
