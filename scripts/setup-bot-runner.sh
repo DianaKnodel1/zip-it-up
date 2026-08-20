@@ -42,9 +42,9 @@ echo "==> Abhängigkeiten fertig."
 # Browser und Systembibliotheken nur bei der ersten Installation laden.
 echo "==> [2/3] Chromium laden (kann 3-8 Minuten dauern, keine Ausgabe = laeuft) ..."
 if [ ! -d "${PLAYWRIGHT_BROWSERS_PATH:-/root/.cache/ms-playwright}" ]; then
-  bun x playwright install --with-deps chromium
+  npx playwright install --with-deps chromium
 else
-  bun x playwright install chromium
+  npx playwright install chromium
 fi
 echo "==> Chromium fertig."
 
@@ -63,7 +63,7 @@ WorkingDirectory=$RUNNER_DIR
 EnvironmentFile=$ENV_FILE
 Environment=HEADLESS=true
 Environment=REQUIRE_PROXY=true
-ExecStart=/usr/local/bin/bun run server.ts
+ExecStart=/usr/bin/npm start
 Restart=always
 RestartSec=5
 User=root
