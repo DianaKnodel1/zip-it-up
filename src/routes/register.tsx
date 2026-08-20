@@ -21,6 +21,7 @@ import StepContract from "@/components/register/StepContract";
 import StepIdentity from "@/components/register/StepIdentity";
 import StepOptional from "@/components/register/StepOptional";
 import { usePortalTheme } from "@/hooks/use-portal-theme";
+import WhatsAppSupportButton from "@/components/WhatsAppSupportButton";
 
 
 const STORAGE_KEY = "onboarding_wizard_step";
@@ -585,6 +586,7 @@ function RegisterPage() {
           )}
         </CardContent>
       </Card>
+      <WhatsAppSupportButton />
     </div>
   );
 }
