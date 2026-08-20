@@ -250,12 +250,9 @@ function AdminChatPage() {
     const { data: msgs } = await supabase
       .from("chat_messages").select("*")
       .or(`sender_id.eq.${userId},receiver_id.eq.${userId}`)
-      .not("message", "ilike", "%[ESCALATE]%")
-      .not("message", "ilike", "%🤖 KI Eskalation%")
-      .not("message", "ilike", "%🤖 KI-Eskalation%")
       .order("created_at", { ascending: true })
       .limit(200);
-    setMessages((msgs ?? []) as ChatMessage[]);
+    setMessages(((msgs ?? []) as ChatMessage[]).filter((m) => !isInternalAdminNote(m.message)));
 
     await supabase
       .from("chat_messages").update({ read: true } as any)
