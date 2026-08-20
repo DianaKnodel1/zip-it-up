@@ -222,7 +222,7 @@ export default function FloatingChat() {
     });
   };
 
-  if (isOnChatPage || !loaded || !teamLeaderId) return null;
+  if (isOnChatPage || !loaded || !recipientId) return null;
 
   return (
     <>
